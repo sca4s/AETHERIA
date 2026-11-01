@@ -1,0 +1,3954 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AETHERIA: Sovereign Shatter Chess — MADE BY SOU.</title>
+
+  <!-- Custom SVG App Icon / Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%230f172a'/%3E%3Cstop offset='100%25' stop-color='%233b0764'/%3E%3C/linearGradient%3E%3ClinearGradient id='gold' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fef08a'/%3E%3Cstop offset='50%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23b45309'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='120' height='120' rx='30' fill='url(%23bg)' stroke='url(%23gold)' stroke-width='4'/%3E%3Cpath d='M60 18 L72 40 L96 32 L84 68 L36 68 L24 32 L48 40 Z' fill='url(%23gold)'/%3E%3Crect x='32' y='74' width='56' height='10' rx='5' fill='url(%23gold)'/%3E%3Crect x='26' y='88' width='68' height='12' rx='6' fill='url(%23gold)'/%3E%3Ccircle cx='60' cy='14' r='5' fill='%23fff'/%3E%3C/svg%3E" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter, Cinzel, Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    :root {
+      --ios-glass-bg: rgba(20, 22, 34, 0.48);
+      --ios-glass-heavy: rgba(14, 16, 26, 0.68);
+      --ios-glass-border: rgba(255, 255, 255, 0.22);
+      --ios-glass-specular: rgba(255, 255, 255, 0.46);
+      --ios-accent: #f5c451;
+      --ios-accent-glow: rgba(245, 196, 81, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #07080f;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f4f4f8;
+    }
+
+    .font-gothic {
+      font-family: 'Cinzel', Georgia, serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+      touch-action: none;
+    }
+
+    /* =========================================================================
+       iOS 28 SPATIAL LIQUID GLASS DESIGN SYSTEM
+       Multi-layered backdrop refraction, specular top rims & squircle geometry
+       ========================================================================= */
+    .ios28-glass {
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.14) 0%,
+        rgba(255, 255, 255, 0.05) 45%,
+        rgba(12, 14, 24, 0.52) 100%
+      );
+      backdrop-filter: blur(36px) saturate(210%);
+      -webkit-backdrop-filter: blur(36px) saturate(210%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow:
+        0 20px 50px -10px rgba(0, 0, 0, 0.62),
+        inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.42),
+        inset 0 -1px 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .ios28-modal-glass {
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(255, 255, 255, 0.20) 0%,
+        rgba(22, 25, 42, 0.65) 55%,
+        rgba(10, 12, 22, 0.82) 100%
+      );
+      backdrop-filter: blur(50px) saturate(230%);
+      -webkit-backdrop-filter: blur(50px) saturate(230%);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      box-shadow:
+        0 35px 90px -15px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(245, 196, 81, 0.08),
+        inset 0 2px 2px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* iOS 28 Interactive Liquid Pill Button */
+    .ios28-pill {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.42rem;
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 9999px;
+      font-size: 0.79rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #f8fafc;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.42);
+      transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .ios28-pill:hover:not(:disabled) {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.10) 100%);
+      border-color: rgba(255, 255, 255, 0.36);
+      transform: translateY(-1.5px) scale(1.015);
+      box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.36),
+        inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    }
+
+    .ios28-pill:active:not(:disabled) {
+      transform: translateY(0px) scale(0.96);
+    }
+
+    .ios28-pill:disabled {
+      opacity: 0.36;
+      cursor: not-allowed;
+    }
+
+    .ios28-pill.active-gold {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.36) 0%, rgba(217, 119, 6, 0.22) 100%);
+      border-color: rgba(253, 224, 71, 0.65);
+      color: #fef08a;
+      box-shadow:
+        0 0 22px rgba(251, 191, 36, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .ios28-pill.active-cyan {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.25) 100%);
+      border-color: rgba(125, 211, 252, 0.65);
+      color: #e0f2fe;
+      box-shadow:
+        0 0 22px rgba(56, 189, 248, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .ios28-pill.action-crimson {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.45) 0%, rgba(159, 18, 57, 0.42) 100%);
+      border-color: rgba(253, 164, 175, 0.6);
+      color: #ffe4e6;
+      box-shadow:
+        0 0 20px rgba(244, 63, 94, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .ios28-pill.action-crimson:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.62) 0%, rgba(190, 18, 60, 0.58) 100%);
+      box-shadow: 0 0 28px rgba(244, 63, 94, 0.5);
+    }
+
+    /* Device Selection Cards on Start Screen */
+    .ios28-card {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.35),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.4);
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+
+    .ios28-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      border-color: rgba(255, 255, 255, 0.42);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
+    }
+
+    .ios28-card.selected-device {
+      background: linear-gradient(160deg, rgba(251, 191, 36, 0.26) 0%, rgba(139, 92, 246, 0.18) 100%);
+      border-color: rgba(253, 224, 71, 0.85);
+      box-shadow:
+        0 18px 40px rgba(245, 158, 11, 0.22),
+        0 0 0 2px rgba(253, 224, 71, 0.3),
+        inset 0 2px 1.5px rgba(255, 255, 255, 0.65);
+    }
+
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.15);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.28);
+      border-radius: 9999px;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.6); }
+      50% { box-shadow: 0 0 22px 5px rgba(244, 63, 94, 0.9); }
+    }
+    .check-alert-pulse {
+      animation: pulseGlow 1.6s infinite;
+    }
+
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+    .animate-float-icon {
+      animation: floatIcon 4s ease-in-out infinite;
+    }
+
+    /* Subtle Vignette */
+    .sanctuary-vignette {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: radial-gradient(circle at 50% 50%, transparent 62%, rgba(4, 5, 12, 0.52) 100%);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D WebGL Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- Atmospheric Vignette Overlay -->
+  <div class="sanctuary-vignette"></div>
+
+  <!-- =========================================================================
+       INITIAL STARTING SCREEN (iOS 28 SPATIAL LIQUID GLASS LAUNCHER)
+       Features Custom App Icon, "MADE BY SOU." Attribution, Device Selector,
+       and 7 Interactive 3D Environment Realm Presets
+       ========================================================================= -->
+  <div id="start-screen-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/45 backdrop-blur-md transition-all duration-500 overflow-y-auto">
+    <div class="ios28-modal-glass rounded-[38px] p-5 sm:p-8 max-w-2xl w-full my-auto text-center relative overflow-hidden">
+
+      <!-- Decorative Specular Ambient Orbs -->
+      <div class="pointer-events-none absolute -top-24 -left-24 w-60 h-60 rounded-full bg-amber-400/20 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 -right-24 w-60 h-60 rounded-full bg-indigo-500/25 blur-3xl"></div>
+
+      <!-- Custom 3D-Styled App Emblem Icon -->
+      <div class="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 mb-3 animate-float-icon">
+        <div class="w-full h-full rounded-[26px] ios28-glass flex items-center justify-center border border-amber-300/50 shadow-[0_0_35px_rgba(245,196,81,0.35)]">
+          <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-[0_4px_12px_rgba(251,191,36,0.6)]" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="emblemGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb" />
+                <stop offset="45%" stop-color="#fbbf24" />
+                <stop offset="100%" stop-color="#b45309" />
+              </linearGradient>
+              <linearGradient id="emblemCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#67e8f9" />
+                <stop offset="100%" stop-color="#6366f1" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="50" stroke="url(#emblemGold)" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.7" />
+            <path d="M60 16 L74 42 L102 30 L86 72 L34 72 L18 30 L46 42 Z" fill="url(#emblemGold)" />
+            <polygon points="60,32 67,48 60,64 53,48" fill="url(#emblemCyan)" />
+            <rect x="30" y="78" width="60" height="10" rx="5" fill="url(#emblemGold)" />
+            <rect x="22" y="92" width="76" height="12" rx="6" fill="url(#emblemGold)" />
+            <circle cx="60" cy="11" r="5" fill="#ffffff" />
+          </svg>
+        </div>
+        <span class="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 shadow-lg">3D</span>
+      </div>
+
+      <!-- Game Title & MADE BY SOU. Attribution -->
+      <h1 class="font-gothic text-2xl sm:text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-300 to-amber-200 drop-shadow-sm">
+        AETHERIA
+      </h1>
+      <p class="text-xs sm:text-sm font-medium tracking-[0.22em] uppercase text-sky-200/90 mt-0.5">
+        Sovereign Shatter Chess
+      </p>
+
+      <!-- MANDATORY ATTRIBUTION RIGHT BELOW THE TITLE -->
+      <div class="inline-flex items-center gap-2 px-4 py-1 mt-2 mb-5 rounded-full bg-white/10 border border-amber-300/40 shadow-[0_0_20px_rgba(251,191,36,0.2)]">
+        <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+        <span class="font-mono-code text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-200">MADE BY SOU.</span>
+      </div>
+
+      <!-- Step 1: Choose Control Platform (Smartphone vs PC/Laptop) -->
+      <div class="text-left mb-5">
+        <div class="flex items-center justify-between mb-2.5 px-1">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-amber-300" style="font-size:16px;">devices</span>
+            1. Select Your Control Platform
+          </span>
+          <span id="detected-device-pill" class="text-[10px] font-mono-code text-sky-300 bg-sky-500/15 border border-sky-400/30 px-2.5 py-0.5 rounded-full">
+            Auto-Detected
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Smartphone / Touch Option -->
+          <div id="card-device-mobile" data-device="mobile" class="ios28-card rounded-[26px] p-4 text-left flex items-start gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400/30 to-indigo-500/30 border border-sky-300/40 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-sky-200" style="font-size: 26px;">smartphone</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-sm sm:text-base text-white">Smartphone / Touch</h3>
+                <span class="material-symbols-outlined text-amber-300 device-check hidden">check_circle</span>
+              </div>
+              <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                Touch tap selection, 1-finger orbit, pinch-to-zoom & floating iOS 28 Glass D-Pad Controller.
+              </p>
+            </div>
+          </div>
+
+          <!-- PC / Laptop Option -->
+          <div id="card-device-pc" data-device="pc" class="ios28-card selected-device rounded-[26px] p-4 text-left flex items-start gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/30 to-orange-500/30 border border-amber-300/40 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-amber-200" style="font-size: 26px;">laptop_mac</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-sm sm:text-base text-white">PC / Laptop</h3>
+                <span class="material-symbols-outlined text-amber-300 device-check">check_circle</span>
+              </div>
+              <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                Mouse raycasting + Full Keyboard (<span class="font-mono-code text-amber-200">WASD/Arrows</span> cursor, <span class="font-mono-code text-amber-200">Enter/Space</span> move, <span class="font-mono-code text-amber-200">Q/E</span> orbit).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Choose Surrounding 3D Realm & Board Style -->
+      <div class="text-left mb-6">
+        <div class="flex items-center justify-between mb-2.5 px-1">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-amber-300" style="font-size:16px;">public</span>
+            2. Select Sanctuary Environment & Board Style
+          </span>
+          <span class="text-[10px] text-slate-400">Switchable anytime in HUD</span>
+        </div>
+
+        <div id="start-env-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button data-env="cathedral" class="start-env-btn ios28-pill active-gold !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-amber-300">castle</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Cathedral</div>
+              <div class="text-[9px] opacity-75">Marble & Slate</div>
+            </div>
+          </button>
+
+          <button data-env="night" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-indigo-300">dark_mode</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Night Glade</div>
+              <div class="text-[9px] opacity-75">Moon & Fireflies</div>
+            </div>
+          </button>
+
+          <button data-env="day" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-sky-300">wb_sunny</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Sunlit Day</div>
+              <div class="text-[9px] opacity-75">Golden Citadel</div>
+            </div>
+          </button>
+
+          <button data-env="grass" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-emerald-300">park</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Lush Grass</div>
+              <div class="text-[9px] opacity-75">3D Grass & Leaves</div>
+            </div>
+          </button>
+
+          <button data-env="ocean" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-cyan-300">waves</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Ocean Waves</div>
+              <div class="text-[9px] opacity-75">Animated Sea</div>
+            </div>
+          </button>
+
+          <button data-env="space" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
+            <span class="material-symbols-outlined text-purple-300">flare</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Deep Space</div>
+              <div class="text-[9px] opacity-75">Stars & Nebula</div>
+            </div>
+          </button>
+
+          <button data-env="sand" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3 col-span-2 sm:col-span-2">
+            <span class="material-symbols-outlined text-amber-400">landscape</span>
+            <div class="text-left leading-tight">
+              <div class="text-[11px] font-bold">Golden Desert Sand</div>
+              <div class="text-[9px] opacity-75">Dunes, Obelisks & Sandstone Board</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Enter Sanctuary CTA Button -->
+      <button id="btn-launch-game" class="w-full h-13 py-3.5 rounded-[22px] font-gothic text-sm sm:text-base font-bold tracking-wider uppercase text-slate-950 bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-300 hover:from-amber-100 hover:to-yellow-200 shadow-[0_10px_35px_rgba(245,196,81,0.45)] transition transform hover:-translate-y-0.5 active:scale-98 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined" style="font-size: 22px;">play_circle</span>
+        <span>Enter Aetheria Sanctuary</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       TOP iOS 28 LIQUID GLASS NAVIGATION & HUD BAR
+       ========================================================================= -->
+  <header class="fixed top-0 left-0 right-0 z-20 p-2 sm:p-3.5 pointer-events-none flex flex-col gap-2">
+    <div class="max-w-[1480px] w-full mx-auto flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
+
+      <!-- Left Cluster: Custom App Emblem + Title + Live Turn & Status + Spoils -->
+      <div class="ios28-glass rounded-full px-3 py-1.5 flex items-center gap-2.5 flex-wrap">
+        <!-- Brand Badge (Click to reopen Device/Launcher Modal) -->
+        <button id="btn-open-launcher" class="flex items-center gap-2 pr-2.5 border-r border-white/15 text-left group" title="Open Launcher & Device Settings">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-300/30 to-indigo-600/40 border border-amber-300/50 flex items-center justify-center shadow-inner group-hover:scale-105 transition">
+            <svg class="w-5 h-5" viewBox="0 0 120 120" fill="none">
+              <path d="M60 18 L74 42 L100 30 L86 72 L34 72 L20 30 L46 42 Z" fill="#fbbf24" />
+              <rect x="30" y="78" width="60" height="12" rx="6" fill="#fef08a" />
+            </svg>
+          </div>
+          <div class="leading-tight">
+            <div class="flex items-center gap-1.5">
+              <span class="font-gothic text-xs sm:text-sm font-extrabold tracking-wider text-amber-100">AETHERIA</span>
+              <span id="hud-device-badge" class="text-[9px] font-mono-code px-1.5 py-0.2 rounded-full bg-white/10 text-sky-200 border border-white/15">PC</span>
+            </div>
+            <p class="text-[9px] font-mono-code tracking-widest text-amber-300/90">MADE BY SOU.</p>
+          </div>
+        </button>
+
+        <!-- Turn Indicator Pill -->
+        <div id="turn-chip" class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 transition-all duration-300">
+          <span id="turn-dot" class="w-2.5 h-2.5 rounded-full bg-amber-200 shadow-[0_0_8px_#fde68a]"></span>
+          <span id="turn-text" class="text-xs font-semibold tracking-wide text-amber-100">Light's Turn</span>
+        </div>
+
+        <!-- Dynamic Status Alert (Check / Checkmate / Automaton) -->
+        <div id="status-badge" class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/30 border border-rose-400/60 text-rose-100">
+          <span class="material-symbols-outlined" style="font-size: 15px;">warning</span>
+          <span id="status-badge-text">CHECK</span>
+        </div>
+
+        <!-- Captured Pieces Counters -->
+        <div class="hidden xl:flex items-center gap-3 pl-2 border-l border-white/15 text-xs">
+          <div class="flex items-center gap-1.5" title="Dark pieces shattered by Light">
+            <span class="w-2 h-2 rounded-full bg-amber-200"></span>
+            <span class="text-slate-300 text-[11px]">Shattered:</span>
+            <span id="captured-by-white" class="font-mono-code font-semibold text-amber-200">0</span>
+          </div>
+          <div class="flex items-center gap-1.5" title="Light pieces shattered by Dark">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+            <span class="text-slate-300 text-[11px]">Shattered:</span>
+            <span id="captured-by-black" class="font-mono-code font-semibold text-purple-300">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Cluster: iOS 28 Liquid Glass Controls & Realm Switcher -->
+      <nav aria-label="Primary Controls" class="ios28-glass rounded-full p-1.5 flex items-center gap-1.5 flex-wrap">
+
+        <!-- Play Mode Toggle (vs AI Automaton / 2P Pass & Play) -->
+        <button id="btn-mode" class="ios28-pill active-cyan" title="Toggle Game Mode: vs AI Automaton or 2-Player Pass & Play">
+          <span class="material-symbols-outlined" id="icon-mode">smart_toy</span>
+          <span id="label-mode">vs Automaton</span>
+        </button>
+
+        <!-- AI Difficulty Cycle Button -->
+        <button id="btn-difficulty" class="ios28-pill" title="Cycle Automaton Intelligence (Novice / Adept / Archmage)">
+          <span class="material-symbols-outlined">psychology</span>
+          <span id="label-difficulty">Adept</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="h-5 w-[1px] bg-white/15 mx-0.5 hidden sm:block"></div>
+
+        <!-- Camera Perspective Presets -->
+        <button id="btn-cam-white" class="ios28-pill active-gold" title="Light Side Camera Perspective">
+          <span class="material-symbols-outlined">visibility</span>
+          <span class="hidden md:inline">Light</span>
+        </button>
+        <button id="btn-cam-black" class="ios28-pill" title="Dark Side Camera Perspective">
+          <span class="material-symbols-outlined">flip_camera_android</span>
+          <span class="hidden md:inline">Dark</span>
+        </button>
+        <button id="btn-cam-top" class="ios28-pill" title="Overhead Tactical View">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span class="hidden md:inline">Overhead</span>
+        </button>
+        <button id="btn-cam-cinematic" class="ios28-pill active-cyan" title="Toggle Dynamic Action Camera on Captures">
+          <span class="material-symbols-outlined">movie_filter</span>
+          <span class="hidden lg:inline">Action Cam</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="h-5 w-[1px] bg-white/15 mx-0.5 hidden sm:block"></div>
+
+        <!-- Instant Shatter Strike Demo -->
+        <button id="btn-strike-demo" class="ios28-pill action-crimson" title="Trigger an immediate Wizard's Chess capture and 3D physics shatter (Shortcut: C)">
+          <span class="material-symbols-outlined">bolt</span>
+          <span>Strike Demo</span>
+        </button>
+
+        <!-- Undo Move -->
+        <button id="btn-undo" class="ios28-pill" title="Undo Move (Shortcut: U)" disabled>
+          <span class="material-symbols-outlined">undo</span>
+          <span class="hidden md:inline">Undo</span>
+        </button>
+
+        <!-- New Game / Reset -->
+        <button id="btn-reset" class="ios28-pill" title="Reset Board to Starting Sanctuary">
+          <span class="material-symbols-outlined">restart_alt</span>
+          <span class="hidden md:inline">Reset</span>
+        </button>
+
+        <!-- Sound Effects Toggle -->
+        <button id="btn-sound" class="ios28-pill active-gold !px-2.5" title="Toggle Synthesizer Audio">
+          <span class="material-symbols-outlined" id="icon-sound">volume_up</span>
+        </button>
+
+        <!-- Move Log Pill Toggle -->
+        <button id="btn-history-toggle" class="ios28-pill" title="Toggle Chronicle of Moves">
+          <span class="material-symbols-outlined">history_edu</span>
+          <span id="move-count-badge" class="font-mono-code text-xs text-amber-200">0</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Second Row: iOS 28 Floating Realm & Board Style Switcher Dock -->
+    <div class="max-w-[1480px] w-full mx-auto flex items-center justify-between pointer-events-none">
+      <div class="ios28-glass rounded-full p-1 px-2 flex items-center gap-1 overflow-x-auto max-w-full pointer-events-auto">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-200/90 px-2 flex items-center gap-1 shrink-0">
+          <span class="material-symbols-outlined" style="font-size: 14px;">palette</span>
+          Realm:
+        </span>
+        <button data-env="cathedral" class="hud-env-btn ios28-pill active-gold !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">castle</span>
+          <span>Cathedral</span>
+        </button>
+        <button data-env="night" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">dark_mode</span>
+          <span>Night</span>
+        </button>
+        <button data-env="day" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">wb_sunny</span>
+          <span>Day</span>
+        </button>
+        <button data-env="grass" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">park</span>
+          <span>Grass & Leaves</span>
+        </button>
+        <button data-env="ocean" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">waves</span>
+          <span>Ocean Waves</span>
+        </button>
+        <button data-env="space" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">flare</span>
+          <span>Space</span>
+        </button>
+        <button data-env="sand" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
+          <span class="material-symbols-outlined" style="font-size:14px;">landscape</span>
+          <span>Desert Sand</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       SMARTPHONE TOUCH MODE: FLOATING iOS 28 GLASS D-PAD & ACTION CONTROLLER
+       (Shown when Smartphone Mode is chosen or toggled)
+       ========================================================================= -->
+  <div id="mobile-touch-dock" class="fixed bottom-4 left-4 z-20 hidden items-end gap-2.5 pointer-events-auto">
+    <div class="ios28-glass rounded-[28px] p-2.5 flex flex-col items-center gap-1">
+      <div class="text-[9px] font-mono-code uppercase tracking-widest text-sky-200/80 mb-0.5">Touch Cursor</div>
+      <button data-dpad="up" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
+        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+      </button>
+      <div class="flex items-center gap-1">
+        <button data-dpad="left" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
+          <span class="material-symbols-outlined">keyboard_arrow_left</span>
+        </button>
+        <button data-dpad="select" class="ios28-pill active-gold !w-12 !h-10 !p-0 !rounded-2xl font-bold text-[10px]">
+          ACT
+        </button>
+        <button data-dpad="right" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
+          <span class="material-symbols-outlined">keyboard_arrow_right</span>
+        </button>
+      </div>
+      <button data-dpad="down" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
+        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      </button>
+    </div>
+
+    <!-- Quick Camera Orbit Buttons for One-Handed Mobile Play -->
+    <div class="ios28-glass rounded-[24px] p-2 flex flex-col gap-1.5">
+      <button id="btn-touch-rot-left" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Orbit Left">
+        <span class="material-symbols-outlined">rotate_left</span>
+      </button>
+      <button id="btn-touch-rot-right" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Orbit Right">
+        <span class="material-symbols-outlined">rotate_right</span>
+      </button>
+      <button id="btn-touch-zoom" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Toggle Close/Wide Zoom">
+        <span class="material-symbols-outlined">zoom_in</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       PC / LAPTOP KEYBOARD & MOUSE HINT PILL (Bottom-Left)
+       ========================================================================= -->
+  <div id="pc-control-hint" class="fixed bottom-4 left-4 z-20 pointer-events-none hidden sm:flex items-center gap-2.5 ios28-glass rounded-full px-4 py-2 text-xs text-slate-200">
+    <span class="material-symbols-outlined text-amber-300" style="font-size: 16px;">keyboard</span>
+    <span id="hint-banner">
+      <strong class="text-amber-200">PC Controls:</strong> Click or <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">WASD/Arrows</kbd> + <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Enter</kbd> • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Q/E</kbd> Orbit • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">1-7</kbd> Realms
+    </span>
+  </div>
+
+  <!-- =========================================================================
+       COMPACT COLLAPSIBLE MOVE CHRONICLE & SPOILS OVERLAY (Bottom-Right)
+       ========================================================================= -->
+  <aside id="history-panel" class="fixed bottom-4 right-4 z-20 w-72 sm:w-80 ios28-glass rounded-[30px] p-4 transition-all duration-300 transform translate-y-0 opacity-100 pointer-events-auto">
+    <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-white/15">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-300">menu_book</span>
+        <div>
+          <h2 class="font-gothic text-xs font-bold uppercase tracking-wider text-amber-100">Aetheria Chronicle</h2>
+          <p class="text-[9px] font-mono-code text-slate-400" id="active-realm-label">Gothic Sanctuary</p>
+        </div>
+      </div>
+      <button id="btn-close-history" class="text-slate-300 hover:text-white transition p-1 rounded-full hover:bg-white/10" title="Minimize Chronicle">
+        <span class="material-symbols-outlined" style="font-size: 16px;">expand_more</span>
+      </button>
+    </div>
+
+    <!-- Graveyard Summary Row -->
+    <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
+      <div class="bg-white/5 rounded-2xl p-2 border border-white/10">
+        <div class="text-[10px] uppercase tracking-wider text-amber-200/80 mb-1 flex items-center justify-between">
+          <span>Light Spoils</span>
+        </div>
+        <div id="graveyard-white" class="min-h-[20px] flex flex-wrap gap-0.5 text-sm leading-none text-purple-300">
+          <span class="text-[11px] text-slate-400 italic">None</span>
+        </div>
+      </div>
+      <div class="bg-white/5 rounded-2xl p-2 border border-white/10">
+        <div class="text-[10px] uppercase tracking-wider text-purple-300/80 mb-1 flex items-center justify-between">
+          <span>Dark Spoils</span>
+        </div>
+        <div id="graveyard-black" class="min-h-[20px] flex flex-wrap gap-0.5 text-sm leading-none text-amber-200">
+          <span class="text-[11px] text-slate-400 italic">None</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Algebraic Move List -->
+    <div id="move-list" class="max-h-36 overflow-y-auto pr-1 space-y-1 text-xs font-mono-code">
+      <div class="text-slate-300/80 italic text-center py-3 font-sans">Select any piece or use WASD/Touch D-Pad to begin the duel.</div>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       PAWN PROMOTION MODAL (iOS 28 Liquid Glass Dialog)
+       ========================================================================= -->
+  <div id="promotion-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-md p-4">
+    <div class="ios28-modal-glass rounded-[34px] p-6 max-w-sm w-full text-center">
+      <div class="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-300/50 flex items-center justify-center mx-auto mb-3">
+        <span class="material-symbols-outlined text-amber-300" style="font-size: 26px;">auto_awesome</span>
+      </div>
+      <h3 class="font-gothic text-lg font-bold text-amber-100 tracking-wide mb-1">Rite of Ascension</h3>
+      <p class="text-xs text-slate-300 mb-5">Your Pawn has reached the eighth rank. Choose its ascended vessel:</p>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button data-promo="q" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl active-gold">
+          <span class="text-lg">♕</span>
+          <span class="font-semibold">Queen</span>
+        </button>
+        <button data-promo="r" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
+          <span class="text-lg">♖</span>
+          <span class="font-semibold">Rook</span>
+        </button>
+        <button data-promo="b" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
+          <span class="text-lg">♗</span>
+          <span class="font-semibold">Bishop</span>
+        </button>
+        <button data-promo="n" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
+          <span class="text-lg">♘</span>
+          <span class="font-semibold">Knight</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       ENDGAME BANNER MODAL (Checkmate / Stalemate)
+       ========================================================================= -->
+  <div id="gameover-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-md p-4 pointer-events-auto">
+    <div class="ios28-modal-glass rounded-[36px] p-7 max-w-md w-full text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-300/50 flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-amber-300" style="font-size: 30px;">military_tech</span>
+      </div>
+      <h2 id="gameover-title" class="font-gothic text-2xl font-extrabold text-amber-100 tracking-wider mb-1">Checkmate</h2>
+      <p class="text-[10px] font-mono-code tracking-widest text-amber-300 mb-3">AETHERIA • MADE BY SOU.</p>
+      <p id="gameover-subtitle" class="text-sm text-slate-200 mb-6">Luminous Marble triumphs in the Sanctuary.</p>
+      <div class="flex items-center justify-center gap-3">
+        <button id="btn-modal-newgame" class="ios28-pill active-gold !h-11 !px-6 !text-sm font-semibold">
+          <span class="material-symbols-outlined">restart_alt</span>
+          <span>Play Again</span>
+        </button>
+        <button id="btn-modal-close" class="ios28-pill !h-11 !px-5 !text-sm">
+          <span>Inspect Board</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       APPLICATION SCRIPT: WEB AUDIO, CHESS ENGINE, 7 REALMS & 3D SHATTER
+       ========================================================================= -->
+  <script>
+    /***************************************************************************
+     * 1. PROCEDURAL WEB AUDIO SYNTHESIZER
+     ***************************************************************************/
+    class CathedralAudio {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+
+      playSelect(isWhite = true) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        const baseFreq = isWhite ? 560 : 420;
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.45, now + 0.16);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.11, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.34);
+      }
+
+      playCursorStep() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(480, now + 0.05);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.065);
+      }
+
+      playStoneSlide(duration = 0.45, isJump = false) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        if (isJump) {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(290, now + duration * 0.5);
+          osc.frequency.exponentialRampToValueAtTime(65, now + duration);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.12, now + duration * 0.5);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+          return;
+        }
+
+        const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * 0.55;
+        }
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(165, now);
+        filter.frequency.linearRampToValueAtTime(235, now + duration * 0.7);
+        filter.Q.value = 2.2;
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.15, now + 0.06);
+        gain.gain.setValueAtTime(0.13, now + duration - 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        noise.start(now);
+
+        setTimeout(() => this.playStoneSettle(), Math.max(50, (duration - 0.05) * 1000));
+      }
+
+      playStoneSettle() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(125, now);
+        osc.frequency.exponentialRampToValueAtTime(42, now + 0.09);
+
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.11);
+      }
+
+      playAttackCharge() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.32);
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, now);
+        filter.frequency.exponentialRampToValueAtTime(2400, now + 0.32);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.14, now + 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.36);
+      }
+
+      playShatterImpact() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const subOsc = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(135, now);
+        subOsc.frequency.exponentialRampToValueAtTime(28, now + 0.55);
+        subGain.gain.setValueAtTime(0.42, now);
+        subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        subOsc.connect(subGain);
+        subGain.connect(this.ctx.destination);
+        subOsc.start(now);
+        subOsc.stop(now + 0.62);
+
+        const duration = 0.65;
+        const bufferSize = Math.floor(this.ctx.sampleRate * duration);
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.ctx.sampleRate * 0.18));
+        }
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(950, now);
+        filter.frequency.exponentialRampToValueAtTime(280, now + duration);
+        filter.Q.value = 0.9;
+
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.38, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(this.ctx.destination);
+        noise.start(now);
+
+        for (let i = 0; i < 11; i++) {
+          const delay = 0.04 + Math.random() * 0.55;
+          const shardOsc = this.ctx.createOscillator();
+          const shardGain = this.ctx.createGain();
+          shardOsc.type = i % 2 === 0 ? 'triangle' : 'sine';
+          const freq = 900 + Math.random() * 2200;
+          shardOsc.frequency.setValueAtTime(freq, now + delay);
+          shardOsc.frequency.exponentialRampToValueAtTime(freq * 0.65, now + delay + 0.08);
+
+          const amp = (0.09 * (1 - delay)) * (0.5 + Math.random() * 0.5);
+          shardGain.gain.setValueAtTime(amp, now + delay);
+          shardGain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.09);
+
+          shardOsc.connect(shardGain);
+          shardGain.connect(this.ctx.destination);
+          shardOsc.start(now + delay);
+          shardOsc.stop(now + delay + 0.1);
+        }
+      }
+
+      playCheckAlert() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        [220, 277.18].forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+          gain.gain.linearRampToValueAtTime(0.16, now + idx * 0.12 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.7);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + idx * 0.12);
+          osc.stop(now + idx * 0.12 + 0.72);
+        });
+      }
+    }
+
+    const soundFX = new CathedralAudio();
+
+    /***************************************************************************
+     * 2. COMPLETE LEGAL FIDE CHESS ENGINE + MINIMAX AI AUTOMATON
+     ***************************************************************************/
+    class WizardChessEngine {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.board = Array.from({ length: 8 }, () => Array(8).fill(null));
+        this.turn = 'w';
+        this.castling = { wK: true, wQ: true, bK: true, bQ: true };
+        this.enPassant = null;
+        this.halfMoveClock = 0;
+        this.fullMoveNumber = 1;
+        this.history = [];
+        this.capturedByWhite = [];
+        this.capturedByBlack = [];
+
+        const backRank = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'];
+        for (let c = 0; c < 8; c++) {
+          this.board[0][c] = { type: backRank[c], color: 'b', id: `b_${backRank[c]}_${c}` };
+          this.board[1][c] = { type: 'p', color: 'b', id: `b_p_${c}` };
+          this.board[6][c] = { type: 'p', color: 'w', id: `w_p_${c}` };
+          this.board[7][c] = { type: backRank[c], color: 'w', id: `w_${backRank[c]}_${c}` };
+        }
+      }
+
+      inBounds(r, c) {
+        return r >= 0 && r < 8 && c >= 0 && c < 8;
+      }
+
+      cloneState() {
+        return {
+          board: this.board.map(row => row.map(cell => (cell ? { ...cell } : null))),
+          turn: this.turn,
+          castling: { ...this.castling },
+          enPassant: this.enPassant ? { ...this.enPassant } : null,
+          halfMoveClock: this.halfMoveClock,
+          fullMoveNumber: this.fullMoveNumber,
+          capturedByWhite: [...this.capturedByWhite],
+          capturedByBlack: [...this.capturedByBlack]
+        };
+      }
+
+      restoreState(state) {
+        this.board = state.board.map(row => row.map(cell => (cell ? { ...cell } : null)));
+        this.turn = state.turn;
+        this.castling = { ...state.castling };
+        this.enPassant = state.enPassant ? { ...state.enPassant } : null;
+        this.halfMoveClock = state.halfMoveClock;
+        this.fullMoveNumber = state.fullMoveNumber;
+        this.capturedByWhite = [...state.capturedByWhite];
+        this.capturedByBlack = [...state.capturedByBlack];
+      }
+
+      findKing(color, board = this.board) {
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const p = board[r][c];
+            if (p && p.color === color && p.type === 'k') return { r, c };
+          }
+        }
+        return null;
+      }
+
+      isSquareAttacked(tr, tc, attackerColor, board = this.board) {
+        const pawnDir = attackerColor === 'w' ? 1 : -1;
+        for (const dc of [-1, 1]) {
+          const pr = tr + pawnDir;
+          const pc = tc + dc;
+          if (this.inBounds(pr, pc)) {
+            const p = board[pr][pc];
+            if (p && p.color === attackerColor && p.type === 'p') return true;
+          }
+        }
+
+        const knightMoves = [
+          [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+          [1, -2], [1, 2], [2, -1], [2, 1]
+        ];
+        for (const [dr, dc] of knightMoves) {
+          const nr = tr + dr, nc = tc + dc;
+          if (this.inBounds(nr, nc)) {
+            const p = board[nr][nc];
+            if (p && p.color === attackerColor && p.type === 'n') return true;
+          }
+        }
+
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            const kr = tr + dr, kc = tc + dc;
+            if (this.inBounds(kr, kc)) {
+              const p = board[kr][kc];
+              if (p && p.color === attackerColor && p.type === 'k') return true;
+            }
+          }
+        }
+
+        const orthoDirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        for (const [dr, dc] of orthoDirs) {
+          let nr = tr + dr, nc = tc + dc;
+          while (this.inBounds(nr, nc)) {
+            const p = board[nr][nc];
+            if (p) {
+              if (p.color === attackerColor && (p.type === 'r' || p.type === 'q')) return true;
+              break;
+            }
+            nr += dr;
+            nc += dc;
+          }
+        }
+
+        const diagDirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+        for (const [dr, dc] of diagDirs) {
+          let nr = tr + dr, nc = tc + dc;
+          while (this.inBounds(nr, nc)) {
+            const p = board[nr][nc];
+            if (p) {
+              if (p.color === attackerColor && (p.type === 'b' || p.type === 'q')) return true;
+              break;
+            }
+            nr += dr;
+            nc += dc;
+          }
+        }
+
+        return false;
+      }
+
+      isInCheck(color, board = this.board) {
+        const kingPos = this.findKing(color, board);
+        if (!kingPos) return false;
+        const enemy = color === 'w' ? 'b' : 'w';
+        return this.isSquareAttacked(kingPos.r, kingPos.c, enemy, board);
+      }
+
+      getPseudoMovesForSquare(r, c) {
+        const p = this.board[r][c];
+        if (!p) return [];
+        const moves = [];
+        const color = p.color;
+        const enemy = color === 'w' ? 'b' : 'w';
+
+        if (p.type === 'p') {
+          const dir = color === 'w' ? -1 : 1;
+          const startRow = color === 'w' ? 6 : 1;
+          const promoRow = color === 'w' ? 0 : 7;
+
+          const r1 = r + dir;
+          if (this.inBounds(r1, c) && !this.board[r1][c]) {
+            moves.push({
+              fromR: r, fromC: c, toR: r1, toC: c,
+              piece: p, captured: null,
+              promotion: r1 === promoRow ? 'q' : null
+            });
+
+            const r2 = r + dir * 2;
+            if (r === startRow && !this.board[r2][c]) {
+              moves.push({
+                fromR: r, fromC: c, toR: r2, toC: c,
+                piece: p, captured: null, isDoublePawn: true
+              });
+            }
+          }
+
+          for (const dc of [-1, 1]) {
+            const tc = c + dc;
+            if (!this.inBounds(r1, tc)) continue;
+            const target = this.board[r1][tc];
+            if (target && target.color === enemy) {
+              moves.push({
+                fromR: r, fromC: c, toR: r1, toC: tc,
+                piece: p, captured: target,
+                promotion: r1 === promoRow ? 'q' : null
+              });
+            } else if (this.enPassant && this.enPassant.r === r1 && this.enPassant.c === tc) {
+              const epVictim = this.board[r][tc];
+              if (epVictim && epVictim.color === enemy) {
+                moves.push({
+                  fromR: r, fromC: c, toR: r1, toC: tc,
+                  piece: p, captured: epVictim,
+                  isEnPassant: true, epCaptureR: r, epCaptureC: tc
+                });
+              }
+            }
+          }
+        } else if (p.type === 'n') {
+          const jumps = [
+            [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+            [1, -2], [1, 2], [2, -1], [2, 1]
+          ];
+          for (const [dr, dc] of jumps) {
+            const nr = r + dr, nc = c + dc;
+            if (!this.inBounds(nr, nc)) continue;
+            const target = this.board[nr][nc];
+            if (!target || target.color === enemy) {
+              moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, piece: p, captured: target || null });
+            }
+          }
+        } else if (p.type === 'b' || p.type === 'r' || p.type === 'q') {
+          const dirs = [];
+          if (p.type === 'b' || p.type === 'q') dirs.push([-1, -1], [-1, 1], [1, -1], [1, 1]);
+          if (p.type === 'r' || p.type === 'q') dirs.push([-1, 0], [1, 0], [0, -1], [0, 1]);
+
+          for (const [dr, dc] of dirs) {
+            let nr = r + dr, nc = c + dc;
+            while (this.inBounds(nr, nc)) {
+              const target = this.board[nr][nc];
+              if (!target) {
+                moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, piece: p, captured: null });
+              } else {
+                if (target.color === enemy) {
+                  moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, piece: p, captured: target });
+                }
+                break;
+              }
+              nr += dr;
+              nc += dc;
+            }
+          }
+        } else if (p.type === 'k') {
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              if (dr === 0 && dc === 0) continue;
+              const nr = r + dr, nc = c + dc;
+              if (!this.inBounds(nr, nc)) continue;
+              const target = this.board[nr][nc];
+              if (!target || target.color === enemy) {
+                moves.push({ fromR: r, fromC: c, toR: nr, toC: nc, piece: p, captured: target || null });
+              }
+            }
+          }
+
+          const homeRow = color === 'w' ? 7 : 0;
+          if (r === homeRow && c === 4 && !this.isInCheck(color)) {
+            const canKingside = color === 'w' ? this.castling.wK : this.castling.bK;
+            const canQueenside = color === 'w' ? this.castling.wQ : this.castling.bQ;
+
+            if (canKingside && !this.board[homeRow][5] && !this.board[homeRow][6]) {
+              const rook = this.board[homeRow][7];
+              if (rook && rook.type === 'r' && rook.color === color) {
+                if (!this.isSquareAttacked(homeRow, 5, enemy) && !this.isSquareAttacked(homeRow, 6, enemy)) {
+                  moves.push({
+                    fromR: homeRow, fromC: 4, toR: homeRow, toC: 6,
+                    piece: p, captured: null, isCastle: 'K',
+                    rookFromC: 7, rookToC: 5
+                  });
+                }
+              }
+            }
+
+            if (canQueenside && !this.board[homeRow][3] && !this.board[homeRow][2] && !this.board[homeRow][1]) {
+              const rook = this.board[homeRow][0];
+              if (rook && rook.type === 'r' && rook.color === color) {
+                if (!this.isSquareAttacked(homeRow, 3, enemy) && !this.isSquareAttacked(homeRow, 2, enemy)) {
+                  moves.push({
+                    fromR: homeRow, fromC: 4, toR: homeRow, toC: 2,
+                    piece: p, captured: null, isCastle: 'Q',
+                    rookFromC: 0, rookToC: 3
+                  });
+                }
+              }
+            }
+          }
+        }
+
+        return moves;
+      }
+
+      getLegalMovesForSquare(r, c) {
+        const p = this.board[r][c];
+        if (!p || p.color !== this.turn) return [];
+        const pseudo = this.getPseudoMovesForSquare(r, c);
+        const legal = [];
+
+        for (const m of pseudo) {
+          const testBoard = this.board.map(row => row.map(cell => (cell ? { ...cell } : null)));
+          testBoard[m.toR][m.toC] = { ...testBoard[m.fromR][m.fromC] };
+          testBoard[m.fromR][m.fromC] = null;
+          if (m.isEnPassant) testBoard[m.epCaptureR][m.epCaptureC] = null;
+          if (m.isCastle) {
+            testBoard[m.fromR][m.rookToC] = testBoard[m.fromR][m.rookFromC];
+            testBoard[m.fromR][m.rookFromC] = null;
+          }
+          if (!this.isInCheck(p.color, testBoard)) {
+            legal.push(m);
+          }
+        }
+        return legal;
+      }
+
+      getAllLegalMoves(color = this.turn) {
+        const prevTurn = this.turn;
+        this.turn = color;
+        const all = [];
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if (this.board[r][c] && this.board[r][c].color === color) {
+              all.push(...this.getLegalMovesForSquare(r, c));
+            }
+          }
+        }
+        this.turn = prevTurn;
+        return all;
+      }
+
+      coordToAlgebraic(r, c) {
+        return `${'abcdefgh'[c]}${8 - r}`;
+      }
+
+      makeMove(move, chosenPromotion = null) {
+        const snapshot = this.cloneState();
+        const piece = { ...this.board[move.fromR][move.fromC] };
+        const captured = move.isEnPassant
+          ? this.board[move.epCaptureR][move.epCaptureC]
+          : this.board[move.toR][move.toC];
+
+        this.board[move.fromR][move.fromC] = null;
+        if (move.isEnPassant) {
+          this.board[move.epCaptureR][move.epCaptureC] = null;
+        }
+
+        const promoType = chosenPromotion || move.promotion;
+        if (promoType) piece.type = promoType;
+        this.board[move.toR][move.toC] = piece;
+
+        let rookMoved = null;
+        if (move.isCastle) {
+          const rook = this.board[move.fromR][move.rookFromC];
+          this.board[move.fromR][move.rookFromC] = null;
+          this.board[move.fromR][move.rookToC] = rook;
+          rookMoved = {
+            id: rook.id,
+            fromR: move.fromR,
+            fromC: move.rookFromC,
+            toR: move.fromR,
+            toC: move.rookToC
+          };
+        }
+
+        if (piece.type === 'k') {
+          if (piece.color === 'w') { this.castling.wK = false; this.castling.wQ = false; }
+          else { this.castling.bK = false; this.castling.bQ = false; }
+        }
+        if (move.fromR === 7 && move.fromC === 0) this.castling.wQ = false;
+        if (move.fromR === 7 && move.fromC === 7) this.castling.wK = false;
+        if (move.fromR === 0 && move.fromC === 0) this.castling.bQ = false;
+        if (move.fromR === 0 && move.fromC === 7) this.castling.bK = false;
+        if (move.toR === 7 && move.toC === 0) this.castling.wQ = false;
+        if (move.toR === 7 && move.toC === 7) this.castling.wK = false;
+        if (move.toR === 0 && move.toC === 0) this.castling.bQ = false;
+        if (move.toR === 0 && move.toC === 7) this.castling.bK = false;
+
+        if (move.isDoublePawn) {
+          this.enPassant = { r: (move.fromR + move.toR) / 2, c: move.fromC };
+        } else {
+          this.enPassant = null;
+        }
+
+        if (captured) {
+          if (piece.color === 'w') this.capturedByWhite.push(captured.type);
+          else this.capturedByBlack.push(captured.type);
+        }
+
+        const nextTurn = this.turn === 'w' ? 'b' : 'w';
+        if (this.turn === 'b') this.fullMoveNumber++;
+        this.turn = nextTurn;
+
+        const inCheck = this.isInCheck(this.turn);
+        const replies = this.getAllLegalMoves(this.turn);
+        const isCheckmate = inCheck && replies.length === 0;
+        const isStalemate = !inCheck && replies.length === 0;
+
+        let san = '';
+        if (move.isCastle === 'K') san = 'O-O';
+        else if (move.isCastle === 'Q') san = 'O-O-O';
+        else {
+          const origType = move.piece.type;
+          if (origType !== 'p') san += origType.toUpperCase();
+          else if (captured) san += 'abcdefgh'[move.fromC];
+          if (captured) san += 'x';
+          san += this.coordToAlgebraic(move.toR, move.toC);
+          if (promoType) san += `=${promoType.toUpperCase()}`;
+        }
+        if (isCheckmate) san += '#';
+        else if (inCheck) san += '+';
+
+        const record = {
+          snapshot,
+          move,
+          pieceAfter: { ...piece },
+          captured: captured ? { ...captured } : null,
+          rookMoved,
+          san,
+          color: move.piece.color,
+          inCheck,
+          isCheckmate,
+          isStalemate
+        };
+
+        this.history.push(record);
+        return record;
+      }
+
+      undo() {
+        if (this.history.length === 0) return null;
+        const last = this.history.pop();
+        this.restoreState(last.snapshot);
+        return last;
+      }
+
+      evaluateBoard() {
+        const values = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+        let score = 0;
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const p = this.board[r][c];
+            if (!p) continue;
+            let val = values[p.type] || 0;
+            const centerDist = Math.abs(3.5 - r) + Math.abs(3.5 - c);
+            if (p.type === 'n' || p.type === 'b' || p.type === 'q') {
+              val += (7 - centerDist) * 6;
+            } else if (p.type === 'p') {
+              const advancement = p.color === 'w' ? (6 - r) : (r - 1);
+              val += advancement * 12;
+              if (c >= 2 && c <= 5) val += 8;
+            }
+            score += p.color === 'w' ? val : -val;
+          }
+        }
+        return score;
+      }
+
+      chooseAIMove(difficulty = 'adept') {
+        const legalMoves = this.getAllLegalMoves(this.turn);
+        if (legalMoves.length === 0) return null;
+
+        if (difficulty === 'novice') {
+          const captures = legalMoves.filter(m => m.captured);
+          if (captures.length > 0 && Math.random() < 0.65) {
+            return captures[Math.floor(Math.random() * captures.length)];
+          }
+          return legalMoves[Math.floor(Math.random() * legalMoves.length)];
+        }
+
+        const depth = difficulty === 'archmage' ? 3 : 2;
+        const isMaximizing = this.turn === 'w';
+        legalMoves.sort((a, b) => (b.captured ? 10 : 0) - (a.captured ? 10 : 0));
+
+        let bestMove = legalMoves[0];
+        let bestValue = isMaximizing ? -Infinity : Infinity;
+
+        for (const m of legalMoves) {
+          const snap = this.cloneState();
+          this.makeMove(m, 'q');
+          const val = this.minimax(depth - 1, -Infinity, Infinity, !isMaximizing);
+          this.history.pop();
+          this.restoreState(snap);
+
+          const captureBias = m.captured ? (isMaximizing ? 18 : -18) : 0;
+          const jitter = (Math.random() - 0.5) * 8;
+          const totalVal = val + captureBias + jitter;
+
+          if (isMaximizing && totalVal > bestValue) {
+            bestValue = totalVal;
+            bestMove = m;
+          } else if (!isMaximizing && totalVal < bestValue) {
+            bestValue = totalVal;
+            bestMove = m;
+          }
+        }
+
+        return bestMove;
+      }
+
+      minimax(depth, alpha, beta, isMaximizing) {
+        if (depth === 0) return this.evaluateBoard();
+        const moves = this.getAllLegalMoves(isMaximizing ? 'w' : 'b');
+        if (moves.length === 0) {
+          if (this.isInCheck(isMaximizing ? 'w' : 'b')) {
+            return isMaximizing ? -99999 - depth * 100 : 99999 + depth * 100;
+          }
+          return 0;
+        }
+
+        moves.sort((a, b) => (b.captured ? 1 : 0) - (a.captured ? 1 : 0));
+
+        if (isMaximizing) {
+          let maxEval = -Infinity;
+          for (const m of moves) {
+            const snap = this.cloneState();
+            this.makeMove(m, 'q');
+            const ev = this.minimax(depth - 1, alpha, beta, false);
+            this.history.pop();
+            this.restoreState(snap);
+            maxEval = Math.max(maxEval, ev);
+            alpha = Math.max(alpha, ev);
+            if (beta <= alpha) break;
+          }
+          return maxEval;
+        } else {
+          let minEval = Infinity;
+          for (const m of moves) {
+            const snap = this.cloneState();
+            this.makeMove(m, 'q');
+            const ev = this.minimax(depth - 1, alpha, beta, true);
+            this.history.pop();
+            this.restoreState(snap);
+            minEval = Math.min(minEval, ev);
+            beta = Math.min(beta, ev);
+            if (beta <= alpha) break;
+          }
+          return minEval;
+        }
+      }
+    }
+
+    /***************************************************************************
+     * 3. PROCEDURAL TEXTURES & GEOMETRY HELPERS
+     ***************************************************************************/
+    const SQUARE_SIZE = 1.35;
+    const BOARD_OFFSET = (7 * SQUARE_SIZE) / 2;
+
+    function boardToWorld(r, c) {
+      return new THREE.Vector3(
+        c * SQUARE_SIZE - BOARD_OFFSET,
+        0,
+        r * SQUARE_SIZE - BOARD_OFFSET
+      );
+    }
+
+    function createStoneTexture(baseHex, veinHex, noiseStrength = 18) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = baseHex;
+      ctx.fillRect(0, 0, 256, 256);
+
+      for (let i = 0; i < 2400; i++) {
+        const x = Math.random() * 256;
+        const y = Math.random() * 256;
+        const alpha = Math.random() * (noiseStrength / 255);
+        ctx.fillStyle = Math.random() > 0.5 ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+        ctx.fillRect(x, y, 2, 2);
+      }
+
+      ctx.strokeStyle = veinHex;
+      ctx.lineWidth = 1.5;
+      for (let v = 0; v < 7; v++) {
+        ctx.beginPath();
+        let x = Math.random() * 256;
+        let y = 0;
+        ctx.moveTo(x, y);
+        while (y < 256) {
+          y += 16 + Math.random() * 20;
+          x += (Math.random() - 0.5) * 38;
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    function createLabelTexture(char) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 64, 64);
+      ctx.font = 'bold 34px "Cinzel", serif';
+      ctx.fillStyle = 'rgba(245, 196, 81, 0.82)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(char, 32, 34);
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    /***************************************************************************
+     * 4. ENVIRONMENT REALM DEFINITIONS (7 SELECTABLE REALMS + BOARD STYLES)
+     ***************************************************************************/
+    const REALM_CONFIGS = {
+      cathedral: {
+        name: 'Gothic Sanctuary',
+        bgHex: 0x09080e,
+        fogDensity: 0.020,
+        ambientHex: 0x282338,
+        ambientIntensity: 1.35,
+        spotHex: 0xfff1d0,
+        spotIntensity: 2.6,
+        rimWestHex: 0x7c5cff,
+        rimEastHex: 0xffa94d,
+        lightSqBase: '#dfd8cd',
+        lightSqVein: 'rgba(150, 140, 125, 0.25)',
+        darkSqBase: '#23202c',
+        darkSqVein: 'rgba(65, 58, 85, 0.28)',
+        frameColor: 0x221f2d,
+        trimColor: 0xc89d3c
+      },
+      night: {
+        name: 'Starlit Night Glade',
+        bgHex: 0x040716,
+        fogDensity: 0.015,
+        ambientHex: 0x162447,
+        ambientIntensity: 1.45,
+        spotHex: 0xc7d2fe,
+        spotIntensity: 2.4,
+        rimWestHex: 0x38bdf8,
+        rimEastHex: 0x818cf8,
+        lightSqBase: '#cbd5e1',
+        lightSqVein: 'rgba(100, 116, 139, 0.3)',
+        darkSqBase: '#0f172a',
+        darkSqVein: 'rgba(56, 189, 248, 0.25)',
+        frameColor: 0x0f172a,
+        trimColor: 0x38bdf8
+      },
+      day: {
+        name: 'Sunlit Alpine Day',
+        bgHex: 0x68a6e8,
+        fogDensity: 0.010,
+        ambientHex: 0xdbeafe,
+        ambientIntensity: 1.65,
+        spotHex: 0xfffbeb,
+        spotIntensity: 2.9,
+        rimWestHex: 0x93c5fd,
+        rimEastHex: 0xfde68a,
+        lightSqBase: '#fef9ef',
+        lightSqVein: 'rgba(217, 179, 130, 0.28)',
+        darkSqBase: '#2b4c7e',
+        darkSqVein: 'rgba(147, 197, 253, 0.25)',
+        frameColor: 0xe2e8f0,
+        trimColor: 0xf59e0b
+      },
+      grass: {
+        name: 'Verdant Meadow & Leaves',
+        bgHex: 0x132a1c,
+        fogDensity: 0.016,
+        ambientHex: 0x344e41,
+        ambientIntensity: 1.5,
+        spotHex: 0xfef3c7,
+        spotIntensity: 2.6,
+        rimWestHex: 0x4ade80,
+        rimEastHex: 0xfbbf24,
+        lightSqBase: '#e2e8ce',
+        lightSqVein: 'rgba(101, 163, 13, 0.28)',
+        darkSqBase: '#283618',
+        darkSqVein: 'rgba(163, 177, 138, 0.25)',
+        frameColor: 0x3a2618,
+        trimColor: 0x84cc16
+      },
+      ocean: {
+        name: 'Tempest Ocean Waves',
+        bgHex: 0x061a2e,
+        fogDensity: 0.014,
+        ambientHex: 0x0f3460,
+        ambientIntensity: 1.5,
+        spotHex: 0xe0f2fe,
+        spotIntensity: 2.7,
+        rimWestHex: 0x06b6d4,
+        rimEastHex: 0x3b82f6,
+        lightSqBase: '#e0f7fa',
+        lightSqVein: 'rgba(6, 182, 212, 0.28)',
+        darkSqBase: '#082f49',
+        darkSqVein: 'rgba(56, 189, 248, 0.30)',
+        frameColor: 0x0c4a6e,
+        trimColor: 0x22d3ee
+      },
+      space: {
+        name: 'Astral Nebula Void',
+        bgHex: 0x03010a,
+        fogDensity: 0.008,
+        ambientHex: 0x241242,
+        ambientIntensity: 1.55,
+        spotHex: 0xf3e8ff,
+        spotIntensity: 2.6,
+        rimWestHex: 0xc084fc,
+        rimEastHex: 0x22d3ee,
+        lightSqBase: '#e9d5ff',
+        lightSqVein: 'rgba(168, 85, 247, 0.32)',
+        darkSqBase: '#13072e',
+        darkSqVein: 'rgba(34, 211, 238, 0.32)',
+        frameColor: 0x1e1b4b,
+        trimColor: 0xa855f7
+      },
+      sand: {
+        name: 'Golden Dunes Sanctuary',
+        bgHex: 0x331d0c,
+        fogDensity: 0.017,
+        ambientHex: 0x6b3e26,
+        ambientIntensity: 1.55,
+        spotHex: 0xffedd5,
+        spotIntensity: 2.8,
+        rimWestHex: 0xf97316,
+        rimEastHex: 0xfacc15,
+        lightSqBase: '#fde6bd',
+        lightSqVein: 'rgba(217, 119, 6, 0.28)',
+        darkSqBase: '#451a03',
+        darkSqVein: 'rgba(245, 158, 11, 0.28)',
+        frameColor: 0x5c2d0c,
+        trimColor: 0xfbbf24
+      }
+    };
+
+    /***************************************************************************
+     * 5. MAIN 3D AETHERIA CHESS APPLICATION CONTROLLER
+     ***************************************************************************/
+    class WizardsChessApp {
+      constructor() {
+        this.engine = new WizardChessEngine();
+
+        // Device & Gameplay state
+        this.controlPlatform = 'pc'; // 'pc' | 'mobile'
+        this.currentRealm = 'cathedral';
+        this.gameMode = 'ai'; // 'ai' | '2p'
+        this.aiDifficulty = 'adept';
+        this.dynamicActionCam = true;
+        this.isAnimating = false;
+        this.selectedSquare = null;
+        this.legalMovesForSelected = [];
+        this.pendingPromotionMove = null;
+
+        // 3D Board Cursor for Keyboard (WASD/Arrows) & Mobile D-Pad
+        this.cursorSquare = { r: 6, c: 4 }; // Starts on e2
+
+        // 3D Scene registries
+        this.squareMeshes = [];
+        this.pieceMeshes = new Map();
+        this.shatterFragments = [];
+        this.trailParticles = [];
+        this.shockwaves = [];
+
+        // Dynamic environment references for per-frame animation
+        this.envGroup = null;
+        this.oceanMesh = null;
+        this.oceanBasePositions = null;
+        this.grassInstancedMesh = null;
+        this.grassDummyMatrices = [];
+        this.fallingLeaves = [];
+        this.envParticles = null;
+        this.spaceRings = [];
+
+        // Spherical Camera Orbit State
+        this.cameraState = {
+          theta: 0,
+          phi: 0.92,
+          radius: 15.8,
+          target: new THREE.Vector3(0, 0.4, 0),
+          desiredTheta: 0,
+          desiredPhi: 0.92,
+          desiredRadius: 15.8,
+          desiredTarget: new THREE.Vector3(0, 0.4, 0),
+          shakeIntensity: 0,
+          savedBeforeAction: null
+        };
+
+        this.clock = new THREE.Clock();
+        this.raycaster = new THREE.Raycaster();
+        this.pointer = new THREE.Vector2();
+
+        this.initThreeScene();
+        this.initSharedMaterials();
+        this.buildChessBoard();
+        this.buildCursorMesh();
+        this.setEnvironmentRealm('cathedral');
+        this.syncPiecesWithEngine();
+        this.initLauncherAndDeviceDetection();
+        this.initControlsAndEvents();
+        this.updateHUD();
+
+        this.animate = this.animate.bind(this);
+        requestAnimationFrame(this.animate);
+      }
+
+      initThreeScene() {
+        const container = document.getElementById('canvas-container');
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x09080e);
+        this.scene.fog = new THREE.FogExp2(0x09080e, 0.020);
+
+        this.camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 180);
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1.15;
+        container.appendChild(this.renderer.domElement);
+
+        this.ambientLight = new THREE.AmbientLight(0x282338, 1.35);
+        this.scene.add(this.ambientLight);
+
+        this.mainSpotLight = new THREE.SpotLight(0xfff1d0, 2.6);
+        this.mainSpotLight.position.set(4, 21, 6);
+        this.mainSpotLight.angle = Math.PI / 3.0;
+        this.mainSpotLight.penumbra = 0.65;
+        this.mainSpotLight.decay = 1.2;
+        this.mainSpotLight.distance = 75;
+        this.mainSpotLight.castShadow = true;
+        this.mainSpotLight.shadow.mapSize.width = 2048;
+        this.mainSpotLight.shadow.mapSize.height = 2048;
+        this.mainSpotLight.shadow.bias = -0.0005;
+        this.scene.add(this.mainSpotLight);
+
+        this.rimLightWest = new THREE.DirectionalLight(0x7c5cff, 1.15);
+        this.rimLightWest.position.set(-18, 12, -8);
+        this.scene.add(this.rimLightWest);
+
+        this.rimLightEast = new THREE.DirectionalLight(0xffa94d, 0.95);
+        this.rimLightEast.position.set(18, 9, 10);
+        this.scene.add(this.rimLightEast);
+
+        this.actionLight = new THREE.PointLight(0xff3b5c, 0, 12);
+        this.actionLight.position.set(0, 3, 0);
+        this.scene.add(this.actionLight);
+      }
+
+      initSharedMaterials() {
+        const marbleTex = createStoneTexture('#f5f0e6', 'rgba(185, 165, 135, 0.25)', 12);
+        const obsidianTex = createStoneTexture('#1a1822', 'rgba(98, 70, 145, 0.28)', 16);
+
+        this.matMarble = new THREE.MeshStandardMaterial({
+          map: marbleTex,
+          color: 0xfaf5eb,
+          roughness: 0.18,
+          metalness: 0.08
+        });
+        this.matWhiteRune = new THREE.MeshStandardMaterial({
+          color: 0xffd56b,
+          emissive: 0xf59e0b,
+          emissiveIntensity: 1.45,
+          roughness: 0.2,
+          metalness: 0.8
+        });
+
+        this.matObsidian = new THREE.MeshStandardMaterial({
+          map: obsidianTex,
+          color: 0x1c1926,
+          roughness: 0.14,
+          metalness: 0.55
+        });
+        this.matBlackRune = new THREE.MeshStandardMaterial({
+          color: 0xc084fc,
+          emissive: 0x9333ea,
+          emissiveIntensity: 1.65,
+          roughness: 0.2,
+          metalness: 0.8
+        });
+
+        this.matCathedralStone = new THREE.MeshStandardMaterial({
+          color: 0x191722,
+          roughness: 0.82,
+          metalness: 0.12
+        });
+        this.matPedestalStone = new THREE.MeshStandardMaterial({
+          color: 0x221f2d,
+          roughness: 0.55,
+          metalness: 0.25
+        });
+      }
+
+      /*************************************************************************
+       * 3D BOARD & INTERACTIVE KEYBOARD / D-PAD SELECTOR CURSOR
+       *************************************************************************/
+      buildChessBoard() {
+        this.boardGroup = new THREE.Group();
+        this.scene.add(this.boardGroup);
+
+        const boardSpan = 8 * SQUARE_SIZE;
+
+        const frameGeo = new THREE.BoxGeometry(boardSpan + 1.3, 0.52, boardSpan + 1.3);
+        this.boardFrameMesh = new THREE.Mesh(frameGeo, this.matPedestalStone.clone());
+        this.boardFrameMesh.position.y = -0.32;
+        this.boardFrameMesh.receiveShadow = true;
+        this.boardFrameMesh.castShadow = true;
+        this.boardGroup.add(this.boardFrameMesh);
+
+        const trimGeo = new THREE.BoxGeometry(boardSpan + 0.18, 0.54, boardSpan + 0.18);
+        this.boardTrimMat = new THREE.MeshStandardMaterial({
+          color: 0xc89d3c,
+          roughness: 0.28,
+          metalness: 0.85
+        });
+        this.boardTrimMesh = new THREE.Mesh(trimGeo, this.boardTrimMat);
+        this.boardTrimMesh.position.y = -0.31;
+        this.boardGroup.add(this.boardTrimMesh);
+
+        const upperPedestalGeo = new THREE.CylinderGeometry(5.2, 6.2, 1.4, 8);
+        this.upperPedestal = new THREE.Mesh(upperPedestalGeo, this.matPedestalStone);
+        this.upperPedestal.position.y = -1.25;
+        this.upperPedestal.rotation.y = Math.PI / 8;
+        this.upperPedestal.receiveShadow = true;
+        this.boardGroup.add(this.upperPedestal);
+
+        const lowerPedestalGeo = new THREE.CylinderGeometry(6.2, 7.6, 1.6, 8);
+        this.lowerPedestal = new THREE.Mesh(lowerPedestalGeo, this.matCathedralStone);
+        this.lowerPedestal.position.y = -2.65;
+        this.lowerPedestal.rotation.y = Math.PI / 8;
+        this.lowerPedestal.receiveShadow = true;
+        this.boardGroup.add(this.lowerPedestal);
+
+        // 64 Squares
+        this.squareMeshes = Array.from({ length: 8 }, () => Array(8).fill(null));
+        const squareGeo = new THREE.BoxGeometry(SQUARE_SIZE * 0.985, 0.22, SQUARE_SIZE * 0.985);
+
+        const lightTex = createStoneTexture('#dfd8cd', 'rgba(150, 140, 125, 0.22)', 14);
+        const darkTex = createStoneTexture('#23202c', 'rgba(65, 58, 85, 0.25)', 18);
+
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const isLight = (r + c) % 2 === 0;
+            const mat = new THREE.MeshStandardMaterial({
+              map: isLight ? lightTex : darkTex,
+              roughness: isLight ? 0.24 : 0.28,
+              metalness: isLight ? 0.08 : 0.22
+            });
+            const sqMesh = new THREE.Mesh(squareGeo, mat);
+            const worldPos = boardToWorld(r, c);
+            sqMesh.position.set(worldPos.x, -0.11, worldPos.z);
+            sqMesh.receiveShadow = true;
+            sqMesh.userData = { type: 'square', r, c, isLight };
+            this.boardGroup.add(sqMesh);
+            this.squareMeshes[r][c] = sqMesh;
+          }
+        }
+
+        // Coordinate Labels
+        const files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+        const labelGeo = new THREE.PlaneGeometry(0.45, 0.45);
+
+        for (let i = 0; i < 8; i++) {
+          const pos = i * SQUARE_SIZE - BOARD_OFFSET;
+          const fileMat = new THREE.MeshBasicMaterial({
+            map: createLabelTexture(files[i]),
+            transparent: true,
+            depthWrite: false
+          });
+          const fFront = new THREE.Mesh(labelGeo, fileMat);
+          fFront.rotation.x = -Math.PI / 2;
+          fFront.position.set(pos, -0.04, boardSpan / 2 + 0.36);
+          this.boardGroup.add(fFront);
+
+          const fBack = new THREE.Mesh(labelGeo, fileMat);
+          fBack.rotation.x = -Math.PI / 2;
+          fBack.rotation.z = Math.PI;
+          fBack.position.set(pos, -0.04, -boardSpan / 2 - 0.36);
+          this.boardGroup.add(fBack);
+
+          const rankMat = new THREE.MeshBasicMaterial({
+            map: createLabelTexture(ranks[i]),
+            transparent: true,
+            depthWrite: false
+          });
+          const rLeft = new THREE.Mesh(labelGeo, rankMat);
+          rLeft.rotation.x = -Math.PI / 2;
+          rLeft.position.set(-boardSpan / 2 - 0.36, -0.04, pos);
+          this.boardGroup.add(rLeft);
+
+          const rRight = new THREE.Mesh(labelGeo, rankMat);
+          rRight.rotation.x = -Math.PI / 2;
+          rRight.position.set(boardSpan / 2 + 0.36, -0.04, pos);
+          this.boardGroup.add(rRight);
+        }
+
+        this.indicatorGroup = new THREE.Group();
+        this.scene.add(this.indicatorGroup);
+      }
+
+      /** Builds the 3D spatial cursor ring controlled by Keyboard (WASD/Arrows) or Touch D-Pad */
+      buildCursorMesh() {
+        this.cursorGroup = new THREE.Group();
+        const ringGeo = new THREE.RingGeometry(0.50, 0.62, 4);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0x38bdf8,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.88
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = -Math.PI / 2;
+        ring.rotation.z = Math.PI / 4;
+        this.cursorGroup.add(ring);
+
+        const innerRing = new THREE.Mesh(
+          new THREE.RingGeometry(0.42, 0.45, 32),
+          new THREE.MeshBasicMaterial({
+            color: 0xfef08a,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.75
+          })
+        );
+        innerRing.rotation.x = -Math.PI / 2;
+        this.cursorGroup.add(innerRing);
+
+        this.scene.add(this.cursorGroup);
+        this.updateCursorMeshPosition();
+      }
+
+      updateCursorMeshPosition() {
+        if (!this.cursorGroup) return;
+        const pos = boardToWorld(this.cursorSquare.r, this.cursorSquare.c);
+        this.cursorGroup.position.set(pos.x, 0.04, pos.z);
+      }
+
+      /*************************************************************************
+       * 7 LIVE-SWITCHABLE 3D ENVIRONMENTS & MATCHING BOARD STYLES
+       *************************************************************************/
+      setEnvironmentRealm(realmKey) {
+        if (!REALM_CONFIGS[realmKey]) return;
+        this.currentRealm = realmKey;
+        const cfg = REALM_CONFIGS[realmKey];
+
+        // Update UI active states
+        document.querySelectorAll('.hud-env-btn, .start-env-btn').forEach(btn => {
+          btn.classList.toggle('active-gold', btn.getAttribute('data-env') === realmKey);
+        });
+        const realmLabel = document.getElementById('active-realm-label');
+        if (realmLabel) realmLabel.textContent = cfg.name;
+
+        // Update Scene Atmosphere & Lights
+        this.scene.background.setHex(cfg.bgHex);
+        this.scene.fog.color.setHex(cfg.bgHex);
+        this.scene.fog.density = cfg.fogDensity;
+
+        this.ambientLight.color.setHex(cfg.ambientHex);
+        this.ambientLight.intensity = cfg.ambientIntensity;
+        this.mainSpotLight.color.setHex(cfg.spotHex);
+        this.mainSpotLight.intensity = cfg.spotIntensity;
+        this.rimLightWest.color.setHex(cfg.rimWestHex);
+        this.rimLightEast.color.setHex(cfg.rimEastHex);
+
+        // Update Board Square & Frame Materials to match Realm
+        const lightTex = createStoneTexture(cfg.lightSqBase, cfg.lightSqVein, 14);
+        const darkTex = createStoneTexture(cfg.darkSqBase, cfg.darkSqVein, 18);
+
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const isLight = (r + c) % 2 === 0;
+            const sq = this.squareMeshes[r][c];
+            sq.material.map = isLight ? lightTex : darkTex;
+            sq.material.roughness = realmKey === 'space' ? 0.12 : (isLight ? 0.24 : 0.28);
+            sq.material.metalness = realmKey === 'space' ? 0.45 : (isLight ? 0.08 : 0.22);
+            sq.material.needsUpdate = true;
+          }
+        }
+        this.boardFrameMesh.material.color.setHex(cfg.frameColor);
+        this.boardTrimMat.color.setHex(cfg.trimColor);
+
+        // Clear previous environment objects
+        if (this.envGroup) {
+          this.scene.remove(this.envGroup);
+        }
+        this.envGroup = new THREE.Group();
+        this.scene.add(this.envGroup);
+
+        this.oceanMesh = null;
+        this.oceanBasePositions = null;
+        this.grassInstancedMesh = null;
+        this.grassDummyMatrices = [];
+        this.fallingLeaves = [];
+        this.envParticles = null;
+        this.spaceRings = [];
+
+        // Show/hide lower pedestals for floating space/ocean feel
+        this.lowerPedestal.visible = realmKey !== 'space';
+
+        // Build specific 3D Realm Geometry
+        if (realmKey === 'cathedral') {
+          this.buildRealmCathedral();
+        } else if (realmKey === 'night') {
+          this.buildRealmNightGlade();
+        } else if (realmKey === 'day') {
+          this.buildRealmSunlitDay();
+        } else if (realmKey === 'grass') {
+          this.buildRealmVerdantGrass();
+        } else if (realmKey === 'ocean') {
+          this.buildRealmOceanWaves();
+        } else if (realmKey === 'space') {
+          this.buildRealmDeepSpace();
+        } else if (realmKey === 'sand') {
+          this.buildRealmGoldenSand();
+        }
+      }
+
+      /** 1. GOTHIC SANCTUARY (CATHEDRAL) */
+      buildRealmCathedral() {
+        const floorGeo = new THREE.CylinderGeometry(48, 48, 0.5, 48);
+        const floorMesh = new THREE.Mesh(floorGeo, this.matCathedralStone);
+        floorMesh.position.y = -3.6;
+        floorMesh.receiveShadow = true;
+        this.envGroup.add(floorMesh);
+
+        const inlayMesh = new THREE.Mesh(
+          new THREE.RingGeometry(8.2, 8.6, 64),
+          new THREE.MeshBasicMaterial({ color: 0xe5c158, side: THREE.DoubleSide, transparent: true, opacity: 0.25 })
+        );
+        inlayMesh.rotation.x = -Math.PI / 2;
+        inlayMesh.position.y = -3.32;
+        this.envGroup.add(inlayMesh);
+
+        const numPillars = 12;
+        const radius = 22;
+        for (let i = 0; i < numPillars; i++) {
+          const angle = (i / numPillars) * Math.PI * 2;
+          const pillarGroup = new THREE.Group();
+          pillarGroup.position.set(Math.cos(angle) * radius, -3.4, Math.sin(angle) * radius);
+          pillarGroup.lookAt(0, -3.4, 0);
+
+          const colMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 1.05, 26, 12), this.matCathedralStone);
+          colMesh.position.y = 13;
+          colMesh.castShadow = true;
+          pillarGroup.add(colMesh);
+
+          const archCurve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(0, 21, 0),
+            new THREE.Vector3(0, 28, 9),
+            new THREE.Vector3(0, 31, radius)
+          );
+          const archMesh = new THREE.Mesh(new THREE.TubeGeometry(archCurve, 14, 0.28, 8, false), this.matCathedralStone);
+          pillarGroup.add(archMesh);
+
+          if (i % 2 === 0) {
+            const glassColor = i % 4 === 0 ? 0xf59e0b : 0x7c3aed;
+            const rayMat = new THREE.MeshBasicMaterial({
+              color: glassColor,
+              transparent: true,
+              opacity: 0.032,
+              side: THREE.DoubleSide,
+              depthWrite: false,
+              blending: THREE.AdditiveBlending
+            });
+            const ray = new THREE.Mesh(new THREE.ConeGeometry(3.2, 18, 16, 1, true), rayMat);
+            ray.position.set(0, 11, 2.3);
+            ray.rotation.x = -Math.PI / 3.4;
+            pillarGroup.add(ray);
+          }
+          this.envGroup.add(pillarGroup);
+        }
+
+        this.createAmbientParticles(260, 0xffe4a0, 0.09, 28);
+      }
+
+      /** 2. STARLIT NIGHT GLADE */
+      buildRealmNightGlade() {
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x0b132b, roughness: 0.85, metalness: 0.1 });
+        const ground = new THREE.Mesh(new THREE.CylinderGeometry(55, 55, 0.6, 48), groundMat);
+        ground.position.y = -3.6;
+        ground.receiveShadow = true;
+        this.envGroup.add(ground);
+
+        // Glowing Full Moon high in the night sky
+        const moonMat = new THREE.MeshBasicMaterial({ color: 0xfef9c3 });
+        const moon = new THREE.Mesh(new THREE.SphereGeometry(4.2, 32, 32), moonMat);
+        moon.position.set(-22, 24, -36);
+        this.envGroup.add(moon);
+
+        const moonHalo = new THREE.Mesh(
+          new THREE.RingGeometry(4.3, 7.8, 32),
+          new THREE.MeshBasicMaterial({ color: 0x93c5fd, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending })
+        );
+        moonHalo.position.copy(moon.position);
+        moonHalo.lookAt(0, 0, 0);
+        this.envGroup.add(moonHalo);
+
+        // Ring of Glowing Moonlight Runestones & Cypress Silhouettes
+        for (let i = 0; i < 14; i++) {
+          const ang = (i / 14) * Math.PI * 2;
+          const dist = 16 + (i % 2) * 4;
+          const x = Math.cos(ang) * dist;
+          const z = Math.sin(ang) * dist;
+
+          const stone = new THREE.Mesh(
+            new THREE.BoxGeometry(1.2, 4.5 + (i % 3), 0.7),
+            new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
+          );
+          stone.position.set(x, -1.2, z);
+          stone.lookAt(0, -1.2, 0);
+          this.envGroup.add(stone);
+
+          const runeCrystal = new THREE.Mesh(
+            new THREE.OctahedronGeometry(0.35, 0),
+            new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+          );
+          runeCrystal.position.set(x, 1.8 + (i % 3) * 0.5, z);
+          this.envGroup.add(runeCrystal);
+        }
+
+        // Starfield Dome + Golden Fireflies
+        this.createStarfieldDome(900, 0xe0f2fe);
+        this.createAmbientParticles(320, 0xbef264, 0.12, 24);
+      }
+
+      /** 3. SUNLIT ALPINE DAY */
+      buildRealmSunlitDay() {
+        // Marble Plaza & Reflecting Pool
+        const poolMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.12, metalness: 0.35 });
+        const pool = new THREE.Mesh(new THREE.CylinderGeometry(52, 52, 0.4, 48), poolMat);
+        pool.position.y = -3.55;
+        pool.receiveShadow = true;
+        this.envGroup.add(pool);
+
+        const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3, metalness: 0.05 });
+        const plazaRing = new THREE.Mesh(new THREE.RingGeometry(7.2, 16.5, 48), whiteColMat);
+        plazaRing.rotation.x = -Math.PI / 2;
+        plazaRing.position.y = -3.32;
+        plazaRing.receiveShadow = true;
+        this.envGroup.add(plazaRing);
+
+        // Classical White Sunlit Colonnade
+        for (let i = 0; i < 12; i++) {
+          const ang = (i / 12) * Math.PI * 2;
+          const x = Math.cos(ang) * 15;
+          const z = Math.sin(ang) * 15;
+          const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 9.5, 16), whiteColMat);
+          col.position.set(x, 1.4, z);
+          col.castShadow = true;
+          col.receiveShadow = true;
+          this.envGroup.add(col);
+        }
+
+        // Drifting Fluffy Volumetric Clouds
+        const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, transparent: true, opacity: 0.88 });
+        for (let c = 0; c < 14; c++) {
+          const cloudGroup = new THREE.Group();
+          const ang = (c / 14) * Math.PI * 2;
+          const dist = 24 + (c % 3) * 8;
+          cloudGroup.position.set(Math.cos(ang) * dist, 11 + (c % 4) * 2.5, Math.sin(ang) * dist);
+          for (let p = 0; p < 4; p++) {
+            const puff = new THREE.Mesh(new THREE.SphereGeometry(1.6 + Math.random() * 1.2, 12, 12), cloudMat);
+            puff.position.set((p - 1.5) * 1.4, Math.random() * 0.6, (Math.random() - 0.5) * 1.2);
+            cloudGroup.add(puff);
+          }
+          this.envGroup.add(cloudGroup);
+          this.spaceRings.push({ mesh: cloudGroup, speed: 0.04 + (c % 3) * 0.02, isCloud: true });
+        }
+
+        this.createAmbientParticles(200, 0xfef08a, 0.09, 26);
+      }
+
+      /** 4. VERDANT MEADOW (PROPER 3D INSTANCED SWAYING GRASS & FALLING LEAVES) */
+      buildRealmVerdantGrass() {
+        const meadowMat = new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.88, metalness: 0.05 });
+        const ground = new THREE.Mesh(new THREE.CylinderGeometry(50, 50, 0.8, 48), meadowMat);
+        ground.position.y = -3.5;
+        ground.receiveShadow = true;
+        this.envGroup.add(ground);
+
+        // 4,500 Proper 3D Grass Blades using InstancedMesh around the sanctuary
+        const bladeCount = 4500;
+        const bladeGeo = new THREE.ConeGeometry(0.08, 0.95, 4);
+        bladeGeo.translate(0, 0.45, 0);
+        const bladeMat = new THREE.MeshStandardMaterial({
+          color: 0x4ade80,
+          roughness: 0.55,
+          metalness: 0.05
+        });
+
+        this.grassInstancedMesh = new THREE.InstancedMesh(bladeGeo, bladeMat, bladeCount);
+        this.grassInstancedMesh.receiveShadow = true;
+
+        const dummy = new THREE.Object3D();
+        const colorVar = new THREE.Color();
+        this.grassDummyMatrices = [];
+
+        for (let i = 0; i < bladeCount; i++) {
+          const rDist = 6.2 + Math.random() * 24;
+          const theta = Math.random() * Math.PI * 2;
+          const x = Math.cos(theta) * rDist;
+          const z = Math.sin(theta) * rDist;
+          const scaleY = 0.6 + Math.random() * 1.1;
+          const rotY = Math.random() * Math.PI * 2;
+
+          dummy.position.set(x, -3.12, z);
+          dummy.rotation.set((Math.random() - 0.5) * 0.25, rotY, (Math.random() - 0.5) * 0.25);
+          dummy.scale.set(1, scaleY, 1);
+          dummy.updateMatrix();
+          this.grassInstancedMesh.setMatrixAt(i, dummy.matrix);
+
+          colorVar.setHSL(0.28 + (Math.random() - 0.5) * 0.08, 0.65, 0.32 + Math.random() * 0.22);
+          this.grassInstancedMesh.setColorAt(i, colorVar);
+
+          if (i < 900) {
+            this.grassDummyMatrices.push({ index: i, x, z, scaleY, rotY, phase: Math.random() * Math.PI * 2 });
+          }
+        }
+        this.grassInstancedMesh.instanceMatrix.needsUpdate = true;
+        if (this.grassInstancedMesh.instanceColor) this.grassInstancedMesh.instanceColor.needsUpdate = true;
+        this.envGroup.add(this.grassInstancedMesh);
+
+        // Ancient Forest Trees surrounding the meadow
+        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a2c11, roughness: 0.9 });
+        const canopyColors = [0x2d6a4f, 0x40916c, 0xd97706, 0x65a30d];
+        for (let t = 0; t < 16; t++) {
+          const ang = (t / 16) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
+          const dist = 16.5 + (t % 3) * 4.5;
+          const tree = new THREE.Group();
+          tree.position.set(Math.cos(ang) * dist, -3.1, Math.sin(ang) * dist);
+
+          const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.75, 5.5, 8), trunkMat);
+          trunk.position.y = 2.75;
+          trunk.castShadow = true;
+          tree.add(trunk);
+
+          const foliageMat = new THREE.MeshStandardMaterial({
+            color: canopyColors[t % canopyColors.length],
+            roughness: 0.75
+          });
+          for (let c = 0; c < 3; c++) {
+            const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(2.4 - c * 0.45, 1), foliageMat);
+            crown.position.set((Math.random() - 0.5) * 0.8, 5.5 + c * 1.4, (Math.random() - 0.5) * 0.8);
+            crown.castShadow = true;
+            tree.add(crown);
+          }
+          this.envGroup.add(tree);
+        }
+
+        // 160 Gently Tumbling 3D Forest Leaves (Emerald & Golden Autumn Leaves)
+        const leafGeo = new THREE.PlaneGeometry(0.24, 0.16);
+        const leafColors = [0x4ade80, 0xfacc15, 0xf97316, 0xa3e635];
+        for (let l = 0; l < 160; l++) {
+          const leafMat = new THREE.MeshBasicMaterial({
+            color: leafColors[l % leafColors.length],
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.9
+          });
+          const leaf = new THREE.Mesh(leafGeo, leafMat);
+          leaf.position.set(
+            (Math.random() - 0.5) * 28,
+            -2 + Math.random() * 16,
+            (Math.random() - 0.5) * 28
+          );
+          leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+          this.envGroup.add(leaf);
+          this.fallingLeaves.push({
+            mesh: leaf,
+            speedY: 0.6 + Math.random() * 0.9,
+            swayPhase: Math.random() * Math.PI * 2,
+            rotSpeed: 1.5 + Math.random() * 2.5
+          });
+        }
+      }
+
+      /** 5. TEMPEST OCEAN (SEA WATER WITH PROPER ANIMATED 3D WAVES) */
+      buildRealmOceanWaves() {
+        const seaGeo = new THREE.PlaneGeometry(110, 110, 76, 76);
+        seaGeo.rotateX(-Math.PI / 2);
+
+        const posAttr = seaGeo.attributes.position;
+        this.oceanBasePositions = new Float32Array(posAttr.array.length);
+        this.oceanBasePositions.set(posAttr.array);
+
+        const seaMat = new THREE.MeshStandardMaterial({
+          color: 0x0284c7,
+          emissive: 0x082f49,
+          emissiveIntensity: 0.4,
+          roughness: 0.14,
+          metalness: 0.68,
+          flatShading: true
+        });
+
+        this.oceanMesh = new THREE.Mesh(seaGeo, seaMat);
+        this.oceanMesh.position.y = -2.15;
+        this.oceanMesh.receiveShadow = true;
+        this.envGroup.add(this.oceanMesh);
+
+        // Glowing Atlantis Sea Spires rising from the waves
+        const spireMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3, metalness: 0.5 });
+        const crystalMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+        for (let i = 0; i < 10; i++) {
+          const ang = (i / 10) * Math.PI * 2;
+          const dist = 17 + (i % 2) * 5;
+          const spire = new THREE.Mesh(new THREE.ConeGeometry(1.4, 9 + (i % 3) * 3, 6), spireMat);
+          spire.position.set(Math.cos(ang) * dist, 0.5, Math.sin(ang) * dist);
+          this.envGroup.add(spire);
+
+          const beacon = new THREE.Mesh(new THREE.OctahedronGeometry(0.45, 0), crystalMat);
+          beacon.position.set(Math.cos(ang) * dist, 5.8 + (i % 3) * 1.5, Math.sin(ang) * dist);
+          this.envGroup.add(beacon);
+        }
+
+        this.createAmbientParticles(300, 0x67e8f9, 0.1, 28);
+      }
+
+      /** 6. ASTRAL NEBULA (DEEP SPACE WITH STARS & ASTEROID RING) */
+      buildRealmDeepSpace() {
+        this.createStarfieldDome(1400, 0xffffff);
+
+        // Rotating Cosmic Nebula Rings around the board
+        const ringConfigs = [
+          { rIn: 9.5, rOut: 10.2, color: 0xa855f7, tiltX: 0.35, tiltZ: -0.2, speed: 0.18 },
+          { rIn: 12.5, rOut: 13.6, color: 0x22d3ee, tiltX: -0.45, tiltZ: 0.3, speed: -0.12 },
+          { rIn: 16.5, rOut: 17.1, color: 0xf43f5e, tiltX: 0.2, tiltZ: 0.5, speed: 0.08 }
+        ];
+
+        for (const rc of ringConfigs) {
+          const ringGeo = new THREE.RingGeometry(rc.rIn, rc.rOut, 64);
+          const ringMat = new THREE.MeshBasicMaterial({
+            color: rc.color,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.34,
+            blending: THREE.AdditiveBlending
+          });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = Math.PI / 2 + rc.tiltX;
+          ring.rotation.y = rc.tiltZ;
+          this.envGroup.add(ring);
+          this.spaceRings.push({ mesh: ring, speed: rc.speed });
+        }
+
+        // Orbiting Asteroid Belt Shards
+        const astGroup = new THREE.Group();
+        const astMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.7, metalness: 0.3 });
+        for (let a = 0; a < 90; a++) {
+          const ang = (a / 90) * Math.PI * 2;
+          const rad = 11.5 + (Math.random() - 0.5) * 4.5;
+          const ast = new THREE.Mesh(new THREE.DodecahedronGeometry(0.18 + Math.random() * 0.38, 0), astMat);
+          ast.position.set(Math.cos(ang) * rad, (Math.random() - 0.5) * 3.5, Math.sin(ang) * rad);
+          ast.rotation.set(Math.random() * 3, Math.random() * 3, 0);
+          astGroup.add(ast);
+        }
+        this.envGroup.add(astGroup);
+        this.spaceRings.push({ mesh: astGroup, speed: 0.14, isYOrbit: true });
+
+        this.createAmbientParticles(340, 0xd8b4fe, 0.11, 30);
+      }
+
+      /** 7. GOLDEN DUNES (DESERT SAND & OBELISKS) */
+      buildRealmGoldenSand() {
+        // Sculpted 3D Desert Sand Dunes
+        const sandGeo = new THREE.PlaneGeometry(110, 110, 64, 64);
+        sandGeo.rotateX(-Math.PI / 2);
+        const pos = sandGeo.attributes.position;
+
+        for (let i = 0; i < pos.count; i++) {
+          const vx = pos.getX(i);
+          const vz = pos.getZ(i);
+          const dist = Math.hypot(vx, vz);
+          if (dist > 8.5) {
+            const duneHeight =
+              Math.sin(vx * 0.14 + vz * 0.08) * 1.65 +
+              Math.cos(vz * 0.18) * 1.1;
+            pos.setY(i, duneHeight * Math.min(1, (dist - 8.5) / 8));
+          }
+        }
+        sandGeo.computeVertexNormals();
+
+        const sandTex = createStoneTexture('#e6b87c', 'rgba(180, 83, 9, 0.22)', 22);
+        const sandMat = new THREE.MeshStandardMaterial({
+          map: sandTex,
+          color: 0xfbbf24,
+          roughness: 0.82,
+          metalness: 0.08
+        });
+
+        const dunesMesh = new THREE.Mesh(sandGeo, sandMat);
+        dunesMesh.position.y = -3.1;
+        dunesMesh.receiveShadow = true;
+        this.envGroup.add(dunesMesh);
+
+        // Ancient Desert Sandstone Obelisks & Pyramids on Horizon
+        const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.7 });
+        const goldCapMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.25, metalness: 0.85 });
+
+        for (let i = 0; i < 8; i++) {
+          const ang = (i / 8) * Math.PI * 2 + 0.2;
+          const dist = 17.5;
+          const obGroup = new THREE.Group();
+          obGroup.position.set(Math.cos(ang) * dist, -3.1, Math.sin(ang) * dist);
+
+          const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.85, 8.5, 4), obeliskMat);
+          pillar.position.y = 4.25;
+          pillar.castShadow = true;
+          obGroup.add(pillar);
+
+          const cap = new THREE.Mesh(new THREE.ConeGeometry(0.48, 1.1, 4), goldCapMat);
+          cap.position.y = 9.05;
+          obGroup.add(cap);
+
+          this.envGroup.add(obGroup);
+        }
+
+        // Distant Great Pyramids
+        for (const [px, pz, scale] of [[-28, -32, 11], [32, -26, 9], [0, -38, 14]]) {
+          const pyr = new THREE.Mesh(new THREE.ConeGeometry(scale, scale * 1.15, 4), obeliskMat);
+          pyr.position.set(px, -3.1 + (scale * 1.15) / 2, pz);
+          pyr.rotation.y = Math.PI / 4;
+          this.envGroup.add(pyr);
+        }
+
+        this.createAmbientParticles(320, 0xfde68a, 0.09, 30);
+      }
+
+      createStarfieldDome(count, colorHex) {
+        const starPos = new Float32Array(count * 3);
+        for (let i = 0; i < count; i++) {
+          const r = 45 + Math.random() * 35;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.random() * Math.PI * 0.65;
+          starPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+          starPos[i * 3 + 1] = r * Math.cos(phi) + 4;
+          starPos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const mat = new THREE.PointsMaterial({
+          color: colorHex,
+          size: 0.22,
+          transparent: true,
+          opacity: 0.85
+        });
+        this.envGroup.add(new THREE.Points(geo, mat));
+      }
+
+      createAmbientParticles(count, colorHex, size, spread) {
+        const posArray = new Float32Array(count * 3);
+        const speedArray = new Float32Array(count);
+
+        for (let i = 0; i < count; i++) {
+          posArray[i * 3] = (Math.random() - 0.5) * spread;
+          posArray[i * 3 + 1] = -2 + Math.random() * 14;
+          posArray[i * 3 + 2] = (Math.random() - 0.5) * spread;
+          speedArray[i] = 0.18 + Math.random() * 0.35;
+        }
+
+        const particleGeo = new THREE.BufferGeometry();
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particleGeo.setAttribute('aSpeed', new THREE.BufferAttribute(speedArray, 1));
+
+        const particleMat = new THREE.PointsMaterial({
+          color: colorHex,
+          size,
+          transparent: true,
+          opacity: 0.65,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+        });
+
+        this.envParticles = new THREE.Points(particleGeo, particleMat);
+        this.envGroup.add(this.envParticles);
+      }
+
+      /*************************************************************************
+       * PROCEDURAL 3D WIZARD'S CHESS PIECES
+       *************************************************************************/
+      createPieceMesh(type, color, id) {
+        const group = new THREE.Group();
+        const bodyGroup = new THREE.Group();
+        group.add(bodyGroup);
+
+        const matStone = color === 'w' ? this.matMarble : this.matObsidian;
+        const matRune = (color === 'w' ? this.matWhiteRune : this.matBlackRune).clone();
+
+        const baseBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.52, 0.14, 24), matStone);
+        baseBottom.position.y = 0.07;
+        baseBottom.castShadow = true;
+        baseBottom.receiveShadow = true;
+        group.add(baseBottom);
+
+        const baseBevel = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.45, 0.12, 24), matStone);
+        baseBevel.position.y = 0.19;
+        baseBevel.castShadow = true;
+        group.add(baseBevel);
+
+        const runeRing = new THREE.Mesh(new THREE.TorusGeometry(0.39, 0.026, 12, 32), matRune);
+        runeRing.rotation.x = Math.PI / 2;
+        runeRing.position.y = 0.25;
+        group.add(runeRing);
+
+        const accentGroup = new THREE.Group();
+        bodyGroup.add(accentGroup);
+
+        const addCastShadow = (mesh) => {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          return mesh;
+        };
+
+        if (type === 'p') {
+          const torso = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.35, 0.56, 20), matStone));
+          torso.position.y = 0.52;
+          bodyGroup.add(torso);
+
+          const collar = addCastShadow(new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.04, 10, 24), matStone));
+          collar.rotation.x = Math.PI / 2;
+          collar.position.y = 0.8;
+          bodyGroup.add(collar);
+
+          const helm = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.23, 20, 20), matStone));
+          helm.position.y = 1.02;
+          bodyGroup.add(helm);
+
+          const orb = new THREE.Mesh(new THREE.OctahedronGeometry(0.11, 0), matRune);
+          orb.position.y = 1.32;
+          accentGroup.add(orb);
+        } else if (type === 'r') {
+          const tower = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.39, 0.88, 12), matStone));
+          tower.position.y = 0.68;
+          bodyGroup.add(tower);
+
+          const parapet = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.39, 0.34, 0.22, 12), matStone));
+          parapet.position.y = 1.18;
+          bodyGroup.add(parapet);
+
+          const merlonGeo = new THREE.BoxGeometry(0.13, 0.18, 0.13);
+          for (let i = 0; i < 6; i++) {
+            const ang = (i / 6) * Math.PI * 2;
+            const merlon = addCastShadow(new THREE.Mesh(merlonGeo, matStone));
+            merlon.position.set(Math.cos(ang) * 0.29, 1.35, Math.sin(ang) * 0.29);
+            merlon.rotation.y = -ang;
+            bodyGroup.add(merlon);
+          }
+
+          const brazier = new THREE.Mesh(new THREE.OctahedronGeometry(0.15, 0), matRune);
+          brazier.position.y = 1.44;
+          accentGroup.add(brazier);
+        } else if (type === 'n') {
+          const ped = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.37, 0.45, 16), matStone));
+          ped.position.y = 0.46;
+          bodyGroup.add(ped);
+
+          const neck = addCastShadow(new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.68, 0.42), matStone));
+          neck.position.set(0, 0.92, 0.04);
+          neck.rotation.x = 0.28;
+          bodyGroup.add(neck);
+
+          const forwardSign = color === 'w' ? -1 : 1;
+          const headGroup = new THREE.Group();
+          headGroup.position.set(0, 1.24, 0);
+          if (forwardSign === 1) headGroup.rotation.y = Math.PI;
+
+          const snout = addCastShadow(new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.56, 6), matStone));
+          snout.rotation.x = -Math.PI / 2.4;
+          snout.position.set(0, 0.04, -0.18);
+          headGroup.add(snout);
+
+          const earGeo = new THREE.ConeGeometry(0.06, 0.2, 4);
+          for (const ex of [-0.1, 0.1]) {
+            const ear = addCastShadow(new THREE.Mesh(earGeo, matStone));
+            ear.position.set(ex, 0.22, 0.05);
+            ear.rotation.x = -0.2;
+            headGroup.add(ear);
+          }
+
+          const mane = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.55, 0.12), matRune);
+          mane.position.set(0, -0.08, 0.19);
+          mane.rotation.x = 0.25;
+          headGroup.add(mane);
+
+          bodyGroup.add(headGroup);
+          accentGroup.add(headGroup);
+        } else if (type === 'b') {
+          const robe = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.37, 0.92, 20), matStone));
+          robe.position.y = 0.7;
+          bodyGroup.add(robe);
+
+          const mitre = addCastShadow(new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.54, 16), matStone));
+          mitre.position.y = 1.38;
+          bodyGroup.add(mitre);
+
+          const halo = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.025, 10, 28), matRune);
+          halo.position.y = 1.38;
+          halo.rotation.x = Math.PI / 3;
+          accentGroup.add(halo);
+
+          const finial = new THREE.Mesh(new THREE.OctahedronGeometry(0.1, 0), matRune);
+          finial.position.y = 1.72;
+          accentGroup.add(finial);
+        } else if (type === 'q') {
+          const lowerGown = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.39, 0.68, 24), matStone));
+          lowerGown.position.y = 0.58;
+          bodyGroup.add(lowerGown);
+
+          const upperBodice = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.21, 0.52, 24), matStone));
+          upperBodice.position.y = 1.15;
+          bodyGroup.add(upperBodice);
+
+          const dome = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 20), matStone));
+          dome.position.y = 1.46;
+          bodyGroup.add(dome);
+
+          const crownRing = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 12, 32), matRune);
+          crownRing.rotation.x = Math.PI / 2;
+          crownRing.position.y = 1.62;
+          accentGroup.add(crownRing);
+
+          const spikeGeo = new THREE.ConeGeometry(0.045, 0.2, 6);
+          for (let i = 0; i < 8; i++) {
+            const ang = (i / 8) * Math.PI * 2;
+            const spike = addCastShadow(new THREE.Mesh(spikeGeo, matStone));
+            spike.position.set(Math.cos(ang) * 0.24, 1.68, Math.sin(ang) * 0.24);
+            accentGroup.add(spike);
+          }
+
+          const pearl = new THREE.Mesh(new THREE.OctahedronGeometry(0.12, 1), matRune);
+          pearl.position.y = 1.84;
+          accentGroup.add(pearl);
+        } else if (type === 'k') {
+          const pillar = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.41, 0.82, 16), matStone));
+          pillar.position.y = 0.65;
+          bodyGroup.add(pillar);
+
+          const mantle = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.26, 0.45, 8), matStone));
+          mantle.position.y = 1.25;
+          bodyGroup.add(mantle);
+
+          const crownBase = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.22, 8), matStone));
+          crownBase.position.y = 1.56;
+          bodyGroup.add(crownBase);
+
+          const kingRuneBand = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.032, 10, 24), matRune);
+          kingRuneBand.rotation.x = Math.PI / 2;
+          kingRuneBand.position.y = 1.56;
+          accentGroup.add(kingRuneBand);
+
+          const crossV = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.36, 0.09), matRune);
+          crossV.position.y = 1.88;
+          accentGroup.add(crossV);
+
+          const crossH = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.09, 0.09), matRune);
+          crossH.position.y = 1.92;
+          accentGroup.add(crossH);
+        }
+
+        group.userData = {
+          id,
+          type,
+          color,
+          bodyGroup,
+          accentGroup,
+          runeRing,
+          matRune,
+          matStone,
+          phaseOffset: Math.random() * Math.PI * 2,
+          baseY: 0,
+          isSelected: false
+        };
+
+        group.traverse(child => {
+          if (child.isMesh) child.userData.pieceGroup = group;
+        });
+
+        return group;
+      }
+
+      syncPiecesWithEngine() {
+        for (const [, mesh] of this.pieceMeshes) {
+          this.scene.remove(mesh);
+        }
+        this.pieceMeshes.clear();
+
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const p = this.engine.board[r][c];
+            if (!p) continue;
+            const mesh = this.createPieceMesh(p.type, p.color, p.id);
+            const worldPos = boardToWorld(r, c);
+            mesh.position.copy(worldPos);
+            mesh.userData.r = r;
+            mesh.userData.c = c;
+            this.scene.add(mesh);
+            this.pieceMeshes.set(p.id, mesh);
+          }
+        }
+
+        this.clearHighlights();
+        this.updateCheckHighlight();
+      }
+
+      clearHighlights() {
+        while (this.indicatorGroup.children.length > 0) {
+          this.indicatorGroup.remove(this.indicatorGroup.children[0]);
+        }
+        for (const [, mesh] of this.pieceMeshes) {
+          mesh.userData.isSelected = false;
+        }
+      }
+
+      showLegalMoveHighlights(r, c, moves) {
+        this.clearHighlights();
+        this.updateCheckHighlight();
+
+        const selPos = boardToWorld(r, c);
+        const selRing = new THREE.Mesh(
+          new THREE.RingGeometry(0.45, 0.56, 32),
+          new THREE.MeshBasicMaterial({ color: 0xffe082, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+        );
+        selRing.rotation.x = -Math.PI / 2;
+        selRing.position.set(selPos.x, 0.02, selPos.z);
+        this.indicatorGroup.add(selRing);
+
+        const pieceData = this.engine.board[r][c];
+        if (pieceData && this.pieceMeshes.has(pieceData.id)) {
+          this.pieceMeshes.get(pieceData.id).userData.isSelected = true;
+        }
+
+        for (const m of moves) {
+          const pos = boardToWorld(m.toR, m.toC);
+          const isCapture = Boolean(m.captured);
+
+          if (isCapture) {
+            const outerRing = new THREE.Mesh(
+              new THREE.RingGeometry(0.48, 0.6, 6),
+              new THREE.MeshBasicMaterial({ color: 0xff3b5c, side: THREE.DoubleSide, transparent: true, opacity: 0.92 })
+            );
+            outerRing.rotation.x = -Math.PI / 2;
+            outerRing.position.set(pos.x, 0.03, pos.z);
+            outerRing.userData = { isPulseIndicator: true };
+            this.indicatorGroup.add(outerRing);
+          } else {
+            const dot = new THREE.Mesh(
+              new THREE.RingGeometry(0.12, 0.25, 24),
+              new THREE.MeshBasicMaterial({ color: 0xffe082, side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
+            );
+            dot.rotation.x = -Math.PI / 2;
+            dot.position.set(pos.x, 0.025, pos.z);
+            dot.userData = { isPulseIndicator: true };
+            this.indicatorGroup.add(dot);
+          }
+        }
+      }
+
+      updateCheckHighlight() {
+        const prev = this.indicatorGroup.getObjectByName('check-aura');
+        if (prev) this.indicatorGroup.remove(prev);
+
+        if (this.engine.isInCheck(this.engine.turn)) {
+          const kingPos = this.engine.findKing(this.engine.turn);
+          if (kingPos) {
+            const worldPos = boardToWorld(kingPos.r, kingPos.c);
+            const aura = new THREE.Mesh(
+              new THREE.RingGeometry(0.32, 0.64, 32),
+              new THREE.MeshBasicMaterial({ color: 0xff1e42, side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
+            );
+            aura.name = 'check-aura';
+            aura.rotation.x = -Math.PI / 2;
+            aura.position.set(worldPos.x, 0.035, worldPos.z);
+            aura.userData = { isPulseIndicator: true };
+            this.indicatorGroup.add(aura);
+          }
+        }
+      }
+
+      /*************************************************************************
+       * 38-SHARD 3D PHYSICS STONE SHATTER EXPLOSION
+       *************************************************************************/
+      spawnShatterExplosion(worldPos, victimColor, attackDir) {
+        const matStone = victimColor === 'w' ? this.matMarble : this.matObsidian;
+        const matRune = victimColor === 'w' ? this.matWhiteRune : this.matBlackRune;
+
+        const shardCount = 38;
+        for (let i = 0; i < shardCount; i++) {
+          const isRuneShard = i % 5 === 0;
+          const scale = 0.08 + Math.random() * 0.16;
+
+          const geo = i % 2 === 0
+            ? new THREE.DodecahedronGeometry(scale, 0)
+            : new THREE.TetrahedronGeometry(scale * 1.25, 0);
+
+          geo.scale(0.6 + Math.random() * 0.9, 0.5 + Math.random() * 1.1, 0.6 + Math.random() * 0.9);
+
+          const mat = (isRuneShard ? matRune : matStone).clone();
+          mat.transparent = true;
+          mat.opacity = 1.0;
+
+          const shard = new THREE.Mesh(geo, mat);
+          shard.position.set(
+            worldPos.x + (Math.random() - 0.5) * 0.45,
+            0.18 + Math.random() * 1.25,
+            worldPos.z + (Math.random() - 0.5) * 0.45
+          );
+          shard.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+          shard.castShadow = true;
+
+          const radialAngle = Math.random() * Math.PI * 2;
+          const radialSpeed = 1.6 + Math.random() * 4.4;
+          const vel = new THREE.Vector3(
+            Math.cos(radialAngle) * radialSpeed + attackDir.x * (2.2 + Math.random() * 2.5),
+            2.4 + Math.random() * 4.8,
+            Math.sin(radialAngle) * radialSpeed + attackDir.z * (2.2 + Math.random() * 2.5)
+          );
+
+          const rotVel = new THREE.Vector3(
+            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 14,
+            (Math.random() - 0.5) * 14
+          );
+
+          this.scene.add(shard);
+          this.shatterFragments.push({
+            mesh: shard,
+            vel,
+            rotVel,
+            age: 0,
+            maxAge: 2.6 + Math.random() * 1.2
+          });
+        }
+
+        const ringMesh = new THREE.Mesh(
+          new THREE.RingGeometry(0.15, 0.34, 32),
+          new THREE.MeshBasicMaterial({
+            color: victimColor === 'w' ? 0xc084fc : 0xffd56b,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.95,
+            blending: THREE.AdditiveBlending
+          })
+        );
+        ringMesh.rotation.x = -Math.PI / 2;
+        ringMesh.position.set(worldPos.x, 0.05, worldPos.z);
+        this.scene.add(ringMesh);
+        this.shockwaves.push({ mesh: ringMesh, age: 0, maxAge: 0.65 });
+
+        this.actionLight.position.set(worldPos.x, 2.2, worldPos.z);
+        this.actionLight.color.setHex(victimColor === 'w' ? 0xa855f7 : 0xf59e0b);
+        this.actionLight.intensity = 6.5;
+        this.cameraState.shakeIntensity = 0.36;
+      }
+
+      spawnTrailSpark(pos, color) {
+        const spark = new THREE.Mesh(
+          new THREE.OctahedronGeometry(0.055, 0),
+          new THREE.MeshBasicMaterial({
+            color: color === 'w' ? 0xffe082 : 0xc084fc,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending
+          })
+        );
+        spark.position.set(
+          pos.x + (Math.random() - 0.5) * 0.35,
+          pos.y + 0.15 + Math.random() * 0.6,
+          pos.z + (Math.random() - 0.5) * 0.35
+        );
+        this.scene.add(spark);
+        this.trailParticles.push({
+          mesh: spark,
+          vel: new THREE.Vector3((Math.random() - 0.5) * 0.6, 0.8 + Math.random() * 0.8, (Math.random() - 0.5) * 0.6),
+          age: 0,
+          maxAge: 0.45 + Math.random() * 0.25
+        });
+      }
+
+      /*************************************************************************
+       * CHOREOGRAPHED MOVE & SHATTER ANIMATION PIPELINE
+       *************************************************************************/
+      async executeMoveWithAnimation(move, chosenPromotion = null) {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+        this.clearHighlights();
+
+        // Sync cursor to destination square
+        this.cursorSquare = { r: move.toR, c: move.toC };
+        this.updateCursorMeshPosition();
+
+        const attackerMesh = this.pieceMeshes.get(move.piece.id);
+        const victimPiece = move.isEnPassant
+          ? this.engine.board[move.epCaptureR][move.epCaptureC]
+          : this.engine.board[move.toR][move.toC];
+        const victimMesh = victimPiece ? this.pieceMeshes.get(victimPiece.id) : null;
+
+        const startPos = boardToWorld(move.fromR, move.fromC);
+        const endPos = boardToWorld(move.toR, move.toC);
+        const victimPos = move.isEnPassant
+          ? boardToWorld(move.epCaptureR, move.epCaptureC)
+          : endPos.clone();
+
+        const isJump = move.piece.type === 'n';
+        const isCapture = Boolean(victimMesh);
+
+        if (!isCapture) {
+          const duration = 0.44;
+          soundFX.playStoneSlide(duration, isJump);
+
+          let rookMesh = null, rookStart = null, rookEnd = null;
+          if (move.isCastle) {
+            const rookPiece = this.engine.board[move.fromR][move.rookFromC];
+            if (rookPiece) {
+              rookMesh = this.pieceMeshes.get(rookPiece.id);
+              rookStart = boardToWorld(move.fromR, move.rookFromC);
+              rookEnd = boardToWorld(move.fromR, move.rookToC);
+            }
+          }
+
+          await this.tweenProgress(duration, (t) => {
+            const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+            if (attackerMesh) {
+              attackerMesh.position.lerpVectors(startPos, endPos, ease);
+              if (isJump) {
+                attackerMesh.position.y = Math.sin(t * Math.PI) * 1.65;
+                attackerMesh.userData.bodyGroup.rotation.x = Math.sin(t * Math.PI) * 0.35;
+              }
+              if (Math.random() < 0.45) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
+            }
+            if (rookMesh) rookMesh.position.lerpVectors(rookStart, rookEnd, ease);
+          });
+
+          if (attackerMesh) {
+            attackerMesh.position.copy(endPos);
+            attackerMesh.userData.bodyGroup.rotation.set(0, 0, 0);
+          }
+        } else {
+          const dir = new THREE.Vector3().subVectors(victimPos, startPos);
+          const totalDist = dir.length();
+          const normDir = dir.clone().normalize();
+          const strikeDist = Math.max(0.1, totalDist - SQUARE_SIZE * 0.78);
+          const strikePos = startPos.clone().addScaledVector(normDir, strikeDist);
+
+          if (this.dynamicActionCam) {
+            this.cameraState.savedBeforeAction = {
+              theta: this.cameraState.desiredTheta,
+              phi: this.cameraState.desiredPhi,
+              radius: this.cameraState.desiredRadius,
+              target: this.cameraState.desiredTarget.clone()
+            };
+            const midFocus = victimPos.clone().lerp(startPos, 0.25);
+            midFocus.y = 0.7;
+            this.cameraState.desiredTarget.copy(midFocus);
+            this.cameraState.desiredRadius = 9.2;
+            this.cameraState.desiredPhi = 0.78;
+            this.cameraState.desiredTheta += (Math.random() - 0.5) * 0.45;
+          }
+
+          const approachDur = 0.38;
+          soundFX.playStoneSlide(approachDur, isJump);
+          await this.tweenProgress(approachDur, (t) => {
+            const ease = 1 - Math.pow(1 - t, 3);
+            if (attackerMesh) {
+              attackerMesh.position.lerpVectors(startPos, strikePos, ease);
+              if (isJump) attackerMesh.position.y = Math.sin(t * Math.PI) * 1.45;
+              if (Math.random() < 0.6) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
+            }
+          });
+
+          soundFX.playAttackCharge();
+          await this.tweenProgress(0.28, (t) => {
+            if (attackerMesh) {
+              const body = attackerMesh.userData.bodyGroup;
+              body.position.y = Math.sin(t * Math.PI * 0.5) * 0.35;
+              body.rotation.x = -normDir.z * t * 0.42;
+              body.rotation.z = normDir.x * t * 0.42;
+              attackerMesh.userData.matRune.emissiveIntensity = 1.5 + t * 4.5;
+            }
+            if (victimMesh) {
+              victimMesh.position.x = victimPos.x + (Math.random() - 0.5) * 0.06 * t;
+              victimMesh.position.z = victimPos.z + (Math.random() - 0.5) * 0.06 * t;
+            }
+          });
+
+          await this.tweenProgress(0.11, (t) => {
+            if (attackerMesh) {
+              const body = attackerMesh.userData.bodyGroup;
+              body.rotation.x = normDir.z * t * 0.65;
+              body.rotation.z = -normDir.x * t * 0.65;
+              attackerMesh.position.lerpVectors(strikePos, victimPos, t * 0.55);
+            }
+          });
+
+          soundFX.playShatterImpact();
+          this.spawnShatterExplosion(victimPos, victimPiece.color, normDir);
+
+          if (victimMesh) {
+            this.scene.remove(victimMesh);
+            this.pieceMeshes.delete(victimPiece.id);
+          }
+
+          const postStrikePos = attackerMesh ? attackerMesh.position.clone() : strikePos;
+          await this.tweenProgress(0.42, (t) => {
+            const ease = 1 - Math.pow(1 - t, 3);
+            if (attackerMesh) {
+              attackerMesh.position.lerpVectors(postStrikePos, endPos, ease);
+              attackerMesh.position.y = 0;
+              const body = attackerMesh.userData.bodyGroup;
+              body.position.y = (1 - ease) * 0.35;
+              body.rotation.x *= (1 - ease);
+              body.rotation.z *= (1 - ease);
+              attackerMesh.userData.matRune.emissiveIntensity = 1.5 + (1 - ease) * 3.0;
+            }
+          });
+
+          if (this.dynamicActionCam && this.cameraState.savedBeforeAction) {
+            setTimeout(() => {
+              if (this.cameraState.savedBeforeAction) {
+                this.cameraState.desiredTarget.copy(this.cameraState.savedBeforeAction.target);
+                this.cameraState.desiredRadius = this.cameraState.savedBeforeAction.radius;
+                this.cameraState.desiredPhi = this.cameraState.savedBeforeAction.phi;
+                this.cameraState.desiredTheta = this.cameraState.savedBeforeAction.theta;
+                this.cameraState.savedBeforeAction = null;
+              }
+            }, 420);
+          }
+        }
+
+        const record = this.engine.makeMove(move, chosenPromotion);
+
+        if (chosenPromotion || move.promotion) {
+          const oldMesh = this.pieceMeshes.get(record.pieceAfter.id);
+          if (oldMesh) this.scene.remove(oldMesh);
+          const promotedMesh = this.createPieceMesh(record.pieceAfter.type, record.pieceAfter.color, record.pieceAfter.id);
+          promotedMesh.position.copy(endPos);
+          promotedMesh.userData.r = move.toR;
+          promotedMesh.userData.c = move.toC;
+          this.scene.add(promotedMesh);
+          this.pieceMeshes.set(record.pieceAfter.id, promotedMesh);
+        } else if (attackerMesh) {
+          attackerMesh.userData.r = move.toR;
+          attackerMesh.userData.c = move.toC;
+        }
+
+        if (record.rookMoved && this.pieceMeshes.has(record.rookMoved.id)) {
+          const rMesh = this.pieceMeshes.get(record.rookMoved.id);
+          rMesh.userData.r = record.rookMoved.toR;
+          rMesh.userData.c = record.rookMoved.toC;
+        }
+
+        if (record.inCheck) soundFX.playCheckAlert();
+
+        this.selectedSquare = null;
+        this.legalMovesForSelected = [];
+        this.updateCheckHighlight();
+        this.updateHUD(record);
+        this.isAnimating = false;
+
+        if (record.isCheckmate || record.isStalemate) {
+          this.showGameOverModal(record);
+          return;
+        }
+
+        if (this.gameMode === 'ai' && this.engine.turn === 'b') {
+          this.triggerAITurn();
+        }
+      }
+
+      tweenProgress(durationSeconds, onUpdate) {
+        return new Promise((resolve) => {
+          const start = performance.now();
+          const step = (now) => {
+            const elapsed = (now - start) / 1000;
+            const t = Math.min(1, elapsed / durationSeconds);
+            onUpdate(t);
+            if (t < 1) requestAnimationFrame(step);
+            else resolve();
+          };
+          requestAnimationFrame(step);
+        });
+      }
+
+      triggerAITurn() {
+        const badge = document.getElementById('status-badge');
+        const badgeText = document.getElementById('status-badge-text');
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+        badgeText.textContent = 'AUTOMATON PONDERING...';
+
+        setTimeout(() => {
+          if (this.engine.turn !== 'b' || this.isAnimating) return;
+          const aiMove = this.engine.chooseAIMove(this.aiDifficulty);
+          if (aiMove) this.executeMoveWithAnimation(aiMove, 'q');
+        }, 420);
+      }
+
+      async triggerStrikeDemo() {
+        if (this.isAnimating) return;
+
+        let allMoves = this.engine.getAllLegalMoves(this.engine.turn);
+        let captures = allMoves.filter(m => m.captured);
+
+        if (captures.length === 0) {
+          const e4 = allMoves.find(m => m.fromR === 6 && m.fromC === 4 && m.toR === 4 && m.toC === 4);
+          if (e4) {
+            this.engine.makeMove(e4);
+            const bMoves = this.engine.getAllLegalMoves('b');
+            const d5 = bMoves.find(m => m.fromR === 1 && m.fromC === 3 && m.toR === 3 && m.toC === 3);
+            if (d5) this.engine.makeMove(d5);
+            this.syncPiecesWithEngine();
+            this.updateHUD();
+            allMoves = this.engine.getAllLegalMoves(this.engine.turn);
+            captures = allMoves.filter(m => m.captured);
+          }
+        }
+
+        if (captures.length > 0) {
+          const chosenCapture = captures[Math.floor(Math.random() * captures.length)];
+          await this.executeMoveWithAnimation(chosenCapture, 'q');
+        } else if (allMoves.length > 0) {
+          const aggressive = allMoves.sort((a, b) => (this.engine.turn === 'w' ? a.toR - b.toR : b.toR - a.toR))[0];
+          await this.executeMoveWithAnimation(aggressive, 'q');
+        }
+      }
+
+      /*************************************************************************
+       * INITIAL SCREEN, DEVICE AUTO-DETECTION & PLATFORM SWITCHING
+       *************************************************************************/
+      initLauncherAndDeviceDetection() {
+        const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
+        this.applyDevicePlatform(isTouchDevice ? 'mobile' : 'pc');
+
+        const detectedPill = document.getElementById('detected-device-pill');
+        if (detectedPill) {
+          detectedPill.textContent = isTouchDevice ? 'Smartphone Detected' : 'PC / Laptop Detected';
+        }
+
+        const cardMobile = document.getElementById('card-device-mobile');
+        const cardPC = document.getElementById('card-device-pc');
+
+        cardMobile.addEventListener('click', () => this.applyDevicePlatform('mobile'));
+        cardPC.addEventListener('click', () => this.applyDevicePlatform('pc'));
+
+        // Environment buttons on Start Screen and HUD
+        document.querySelectorAll('.start-env-btn, .hud-env-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const envKey = btn.getAttribute('data-env');
+            soundFX.playSelect(true);
+            this.setEnvironmentRealm(envKey);
+          });
+        });
+
+        // Launch Button
+        const startModal = document.getElementById('start-screen-modal');
+        document.getElementById('btn-launch-game').addEventListener('click', () => {
+          soundFX.playSelect(true);
+          startModal.classList.add('opacity-0', 'pointer-events-none');
+          setTimeout(() => startModal.classList.add('hidden'), 450);
+        });
+
+        // Reopen Launcher from HUD Brand Badge
+        document.getElementById('btn-open-launcher').addEventListener('click', () => {
+          startModal.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            startModal.classList.remove('opacity-0', 'pointer-events-none');
+          });
+        });
+      }
+
+      applyDevicePlatform(platform) {
+        this.controlPlatform = platform;
+        const cardMobile = document.getElementById('card-device-mobile');
+        const cardPC = document.getElementById('card-device-pc');
+        const touchDock = document.getElementById('mobile-touch-dock');
+        const pcHint = document.getElementById('pc-control-hint');
+        const hudBadge = document.getElementById('hud-device-badge');
+
+        if (platform === 'mobile') {
+          cardMobile.classList.add('selected-device');
+          cardPC.classList.remove('selected-device');
+          cardMobile.querySelector('.device-check').classList.remove('hidden');
+          cardPC.querySelector('.device-check').classList.add('hidden');
+
+          touchDock.classList.remove('hidden');
+          touchDock.classList.add('flex');
+          pcHint.classList.add('hidden');
+          pcHint.classList.remove('sm:flex');
+          if (hudBadge) hudBadge.textContent = 'TOUCH';
+          this.cameraState.desiredRadius = 17.5;
+        } else {
+          cardPC.classList.add('selected-device');
+          cardMobile.classList.remove('selected-device');
+          cardPC.querySelector('.device-check').classList.remove('hidden');
+          cardMobile.querySelector('.device-check').classList.add('hidden');
+
+          touchDock.classList.add('hidden');
+          touchDock.classList.remove('flex');
+          pcHint.classList.remove('hidden');
+          pcHint.classList.add('sm:flex');
+          if (hudBadge) hudBadge.textContent = 'PC';
+          this.cameraState.desiredRadius = 15.8;
+        }
+      }
+
+      /*************************************************************************
+       * UNIFIED INPUT SYSTEM:
+       * 1. Pointer / Mouse Raycasting
+       * 2. Multi-Touch Pinch-to-Zoom & 1-Finger Orbit
+       * 3. PC Keyboard Controls (WASD/Arrows, Enter/Space, Q/E, 1-7)
+       * 4. Smartphone Floating iOS 28 Glass D-Pad Controls
+       *************************************************************************/
+      initControlsAndEvents() {
+        const dom = this.renderer.domElement;
+        let isDragging = false;
+        let dragStart = { x: 0, y: 0 };
+        let pointerDownPos = { x: 0, y: 0 };
+        const activePointers = new Map();
+        let initialPinchDist = null;
+        let initialPinchRadius = this.cameraState.desiredRadius;
+
+        dom.addEventListener('pointerdown', (e) => {
+          activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+          if (activePointers.size === 1) {
+            isDragging = false;
+            dragStart = { x: e.clientX, y: e.clientY };
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+          } else if (activePointers.size === 2) {
+            const pts = Array.from(activePointers.values());
+            initialPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+            initialPinchRadius = this.cameraState.desiredRadius;
+            isDragging = true;
+          }
+          dom.setPointerCapture(e.pointerId);
+        });
+
+        dom.addEventListener('pointermove', (e) => {
+          if (!activePointers.has(e.pointerId)) return;
+          activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+          if (activePointers.size === 2 && initialPinchDist) {
+            // 2-Finger Pinch-to-Zoom for Smartphone / Touch
+            const pts = Array.from(activePointers.values());
+            const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+            const scale = initialPinchDist / Math.max(20, dist);
+            this.cameraState.desiredRadius = Math.max(7.5, Math.min(28, initialPinchRadius * scale));
+            return;
+          }
+
+          if (activePointers.size === 1) {
+            const dx = e.clientX - dragStart.x;
+            const dy = e.clientY - dragStart.y;
+            if (Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y) > 6) {
+              isDragging = true;
+            }
+            if (isDragging) {
+              this.cameraState.desiredTheta -= dx * 0.0075;
+              this.cameraState.desiredPhi = Math.max(0.22, Math.min(1.38, this.cameraState.desiredPhi - dy * 0.0065));
+              dragStart = { x: e.clientX, y: e.clientY };
+            }
+          }
+        });
+
+        const handlePointerEnd = (e) => {
+          activePointers.delete(e.pointerId);
+          if (activePointers.size < 2) initialPinchDist = null;
+          if (dom.hasPointerCapture(e.pointerId)) dom.releasePointerCapture(e.pointerId);
+          if (!isDragging && activePointers.size === 0) {
+            this.handleBoardClick(e.clientX, e.clientY);
+          }
+          if (activePointers.size === 0) isDragging = false;
+        };
+
+        dom.addEventListener('pointerup', handlePointerEnd);
+        dom.addEventListener('pointercancel', handlePointerEnd);
+
+        dom.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          this.cameraState.desiredRadius = Math.max(7.5, Math.min(28, this.cameraState.desiredRadius + e.deltaY * 0.01));
+        }, { passive: false });
+
+        window.addEventListener('resize', () => {
+          this.camera.aspect = window.innerWidth / window.innerHeight;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // =====================================================================
+        // PC KEYBOARD CONTROLS (WASD / Arrow Keys / Enter / Space / Q / E / 1-7)
+        // =====================================================================
+        window.addEventListener('keydown', (e) => {
+          const startModal = document.getElementById('start-screen-modal');
+          if (startModal && !startModal.classList.contains('hidden')) {
+            if (e.key === 'Enter') document.getElementById('btn-launch-game').click();
+            return;
+          }
+
+          const key = e.key.toLowerCase();
+          if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(key)) {
+            e.preventDefault();
+          }
+
+          // Flip cursor movement direction if viewing from Black's perspective
+          const isBlackView = Math.cos(this.cameraState.theta) < 0;
+          const dirSign = isBlackView ? -1 : 1;
+
+          if (key === 'w' || key === 'arrowup') {
+            this.moveCursorBy(-1 * dirSign, 0);
+          } else if (key === 's' || key === 'arrowdown') {
+            this.moveCursorBy(1 * dirSign, 0);
+          } else if (key === 'a' || key === 'arrowleft') {
+            this.moveCursorBy(0, -1 * dirSign);
+          } else if (key === 'd' || key === 'arrowright') {
+            this.moveCursorBy(0, 1 * dirSign);
+          } else if (key === 'enter' || key === ' ') {
+            this.activateSquare(this.cursorSquare.r, this.cursorSquare.c);
+          } else if (key === 'escape') {
+            this.selectedSquare = null;
+            this.legalMovesForSelected = [];
+            this.clearHighlights();
+            this.updateCheckHighlight();
+          } else if (key === 'q') {
+            this.cameraState.desiredTheta -= 0.35;
+          } else if (key === 'e') {
+            this.cameraState.desiredTheta += 0.35;
+          } else if (key === 'r') {
+            document.getElementById('btn-cam-white').click();
+          } else if (key === 'c') {
+            this.triggerStrikeDemo();
+          } else if (key === 'u') {
+            document.getElementById('btn-undo').click();
+          } else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {
+            const realms = ['cathedral', 'night', 'day', 'grass', 'ocean', 'space', 'sand'];
+            this.setEnvironmentRealm(realms[parseInt(key, 10) - 1]);
+          }
+        });
+
+        // =====================================================================
+        // SMARTPHONE TOUCH D-PAD CONTROLS
+        // =====================================================================
+        document.querySelectorAll('[data-dpad]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = btn.getAttribute('data-dpad');
+            const isBlackView = Math.cos(this.cameraState.theta) < 0;
+            const dirSign = isBlackView ? -1 : 1;
+            if (action === 'up') this.moveCursorBy(-1 * dirSign, 0);
+            else if (action === 'down') this.moveCursorBy(1 * dirSign, 0);
+            else if (action === 'left') this.moveCursorBy(0, -1 * dirSign);
+            else if (action === 'right') this.moveCursorBy(0, 1 * dirSign);
+            else if (action === 'select') this.activateSquare(this.cursorSquare.r, this.cursorSquare.c);
+          });
+        });
+
+        document.getElementById('btn-touch-rot-left').addEventListener('click', () => {
+          this.cameraState.desiredTheta -= 0.45;
+        });
+        document.getElementById('btn-touch-rot-right').addEventListener('click', () => {
+          this.cameraState.desiredTheta += 0.45;
+        });
+        document.getElementById('btn-touch-zoom').addEventListener('click', () => {
+          this.cameraState.desiredRadius = this.cameraState.desiredRadius > 14 ? 11.5 : 17.5;
+        });
+
+        // =====================================================================
+        // TOP HUD BUTTON BINDINGS
+        // =====================================================================
+        document.getElementById('btn-mode').addEventListener('click', () => {
+          this.gameMode = this.gameMode === 'ai' ? '2p' : 'ai';
+          const btn = document.getElementById('btn-mode');
+          const icon = document.getElementById('icon-mode');
+          const label = document.getElementById('label-mode');
+          const diffBtn = document.getElementById('btn-difficulty');
+
+          if (this.gameMode === 'ai') {
+            btn.classList.add('active-cyan');
+            icon.textContent = 'smart_toy';
+            label.textContent = 'vs Automaton';
+            diffBtn.style.display = 'inline-flex';
+            if (this.engine.turn === 'b' && !this.isAnimating) this.triggerAITurn();
+          } else {
+            btn.classList.remove('active-cyan');
+            icon.textContent = 'group';
+            label.textContent = '2P Pass & Play';
+            diffBtn.style.display = 'none';
+          }
+        });
+
+        document.getElementById('btn-difficulty').addEventListener('click', () => {
+          const order = ['novice', 'adept', 'archmage'];
+          const names = { novice: 'Novice', adept: 'Adept', archmage: 'Archmage' };
+          const idx = (order.indexOf(this.aiDifficulty) + 1) % order.length;
+          this.aiDifficulty = order[idx];
+          document.getElementById('label-difficulty').textContent = names[this.aiDifficulty];
+        });
+
+        const setCamPreset = (theta, phi, radius, activeBtnId) => {
+          this.cameraState.savedBeforeAction = null;
+          this.cameraState.desiredTarget.set(0, 0.4, 0);
+          this.cameraState.desiredTheta = theta;
+          this.cameraState.desiredPhi = phi;
+          this.cameraState.desiredRadius = radius;
+          ['btn-cam-white', 'btn-cam-black', 'btn-cam-top'].forEach(id => {
+            document.getElementById(id).classList.toggle('active-gold', id === activeBtnId);
+          });
+        };
+
+        document.getElementById('btn-cam-white').addEventListener('click', () => setCamPreset(0, 0.92, 15.8, 'btn-cam-white'));
+        document.getElementById('btn-cam-black').addEventListener('click', () => setCamPreset(Math.PI, 0.92, 15.8, 'btn-cam-black'));
+        document.getElementById('btn-cam-top').addEventListener('click', () => setCamPreset(0, 0.24, 17.5, 'btn-cam-top'));
+
+        document.getElementById('btn-cam-cinematic').addEventListener('click', (e) => {
+          this.dynamicActionCam = !this.dynamicActionCam;
+          e.currentTarget.classList.toggle('active-cyan', this.dynamicActionCam);
+        });
+
+        document.getElementById('btn-strike-demo').addEventListener('click', () => this.triggerStrikeDemo());
+
+        document.getElementById('btn-undo').addEventListener('click', () => {
+          if (this.isAnimating || this.engine.history.length === 0) return;
+          this.engine.undo();
+          if (this.gameMode === 'ai' && this.engine.turn === 'b' && this.engine.history.length > 0) {
+            this.engine.undo();
+          }
+          this.selectedSquare = null;
+          this.legalMovesForSelected = [];
+          this.syncPiecesWithEngine();
+          this.updateHUD();
+        });
+
+        const resetGame = () => {
+          if (this.isAnimating) return;
+          document.getElementById('gameover-modal').classList.add('hidden');
+          document.getElementById('gameover-modal').classList.remove('flex');
+          this.engine.reset();
+          this.selectedSquare = null;
+          this.legalMovesForSelected = [];
+          this.syncPiecesWithEngine();
+          this.updateHUD();
+        };
+        document.getElementById('btn-reset').addEventListener('click', resetGame);
+        document.getElementById('btn-modal-newgame').addEventListener('click', resetGame);
+        document.getElementById('btn-modal-close').addEventListener('click', () => {
+          document.getElementById('gameover-modal').classList.add('hidden');
+          document.getElementById('gameover-modal').classList.remove('flex');
+        });
+
+        document.getElementById('btn-sound').addEventListener('click', (e) => {
+          const on = soundFX.toggle();
+          e.currentTarget.classList.toggle('active-gold', on);
+          document.getElementById('icon-sound').textContent = on ? 'volume_up' : 'volume_off';
+        });
+
+        const historyPanel = document.getElementById('history-panel');
+        const toggleHistory = () => {
+          historyPanel.classList.toggle('translate-y-[120%]');
+          historyPanel.classList.toggle('opacity-0');
+          historyPanel.classList.toggle('pointer-events-none');
+        };
+        document.getElementById('btn-history-toggle').addEventListener('click', toggleHistory);
+        document.getElementById('btn-close-history').addEventListener('click', toggleHistory);
+
+        document.querySelectorAll('.promo-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const promoType = btn.getAttribute('data-promo');
+            const modal = document.getElementById('promotion-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            if (this.pendingPromotionMove) {
+              const m = this.pendingPromotionMove;
+              this.pendingPromotionMove = null;
+              this.executeMoveWithAnimation(m, promoType);
+            }
+          });
+        });
+      }
+
+      moveCursorBy(dr, dc) {
+        if (this.isAnimating) return;
+        this.cursorSquare.r = (this.cursorSquare.r + dr + 8) % 8;
+        this.cursorSquare.c = (this.cursorSquare.c + dc + 8) % 8;
+        this.updateCursorMeshPosition();
+        soundFX.playCursorStep();
+      }
+
+      handleBoardClick(clientX, clientY) {
+        if (this.isAnimating) return;
+        if (this.gameMode === 'ai' && this.engine.turn === 'b') return;
+
+        this.pointer.x = (clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(clientY / window.innerHeight) * 2 + 1;
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+
+        const interactables = [];
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) interactables.push(this.squareMeshes[r][c]);
+        }
+        for (const [, pGroup] of this.pieceMeshes) {
+          pGroup.traverse(ch => { if (ch.isMesh) interactables.push(ch); });
+        }
+
+        const hits = this.raycaster.intersectObjects(interactables, false);
+        if (hits.length === 0) {
+          this.selectedSquare = null;
+          this.legalMovesForSelected = [];
+          this.clearHighlights();
+          this.updateCheckHighlight();
+          return;
+        }
+
+        const hitObj = hits[0].object;
+        let clickedR = null, clickedC = null;
+
+        if (hitObj.userData && hitObj.userData.type === 'square') {
+          clickedR = hitObj.userData.r;
+          clickedC = hitObj.userData.c;
+        } else if (hitObj.userData && hitObj.userData.pieceGroup) {
+          clickedR = hitObj.userData.pieceGroup.userData.r;
+          clickedC = hitObj.userData.pieceGroup.userData.c;
+        }
+
+        if (clickedR === null || clickedC === null) return;
+        this.cursorSquare = { r: clickedR, c: clickedC };
+        this.updateCursorMeshPosition();
+        this.activateSquare(clickedR, clickedC);
+      }
+
+      activateSquare(r, c) {
+        if (this.isAnimating) return;
+        if (this.gameMode === 'ai' && this.engine.turn === 'b') return;
+
+        if (this.selectedSquare) {
+          const matchingMove = this.legalMovesForSelected.find(m => m.toR === r && m.toC === c);
+          if (matchingMove) {
+            if (matchingMove.promotion) {
+              this.pendingPromotionMove = matchingMove;
+              const modal = document.getElementById('promotion-modal');
+              modal.classList.remove('hidden');
+              modal.classList.add('flex');
+              return;
+            }
+            this.executeMoveWithAnimation(matchingMove);
+            return;
+          }
+        }
+
+        const clickedPiece = this.engine.board[r][c];
+        if (clickedPiece && clickedPiece.color === this.engine.turn) {
+          soundFX.playSelect(clickedPiece.color === 'w');
+          this.selectedSquare = { r, c };
+          this.legalMovesForSelected = this.engine.getLegalMovesForSquare(r, c);
+          this.showLegalMoveHighlights(r, c, this.legalMovesForSelected);
+        } else {
+          this.selectedSquare = null;
+          this.legalMovesForSelected = [];
+          this.clearHighlights();
+          this.updateCheckHighlight();
+        }
+      }
+
+      updateHUD(lastRecord = null) {
+        const isWhiteTurn = this.engine.turn === 'w';
+        const turnDot = document.getElementById('turn-dot');
+        const turnText = document.getElementById('turn-text');
+
+        if (isWhiteTurn) {
+          turnDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-200 shadow-[0_0_8px_#fde68a]';
+          turnText.textContent = "Light's Turn";
+          turnText.className = 'text-xs font-semibold tracking-wide text-amber-100';
+        } else {
+          turnDot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]';
+          turnText.textContent = this.gameMode === 'ai' ? 'Automaton (Dark)' : "Dark's Turn";
+          turnText.className = 'text-xs font-semibold tracking-wide text-purple-200';
+        }
+
+        const badge = document.getElementById('status-badge');
+        const badgeText = document.getElementById('status-badge-text');
+        const inCheck = this.engine.isInCheck(this.engine.turn);
+
+        if (lastRecord && lastRecord.isCheckmate) {
+          badge.classList.remove('hidden');
+          badge.classList.add('flex', 'check-alert-pulse');
+          badgeText.textContent = 'CHECKMATE';
+        } else if (lastRecord && lastRecord.isStalemate) {
+          badge.classList.remove('hidden');
+          badge.classList.add('flex');
+          badgeText.textContent = 'STALEMATE';
+        } else if (inCheck) {
+          badge.classList.remove('hidden');
+          badge.classList.add('flex', 'check-alert-pulse');
+          badgeText.textContent = 'KING IN CHECK';
+        } else {
+          badge.classList.add('hidden');
+          badge.classList.remove('flex', 'check-alert-pulse');
+        }
+
+        document.getElementById('btn-undo').disabled = this.engine.history.length === 0;
+        document.getElementById('move-count-badge').textContent = this.engine.history.length;
+
+        document.getElementById('captured-by-white').textContent = this.engine.capturedByWhite.length;
+        document.getElementById('captured-by-black').textContent = this.engine.capturedByBlack.length;
+
+        const iconsW = { p: '♟', n: '♞', b: '♝', r: '♜', q: '♛', k: '♚' };
+        const iconsB = { p: '♙', n: '♘', b: '♗', r: '♖', q: '♕', k: '♔' };
+
+        document.getElementById('graveyard-white').innerHTML = this.engine.capturedByWhite.length
+          ? this.engine.capturedByWhite.map(t => `<span>${iconsW[t]}</span>`).join('')
+          : '<span class="text-[11px] text-slate-400 italic">None</span>';
+
+        document.getElementById('graveyard-black').innerHTML = this.engine.capturedByBlack.length
+          ? this.engine.capturedByBlack.map(t => `<span>${iconsB[t]}</span>`).join('')
+          : '<span class="text-[11px] text-slate-400 italic">None</span>';
+
+        const moveListEl = document.getElementById('move-list');
+        if (this.engine.history.length === 0) {
+          moveListEl.innerHTML = '<div class="text-slate-300/80 italic text-center py-3 font-sans">Select any piece or use WASD/Touch D-Pad to begin the duel.</div>';
+        } else {
+          let html = '';
+          for (let i = 0; i < this.engine.history.length; i += 2) {
+            const moveNum = Math.floor(i / 2) + 1;
+            const wRec = this.engine.history[i];
+            const bRec = this.engine.history[i + 1];
+            const wCap = wRec.captured ? '<span class="text-rose-400 ml-0.5">✦</span>' : '';
+            const bCap = bRec && bRec.captured ? '<span class="text-rose-400 ml-0.5">✦</span>' : '';
+
+            html += `
+              <div class="grid grid-cols-7 items-center px-2 py-1 rounded-lg ${i + 2 >= this.engine.history.length ? 'bg-white/10' : 'bg-white/[0.03]'}">
+                <span class="col-span-1 text-slate-400">${moveNum}.</span>
+                <span class="col-span-3 text-amber-200 font-medium">${wRec.san}${wCap}</span>
+                <span class="col-span-3 text-purple-300 font-medium">${bRec ? bRec.san + bCap : ''}</span>
+              </div>
+            `;
+          }
+          moveListEl.innerHTML = html;
+          moveListEl.scrollTop = moveListEl.scrollHeight;
+        }
+      }
+
+      showGameOverModal(record) {
+        const modal = document.getElementById('gameover-modal');
+        const title = document.getElementById('gameover-title');
+        const subtitle = document.getElementById('gameover-subtitle');
+
+        if (record.isCheckmate) {
+          const winner = record.color === 'w' ? 'Luminous Marble' : 'Volcanic Obsidian';
+          title.textContent = 'Checkmate';
+          subtitle.textContent = `${winner} triumphs in the ${REALM_CONFIGS[this.currentRealm].name} after ${this.engine.history.length} moves.`;
+        } else {
+          title.textContent = 'Stalemate';
+          subtitle.textContent = 'Neither arcane host can claim victory — the Sanctuary duel ends in a draw.';
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+
+      /*************************************************************************
+       * MAIN 60FPS ANIMATION LOOP (Pieces, Shatter, Ocean Waves, Grass, Leaves)
+       *************************************************************************/
+      animate() {
+        requestAnimationFrame(this.animate);
+
+        const dt = Math.min(0.05, this.clock.getDelta());
+        const elapsed = this.clock.getElapsedTime();
+
+        // 1. Piece Idle Levitation & Rune Glow
+        for (const [, pGroup] of this.pieceMeshes) {
+          const { bodyGroup, accentGroup, runeRing, matRune, phaseOffset, isSelected } = pGroup.userData;
+          const phase = elapsed * 2.2 + phaseOffset;
+
+          if (!this.isAnimating) {
+            const hoverAmp = isSelected ? 0.14 : 0.035;
+            const hoverOffset = isSelected ? 0.16 : 0.02;
+            bodyGroup.position.y = hoverOffset + Math.sin(phase) * hoverAmp;
+            bodyGroup.rotation.z = Math.sin(phase * 0.7) * 0.022;
+          }
+
+          if (accentGroup && pGroup.userData.type !== 'n') {
+            accentGroup.rotation.y = elapsed * 0.85 + phaseOffset;
+          }
+          if (runeRing) {
+            runeRing.scale.setScalar(1 + Math.sin(phase * 1.5) * 0.04);
+          }
+          if (matRune && !this.isAnimating) {
+            matRune.emissiveIntensity = (isSelected ? 2.8 : 1.35) + Math.sin(phase * 1.8) * 0.35;
+          }
+        }
+
+        // 2. Pulse Cursor & Move Indicators
+        if (this.cursorGroup) {
+          const cs = 1 + Math.sin(elapsed * 4.5) * 0.06;
+          this.cursorGroup.scale.set(cs, 1, cs);
+          this.cursorGroup.children[0].rotation.z = elapsed * 0.6;
+        }
+        for (const child of this.indicatorGroup.children) {
+          if (child.userData && child.userData.isPulseIndicator) {
+            const s = 1 + Math.sin(elapsed * 5) * 0.09;
+            child.scale.set(s, s, 1);
+          }
+        }
+
+        // 3. Update 3D Physics Shatter Shards
+        for (let i = this.shatterFragments.length - 1; i >= 0; i--) {
+          const frag = this.shatterFragments[i];
+          frag.age += dt;
+
+          if (frag.age >= frag.maxAge) {
+            this.scene.remove(frag.mesh);
+            frag.mesh.geometry.dispose();
+            frag.mesh.material.dispose();
+            this.shatterFragments.splice(i, 1);
+            continue;
+          }
+
+          frag.vel.y -= 13.5 * dt;
+          frag.mesh.position.addScaledVector(frag.vel, dt);
+          frag.mesh.rotation.x += frag.rotVel.x * dt;
+          frag.mesh.rotation.y += frag.rotVel.y * dt;
+          frag.mesh.rotation.z += frag.rotVel.z * dt;
+
+          const withinBoard = Math.abs(frag.mesh.position.x) < 5.8 && Math.abs(frag.mesh.position.z) < 5.8;
+          if (withinBoard && frag.mesh.position.y < 0.06 && frag.vel.y < 0) {
+            frag.mesh.position.y = 0.06;
+            frag.vel.y = -frag.vel.y * 0.44;
+            frag.vel.x *= 0.72;
+            frag.vel.z *= 0.72;
+            frag.rotVel.multiplyScalar(0.68);
+          }
+
+          const lifeRatio = frag.age / frag.maxAge;
+          if (lifeRatio > 0.6) {
+            frag.mesh.material.opacity = Math.max(0, 1 - (lifeRatio - 0.6) / 0.4);
+            frag.mesh.scale.multiplyScalar(0.992);
+          }
+        }
+
+        // 4. Update Shockwaves & Trail Particles
+        for (let i = this.shockwaves.length - 1; i >= 0; i--) {
+          const sw = this.shockwaves[i];
+          sw.age += dt;
+          if (sw.age >= sw.maxAge) {
+            this.scene.remove(sw.mesh);
+            sw.mesh.geometry.dispose();
+            sw.mesh.material.dispose();
+            this.shockwaves.splice(i, 1);
+            continue;
+          }
+          const p = sw.age / sw.maxAge;
+          const scale = 1 + p * 6.5;
+          sw.mesh.scale.set(scale, scale, 1);
+          sw.mesh.material.opacity = (1 - p) * 0.9;
+        }
+
+        for (let i = this.trailParticles.length - 1; i >= 0; i--) {
+          const tp = this.trailParticles[i];
+          tp.age += dt;
+          if (tp.age >= tp.maxAge) {
+            this.scene.remove(tp.mesh);
+            tp.mesh.geometry.dispose();
+            tp.mesh.material.dispose();
+            this.trailParticles.splice(i, 1);
+            continue;
+          }
+          tp.mesh.position.addScaledVector(tp.vel, dt);
+          const p = tp.age / tp.maxAge;
+          tp.mesh.material.opacity = (1 - p) * 0.85;
+          tp.mesh.scale.setScalar(1 - p * 0.7);
+        }
+
+        // 5. Dynamic Environment Animations (Ocean Waves, Swaying Grass, Falling Leaves, Space Rings)
+        if (this.oceanMesh && this.oceanBasePositions) {
+          const posAttr = this.oceanMesh.geometry.attributes.position;
+          const arr = posAttr.array;
+          for (let i = 0; i < arr.length; i += 3) {
+            const bx = this.oceanBasePositions[i];
+            const bz = this.oceanBasePositions[i + 2];
+            const waveH =
+              Math.sin(bx * 0.22 + elapsed * 2.1) * 0.42 +
+              Math.cos(bz * 0.18 + elapsed * 1.6) * 0.35 +
+              Math.sin((bx + bz) * 0.12 - elapsed * 1.2) * 0.22;
+            arr[i + 1] = waveH;
+          }
+          posAttr.needsUpdate = true;
+          this.oceanMesh.geometry.computeVertexNormals();
+        }
+
+        if (this.grassInstancedMesh && this.grassDummyMatrices.length > 0) {
+          const dummy = new THREE.Object3D();
+          for (let i = 0; i < this.grassDummyMatrices.length; i++) {
+            const g = this.grassDummyMatrices[i];
+            dummy.position.set(g.x, -3.12, g.z);
+            const sway = Math.sin(elapsed * 2.4 + g.phase + g.x * 0.2) * 0.18;
+            dummy.rotation.set(sway, g.rotY, sway * 0.5);
+            dummy.scale.set(1, g.scaleY, 1);
+            dummy.updateMatrix();
+            this.grassInstancedMesh.setMatrixAt(g.index, dummy.matrix);
+          }
+          this.grassInstancedMesh.instanceMatrix.needsUpdate = true;
+        }
+
+        if (this.fallingLeaves.length > 0) {
+          for (const lf of this.fallingLeaves) {
+            lf.mesh.position.y -= lf.speedY * dt;
+            lf.mesh.position.x += Math.sin(elapsed * 1.5 + lf.swayPhase) * 0.015;
+            lf.mesh.rotation.x += lf.rotSpeed * dt;
+            lf.mesh.rotation.z += lf.rotSpeed * 0.7 * dt;
+            if (lf.mesh.position.y < -3.0) {
+              lf.mesh.position.y = 13 + Math.random() * 3;
+            }
+          }
+        }
+
+        if (this.spaceRings.length > 0) {
+          for (const sr of this.spaceRings) {
+            if (sr.isYOrbit || sr.isCloud) {
+              sr.mesh.rotation.y += sr.speed * dt;
+            } else {
+              sr.mesh.rotation.z += sr.speed * dt;
+            }
+          }
+        }
+
+        if (this.envParticles) {
+          const positions = this.envParticles.geometry.attributes.position.array;
+          const speeds = this.envParticles.geometry.attributes.aSpeed.array;
+          for (let i = 0; i < speeds.length; i++) {
+            positions[i * 3 + 1] += speeds[i] * dt;
+            positions[i * 3] += Math.sin(elapsed * 0.5 + i) * 0.003;
+            if (positions[i * 3 + 1] > 12) positions[i * 3 + 1] = -2;
+          }
+          this.envParticles.geometry.attributes.position.needsUpdate = true;
+        }
+
+        if (this.actionLight.intensity > 0) {
+          this.actionLight.intensity = Math.max(0, this.actionLight.intensity - dt * 11);
+        }
+
+        // 6. Smooth Camera Damping + Screen Shake
+        const cs = this.cameraState;
+        const damping = 1 - Math.exp(-7.5 * dt);
+        cs.theta += (cs.desiredTheta - cs.theta) * damping;
+        cs.phi += (cs.desiredPhi - cs.phi) * damping;
+        cs.radius += (cs.desiredRadius - cs.radius) * damping;
+        cs.target.lerp(cs.desiredTarget, damping);
+
+        const camX = cs.target.x + cs.radius * Math.sin(cs.phi) * Math.sin(cs.theta);
+        const camY = cs.target.y + cs.radius * Math.cos(cs.phi);
+        const camZ = cs.target.z + cs.radius * Math.sin(cs.phi) * Math.cos(cs.theta);
+
+        this.camera.position.set(camX, camY, camZ);
+
+        if (cs.shakeIntensity > 0.002) {
+          this.camera.position.x += (Math.random() - 0.5) * cs.shakeIntensity;
+          this.camera.position.y += (Math.random() - 0.5) * cs.shakeIntensity;
+          this.camera.position.z += (Math.random() - 0.5) * cs.shakeIntensity;
+          cs.shakeIntensity *= Math.exp(-8.5 * dt);
+        } else {
+          cs.shakeIntensity = 0;
+        }
+
+        this.camera.lookAt(cs.target);
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+
+    window.onload = function () {
+      window.wizardChessApp = new WizardsChessApp();
+    };
+  </script>
+</body>
+</html>
