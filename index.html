@@ -1,41 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>AETHERIA: Sovereign Shatter Chess — MADE BY SOU.</title>
 
-  <!-- Custom SVG App Icon / Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%230f172a'/%3E%3Cstop offset='100%25' stop-color='%233b0764'/%3E%3C/linearGradient%3E%3ClinearGradient id='gold' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fef08a'/%3E%3Cstop offset='50%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23b45309'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='120' height='120' rx='30' fill='url(%23bg)' stroke='url(%23gold)' stroke-width='4'/%3E%3Cpath d='M60 18 L72 40 L96 32 L84 68 L36 68 L24 32 L48 40 Z' fill='url(%23gold)'/%3E%3Crect x='32' y='74' width='56' height='10' rx='5' fill='url(%23gold)'/%3E%3Crect x='26' y='88' width='68' height='12' rx='6' fill='url(%23gold)'/%3E%3Ccircle cx='60' cy='14' r='5' fill='%23fff'/%3E%3C/svg%3E" />
+  <!-- Custom Pastel SVG App Icon / Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232e294e'/%3E%3Cstop offset='50%25' stop-color='%231e1b2e'/%3E%3Cstop offset='100%25' stop-color='%233d315b'/%3E%3C/linearGradient%3E%3ClinearGradient id='pastel' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fde2e4'/%3E%3Cstop offset='50%25' stop-color='%23e2ece9'/%3E%3Cstop offset='100%25' stop-color='%23cddafd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='120' height='120' rx='30' fill='url(%23bg)' stroke='url(%23pastel)' stroke-width='4'/%3E%3Cpath d='M60 18 L72 40 L96 32 L84 68 L36 68 L24 32 L48 40 Z' fill='url(%23pastel)'/%3E%3Crect x='32' y='74' width='56' height='10' rx='5' fill='url(%23pastel)'/%3E%3Crect x='26' y='88' width='68' height='12' rx='6' fill='url(%23pastel)'/%3E%3Ccircle cx='60' cy='14' r='5' fill='%23fff'/%3E%3C/svg%3E" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Inter, Cinzel, Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Material Symbols Outlined -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Three.js r128 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     :root {
-      --ios-glass-bg: rgba(20, 22, 34, 0.48);
-      --ios-glass-heavy: rgba(14, 16, 26, 0.68);
-      --ios-glass-border: rgba(255, 255, 255, 0.22);
-      --ios-glass-specular: rgba(255, 255, 255, 0.46);
-      --ios-accent: #f5c451;
-      --ios-accent-glow: rgba(245, 196, 81, 0.35);
+      --pastel-rose: #f9dcc4;
+      --pastel-blush: #fbcfe8;
+      --pastel-lavender: #e9d5ff;
+      --pastel-sky: #bae6fd;
+      --pastel-mint: #bbf7d0;
+      --pastel-butter: #fef3c7;
+      --pastel-text: #f8fafc;
+      --pastel-muted: #cbd5e1;
     }
 
     * {
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-touch-callout: none;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -44,10 +44,13 @@
       padding: 0;
       width: 100%;
       height: 100%;
+      height: 100dvh;
       overflow: hidden;
-      background-color: #07080f;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f4f4f8;
+      background-color: #1b1926;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--pastel-text);
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     .font-gothic {
@@ -61,199 +64,206 @@
     #canvas-container {
       position: fixed;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       z-index: 1;
+      touch-action: none;
     }
 
     canvas {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 100% !important;
+      height: 100% !important;
       outline: none;
       touch-action: none;
     }
 
-    /* =========================================================================
-       iOS 28 SPATIAL LIQUID GLASS DESIGN SYSTEM
-       Multi-layered backdrop refraction, specular top rims & squircle geometry
-       ========================================================================= */
-    .ios28-glass {
+    /* Translucent Frosted Pastel Surfaces */
+    .spatial-surface {
       background: linear-gradient(
         145deg,
-        rgba(255, 255, 255, 0.14) 0%,
-        rgba(255, 255, 255, 0.05) 45%,
-        rgba(12, 14, 24, 0.52) 100%
+        rgba(255, 255, 255, 0.20) 0%,
+        rgba(233, 213, 255, 0.10) 50%,
+        rgba(30, 27, 46, 0.52) 100%
       );
-      backdrop-filter: blur(36px) saturate(210%);
-      -webkit-backdrop-filter: blur(36px) saturate(210%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(36px) saturate(190%);
+      -webkit-backdrop-filter: blur(36px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       box-shadow:
-        0 20px 50px -10px rgba(0, 0, 0, 0.62),
-        inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.42),
-        inset 0 -1px 1px 0 rgba(255, 255, 255, 0.08);
+        0 16px 40px -10px rgba(15, 12, 28, 0.45),
+        inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.52),
+        inset 0 -1px 1px 0 rgba(255, 255, 255, 0.12);
     }
 
-    .ios28-modal-glass {
+    .spatial-modal {
       background: radial-gradient(
         circle at 50% 0%,
-        rgba(255, 255, 255, 0.20) 0%,
-        rgba(22, 25, 42, 0.65) 55%,
-        rgba(10, 12, 22, 0.82) 100%
+        rgba(251, 207, 232, 0.24) 0%,
+        rgba(46, 41, 78, 0.68) 55%,
+        rgba(24, 22, 38, 0.82) 100%
       );
-      backdrop-filter: blur(50px) saturate(230%);
-      -webkit-backdrop-filter: blur(50px) saturate(230%);
-      border: 1px solid rgba(255, 255, 255, 0.26);
+      backdrop-filter: blur(48px) saturate(210%);
+      -webkit-backdrop-filter: blur(48px) saturate(210%);
+      border: 1px solid rgba(255, 255, 255, 0.34);
       box-shadow:
-        0 35px 90px -15px rgba(0, 0, 0, 0.8),
-        0 0 60px rgba(245, 196, 81, 0.08),
-        inset 0 2px 2px 0 rgba(255, 255, 255, 0.55),
-        inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.12);
+        0 28px 75px -12px rgba(10, 8, 20, 0.65),
+        0 0 50px rgba(233, 213, 255, 0.12),
+        inset 0 2px 2px 0 rgba(255, 255, 255, 0.60),
+        inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.16);
     }
 
-    /* iOS 28 Interactive Liquid Pill Button */
-    .ios28-pill {
+    /* Interactive Pastel Pill Button */
+    .spatial-pill {
       position: relative;
       overflow: hidden;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.42rem;
-      height: 38px;
-      padding: 0 14px;
+      gap: 0.38rem;
+      height: 34px;
+      padding: 0 11px;
       border-radius: 9999px;
-      font-size: 0.79rem;
+      font-size: 0.74rem;
       font-weight: 600;
       letter-spacing: 0.01em;
       color: #f8fafc;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.07) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0.5px rgba(255, 255, 255, 0.42);
-      transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+        0 4px 12px rgba(15, 12, 28, 0.20),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.48);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s ease, border-color 0.2s ease;
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .ios28-pill:hover:not(:disabled) {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.10) 100%);
-      border-color: rgba(255, 255, 255, 0.36);
-      transform: translateY(-1.5px) scale(1.015);
-      box-shadow:
-        0 8px 22px rgba(0, 0, 0, 0.36),
-        inset 0 1px 1px rgba(255, 255, 255, 0.65);
+    @media (min-width: 640px) {
+      .spatial-pill {
+        height: 36px;
+        padding: 0 13px;
+        font-size: 0.78rem;
+      }
     }
 
-    .ios28-pill:active:not(:disabled) {
-      transform: translateY(0px) scale(0.96);
+    .spatial-pill:hover:not(:disabled) {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.12) 100%);
+      border-color: rgba(255, 255, 255, 0.44);
+      transform: translateY(-1px);
     }
 
-    .ios28-pill:disabled {
-      opacity: 0.36;
+    .spatial-pill:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    .spatial-pill:disabled {
+      opacity: 0.38;
       cursor: not-allowed;
     }
 
-    .ios28-pill.active-gold {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.36) 0%, rgba(217, 119, 6, 0.22) 100%);
-      border-color: rgba(253, 224, 71, 0.65);
-      color: #fef08a;
+    .spatial-pill.active-peach {
+      background: linear-gradient(135deg, rgba(254, 215, 170, 0.40) 0%, rgba(251, 207, 232, 0.30) 100%);
+      border-color: rgba(254, 215, 170, 0.78);
+      color: #fff7ed;
       box-shadow:
-        0 0 22px rgba(251, 191, 36, 0.28),
-        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        0 0 18px rgba(254, 215, 170, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.68);
     }
 
-    .ios28-pill.active-cyan {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.25) 100%);
-      border-color: rgba(125, 211, 252, 0.65);
-      color: #e0f2fe;
+    .spatial-pill.active-sky {
+      background: linear-gradient(135deg, rgba(186, 230, 253, 0.38) 0%, rgba(233, 213, 255, 0.30) 100%);
+      border-color: rgba(186, 230, 253, 0.78);
+      color: #f0f9ff;
       box-shadow:
-        0 0 22px rgba(56, 189, 248, 0.28),
-        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        0 0 18px rgba(186, 230, 253, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.68);
     }
 
-    .ios28-pill.action-crimson {
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.45) 0%, rgba(159, 18, 57, 0.42) 100%);
-      border-color: rgba(253, 164, 175, 0.6);
-      color: #ffe4e6;
+    .spatial-pill.action-blush {
+      background: linear-gradient(135deg, rgba(251, 207, 232, 0.44) 0%, rgba(244, 162, 184, 0.36) 100%);
+      border-color: rgba(251, 207, 232, 0.78);
+      color: #fff1f2;
       box-shadow:
-        0 0 20px rgba(244, 63, 94, 0.28),
-        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        0 0 18px rgba(251, 207, 232, 0.26),
+        inset 0 1px 1px rgba(255, 255, 255, 0.62);
     }
 
-    .ios28-pill.action-crimson:hover:not(:disabled) {
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.62) 0%, rgba(190, 18, 60, 0.58) 100%);
-      box-shadow: 0 0 28px rgba(244, 63, 94, 0.5);
-    }
-
-    /* Device Selection Cards on Start Screen */
-    .ios28-card {
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
+    /* Device Selection Cards */
+    .spatial-card {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
       box-shadow:
-        0 14px 34px rgba(0, 0, 0, 0.35),
-        inset 0 1.5px 1px rgba(255, 255, 255, 0.4);
-      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        0 12px 28px rgba(15, 12, 28, 0.28),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.45);
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
       cursor: pointer;
     }
 
-    .ios28-card:hover {
-      transform: translateY(-3px) scale(1.01);
-      border-color: rgba(255, 255, 255, 0.42);
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
+    .spatial-card:hover {
+      border-color: rgba(255, 255, 255, 0.45);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
     }
 
-    .ios28-card.selected-device {
-      background: linear-gradient(160deg, rgba(251, 191, 36, 0.26) 0%, rgba(139, 92, 246, 0.18) 100%);
-      border-color: rgba(253, 224, 71, 0.85);
+    .spatial-card.selected-device {
+      background: linear-gradient(160deg, rgba(254, 215, 170, 0.28) 0%, rgba(233, 213, 255, 0.24) 100%);
+      border-color: rgba(254, 215, 170, 0.85);
       box-shadow:
-        0 18px 40px rgba(245, 158, 11, 0.22),
-        0 0 0 2px rgba(253, 224, 71, 0.3),
-        inset 0 2px 1.5px rgba(255, 255, 255, 0.65);
+        0 14px 32px rgba(254, 215, 170, 0.18),
+        0 0 0 2px rgba(254, 215, 170, 0.25),
+        inset 0 2px 1.5px rgba(255, 255, 255, 0.68);
     }
 
-    .material-symbols-outlined {
-      font-size: 18px;
-      line-height: 1;
-      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+    .svg-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
     }
 
-    /* Custom Scrollbars */
+    /* Hide scrollbars cleanly for horizontal pill bars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.1);
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 9999px;
     }
 
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.6); }
-      50% { box-shadow: 0 0 22px 5px rgba(244, 63, 94, 0.9); }
+    @keyframes pulseSoft {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 207, 232, 0.55); }
+      50% { box-shadow: 0 0 18px 4px rgba(251, 207, 232, 0.85); }
     }
     .check-alert-pulse {
-      animation: pulseGlow 1.6s infinite;
+      animation: pulseSoft 1.6s infinite;
     }
 
     @keyframes floatIcon {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(2deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
     }
     .animate-float-icon {
       animation: floatIcon 4s ease-in-out infinite;
     }
 
-    /* Subtle Vignette */
     .sanctuary-vignette {
       pointer-events: none;
       position: fixed;
       inset: 0;
       z-index: 2;
-      background: radial-gradient(circle at 50% 50%, transparent 62%, rgba(4, 5, 12, 0.52) 100%);
+      background: radial-gradient(circle at 50% 50%, transparent 65%, rgba(20, 18, 32, 0.42) 100%);
     }
   </style>
 </head>
@@ -262,464 +272,462 @@
   <!-- 3D WebGL Canvas Container -->
   <div id="canvas-container"></div>
 
-  <!-- Atmospheric Vignette Overlay -->
+  <!-- Soft Vignette Overlay -->
   <div class="sanctuary-vignette"></div>
 
   <!-- =========================================================================
-       INITIAL STARTING SCREEN (iOS 28 SPATIAL LIQUID GLASS LAUNCHER)
-       Features Custom App Icon, "MADE BY SOU." Attribution, Device Selector,
-       and 7 Interactive 3D Environment Realm Presets
+       STARTING LAUNCHER MODAL
        ========================================================================= -->
-  <div id="start-screen-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/45 backdrop-blur-md transition-all duration-500 overflow-y-auto">
-    <div class="ios28-modal-glass rounded-[38px] p-5 sm:p-8 max-w-2xl w-full my-auto text-center relative overflow-hidden">
+  <div id="start-screen-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/40 backdrop-blur-md transition-opacity duration-300 overflow-y-auto">
+    <div class="spatial-modal rounded-[32px] p-4 sm:p-7 max-w-xl w-full my-auto text-center relative overflow-hidden max-h-[94dvh] overflow-y-auto">
 
-      <!-- Decorative Specular Ambient Orbs -->
-      <div class="pointer-events-none absolute -top-24 -left-24 w-60 h-60 rounded-full bg-amber-400/20 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-24 -right-24 w-60 h-60 rounded-full bg-indigo-500/25 blur-3xl"></div>
+      <!-- Soft Pastel Ambient Orbs -->
+      <div class="pointer-events-none absolute -top-20 -left-20 w-52 h-52 rounded-full bg-pink-200/20 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-20 -right-20 w-52 h-52 rounded-full bg-sky-200/20 blur-3xl"></div>
 
       <!-- Custom 3D-Styled App Emblem Icon -->
-      <div class="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 mb-3 animate-float-icon">
-        <div class="w-full h-full rounded-[26px] ios28-glass flex items-center justify-center border border-amber-300/50 shadow-[0_0_35px_rgba(245,196,81,0.35)]">
-          <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-[0_4px_12px_rgba(251,191,36,0.6)]" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="relative mx-auto w-16 h-16 sm:w-20 sm:h-20 mb-2.5 animate-float-icon">
+        <div class="w-full h-full rounded-[22px] spatial-surface flex items-center justify-center border border-orange-200/50">
+          <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="emblemGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#fffbeb" />
-                <stop offset="45%" stop-color="#fbbf24" />
-                <stop offset="100%" stop-color="#b45309" />
+              <linearGradient id="emblemPastel" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff1f2" />
+                <stop offset="50%" stop-color="#fed7aa" />
+                <stop offset="100%" stop-color="#f9a8d4" />
               </linearGradient>
-              <linearGradient id="emblemCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#67e8f9" />
-                <stop offset="100%" stop-color="#6366f1" />
+              <linearGradient id="emblemSky" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#bae6fd" />
+                <stop offset="100%" stop-color="#e9d5ff" />
               </linearGradient>
             </defs>
-            <circle cx="60" cy="60" r="50" stroke="url(#emblemGold)" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.7" />
-            <path d="M60 16 L74 42 L102 30 L86 72 L34 72 L18 30 L46 42 Z" fill="url(#emblemGold)" />
-            <polygon points="60,32 67,48 60,64 53,48" fill="url(#emblemCyan)" />
-            <rect x="30" y="78" width="60" height="10" rx="5" fill="url(#emblemGold)" />
-            <rect x="22" y="92" width="76" height="12" rx="6" fill="url(#emblemGold)" />
+            <circle cx="60" cy="60" r="50" stroke="url(#emblemPastel)" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.75" />
+            <path d="M60 16 L74 42 L102 30 L86 72 L34 72 L18 30 L46 42 Z" fill="url(#emblemPastel)" />
+            <polygon points="60,32 67,48 60,64 53,48" fill="url(#emblemSky)" />
+            <rect x="30" y="78" width="60" height="10" rx="5" fill="url(#emblemPastel)" />
+            <rect x="22" y="92" width="76" height="12" rx="6" fill="url(#emblemPastel)" />
             <circle cx="60" cy="11" r="5" fill="#ffffff" />
           </svg>
         </div>
-        <span class="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 shadow-lg">3D</span>
+        <span class="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase bg-gradient-to-r from-orange-200 to-pink-200 text-slate-900 shadow">3D</span>
       </div>
 
-      <!-- Game Title & MADE BY SOU. Attribution -->
-      <h1 class="font-gothic text-2xl sm:text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-300 to-amber-200 drop-shadow-sm">
+      <!-- Title & Attribution -->
+      <h1 class="font-gothic text-2xl sm:text-3xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-rose-100 via-orange-100 to-sky-100">
         AETHERIA
       </h1>
-      <p class="text-xs sm:text-sm font-medium tracking-[0.22em] uppercase text-sky-200/90 mt-0.5">
+      <p class="text-[11px] sm:text-xs font-medium tracking-[0.2em] uppercase text-sky-100/80 mt-0.5">
         Sovereign Shatter Chess
       </p>
 
-      <!-- MANDATORY ATTRIBUTION RIGHT BELOW THE TITLE -->
-      <div class="inline-flex items-center gap-2 px-4 py-1 mt-2 mb-5 rounded-full bg-white/10 border border-amber-300/40 shadow-[0_0_20px_rgba(251,191,36,0.2)]">
-        <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
-        <span class="font-mono-code text-xs sm:text-sm font-bold tracking-[0.2em] text-amber-200">MADE BY SOU.</span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 mt-2 mb-4 rounded-full bg-white/10 border border-orange-200/40">
+        <span class="w-2 h-2 rounded-full bg-pink-200 animate-pulse"></span>
+        <span class="font-mono-code text-[11px] font-semibold tracking-[0.18em] text-orange-100">MADE BY SOU.</span>
       </div>
 
-      <!-- Step 1: Choose Control Platform (Smartphone vs PC/Laptop) -->
-      <div class="text-left mb-5">
-        <div class="flex items-center justify-between mb-2.5 px-1">
-          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300 flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-amber-300" style="font-size:16px;">devices</span>
-            1. Select Your Control Platform
+      <!-- Step 1: Choose Control Platform -->
+      <div class="text-left mb-4">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+            <svg class="svg-icon text-orange-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="14" height="12" rx="2"/><rect x="18" y="8" width="4" height="12" rx="1"/><path d="M6 20h6"/>
+            </svg>
+            1. Select Control Platform
           </span>
-          <span id="detected-device-pill" class="text-[10px] font-mono-code text-sky-300 bg-sky-500/15 border border-sky-400/30 px-2.5 py-0.5 rounded-full">
+          <span id="detected-device-pill" class="text-[10px] font-mono-code text-sky-100 bg-sky-300/20 border border-sky-200/35 px-2.5 py-0.5 rounded-full">
             Auto-Detected
           </span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <!-- Smartphone / Touch Option -->
-          <div id="card-device-mobile" data-device="mobile" class="ios28-card rounded-[26px] p-4 text-left flex items-start gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400/30 to-indigo-500/30 border border-sky-300/40 flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-sky-200" style="font-size: 26px;">smartphone</span>
+          <div id="card-device-mobile" data-device="mobile" class="spatial-card rounded-[22px] p-3.5 text-left flex items-start gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-sky-200/20 border border-sky-200/40 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-sky-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="12" cy="18" r="1"/>
+              </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm sm:text-base text-white">Smartphone / Touch</h3>
-                <span class="material-symbols-outlined text-amber-300 device-check hidden">check_circle</span>
+              <div class="flex items-center justify-between gap-1">
+                <h3 class="font-bold text-xs sm:text-sm text-white truncate">Smartphone / Touch</h3>
+                <span class="device-check hidden text-orange-200 shrink-0">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1.2 14.2-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>
+                </span>
               </div>
-              <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
-                Touch tap selection, 1-finger orbit, pinch-to-zoom & floating iOS 28 Glass D-Pad Controller.
+              <p class="text-[11px] text-slate-200/85 mt-0.5 leading-snug">
+                Touch tap selection, 1-finger orbit, pinch-to-zoom &amp; floating D-Pad controller.
               </p>
             </div>
           </div>
 
           <!-- PC / Laptop Option -->
-          <div id="card-device-pc" data-device="pc" class="ios28-card selected-device rounded-[26px] p-4 text-left flex items-start gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400/30 to-orange-500/30 border border-amber-300/40 flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-amber-200" style="font-size: 26px;">laptop_mac</span>
+          <div id="card-device-pc" data-device="pc" class="spatial-card selected-device rounded-[22px] p-3.5 text-left flex items-start gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-orange-200/20 border border-orange-200/40 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-orange-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/>
+              </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm sm:text-base text-white">PC / Laptop</h3>
-                <span class="material-symbols-outlined text-amber-300 device-check">check_circle</span>
+              <div class="flex items-center justify-between gap-1">
+                <h3 class="font-bold text-xs sm:text-sm text-white truncate">PC / Laptop</h3>
+                <span class="device-check text-orange-200 shrink-0">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1.2 14.2-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>
+                </span>
               </div>
-              <p class="text-[11px] text-slate-300 mt-1 leading-relaxed">
-                Mouse raycasting + Full Keyboard (<span class="font-mono-code text-amber-200">WASD/Arrows</span> cursor, <span class="font-mono-code text-amber-200">Enter/Space</span> move, <span class="font-mono-code text-amber-200">Q/E</span> orbit).
+              <p class="text-[11px] text-slate-200/85 mt-0.5 leading-snug">
+                Mouse click + Keyboard (<span class="font-mono-code text-orange-100">WASD/Arrows</span> cursor, <span class="font-mono-code text-orange-100">Enter</span> move, <span class="font-mono-code text-orange-100">Q/E</span> orbit).
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Step 2: Choose Surrounding 3D Realm & Board Style -->
-      <div class="text-left mb-6">
-        <div class="flex items-center justify-between mb-2.5 px-1">
-          <span class="text-[11px] font-bold uppercase tracking-widest text-slate-300 flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-amber-300" style="font-size:16px;">public</span>
-            2. Select Sanctuary Environment & Board Style
+      <!-- Step 2: Choose Pastel Sanctuary Environment -->
+      <div class="text-left mb-5">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+            <svg class="svg-icon text-pink-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>
+            </svg>
+            2. Select Pastel Sanctuary &amp; Board
           </span>
-          <span class="text-[10px] text-slate-400">Switchable anytime in HUD</span>
+          <span class="text-[10px] text-slate-300">Switchable anytime</span>
         </div>
 
         <div id="start-env-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button data-env="cathedral" class="start-env-btn ios28-pill active-gold !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-amber-300">castle</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Cathedral</div>
-              <div class="text-[9px] opacity-75">Marble & Slate</div>
+          <button data-env="cathedral" class="start-env-btn spatial-pill active-peach !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Cathedral</div>
+              <div class="text-[9px] opacity-75 truncate">Pearl &amp; Lilac</div>
             </div>
           </button>
 
-          <button data-env="night" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-indigo-300">dark_mode</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Night Glade</div>
-              <div class="text-[9px] opacity-75">Moon & Fireflies</div>
+          <button data-env="night" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Dream Night</div>
+              <div class="text-[9px] opacity-75 truncate">Periwinkle Moon</div>
             </div>
           </button>
 
-          <button data-env="day" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-sky-300">wb_sunny</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Sunlit Day</div>
-              <div class="text-[9px] opacity-75">Golden Citadel</div>
+          <button data-env="day" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Morning Sky</div>
+              <div class="text-[9px] opacity-75 truncate">Cloud Citadel</div>
             </div>
           </button>
 
-          <button data-env="grass" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-emerald-300">park</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Lush Grass</div>
-              <div class="text-[9px] opacity-75">3D Grass & Leaves</div>
+          <button data-env="grass" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Mint Meadow</div>
+              <div class="text-[9px] opacity-75 truncate">Pastel Petals</div>
             </div>
           </button>
 
-          <button data-env="ocean" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-cyan-300">waves</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Ocean Waves</div>
-              <div class="text-[9px] opacity-75">Animated Sea</div>
+          <button data-env="ocean" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Aqua Lagoon</div>
+              <div class="text-[9px] opacity-75 truncate">Gentle Waves</div>
             </div>
           </button>
 
-          <button data-env="space" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3">
-            <span class="material-symbols-outlined text-purple-300">flare</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Deep Space</div>
-              <div class="text-[9px] opacity-75">Stars & Nebula</div>
+          <button data-env="space" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Lilac Nebula</div>
+              <div class="text-[9px] opacity-75 truncate">Starlight Rings</div>
             </div>
           </button>
 
-          <button data-env="sand" class="start-env-btn ios28-pill !h-11 !rounded-2xl justify-start !px-3 col-span-2 sm:col-span-2">
-            <span class="material-symbols-outlined text-amber-400">landscape</span>
-            <div class="text-left leading-tight">
-              <div class="text-[11px] font-bold">Golden Desert Sand</div>
-              <div class="text-[9px] opacity-75">Dunes, Obelisks & Sandstone Board</div>
+          <button data-env="sand" class="start-env-btn spatial-pill !h-11 !rounded-2xl justify-start !px-3 col-span-2 w-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-200 shrink-0"></span>
+            <div class="text-left leading-tight truncate">
+              <div class="text-[11px] font-bold truncate">Peach Blush Dunes</div>
+              <div class="text-[9px] opacity-75 truncate">Pastel Sandstone &amp; Rose Obelisks</div>
             </div>
           </button>
         </div>
       </div>
 
-      <!-- Enter Sanctuary CTA Button -->
-      <button id="btn-launch-game" class="w-full h-13 py-3.5 rounded-[22px] font-gothic text-sm sm:text-base font-bold tracking-wider uppercase text-slate-950 bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-300 hover:from-amber-100 hover:to-yellow-200 shadow-[0_10px_35px_rgba(245,196,81,0.45)] transition transform hover:-translate-y-0.5 active:scale-98 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined" style="font-size: 22px;">play_circle</span>
+      <!-- Enter Sanctuary CTA -->
+      <button id="btn-launch-game" class="w-full py-3 rounded-[20px] font-gothic text-sm sm:text-base font-bold tracking-wider uppercase text-slate-900 bg-gradient-to-r from-rose-200 via-orange-100 to-sky-200 hover:from-rose-100 hover:to-sky-100 shadow-lg transition transform active:scale-98 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         <span>Enter Aetheria Sanctuary</span>
       </button>
     </div>
   </div>
 
   <!-- =========================================================================
-       TOP iOS 28 LIQUID GLASS NAVIGATION & HUD BAR
+       COMPACT RESPONSIVE TOP HUD BAR
        ========================================================================= -->
-  <header class="fixed top-0 left-0 right-0 z-20 p-2 sm:p-3.5 pointer-events-none flex flex-col gap-2">
-    <div class="max-w-[1480px] w-full mx-auto flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
+  <header class="fixed top-0 left-0 right-0 z-20 p-2 sm:p-3 pointer-events-none flex flex-col gap-1.5">
+    <div class="max-w-[1440px] w-full mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-1.5">
 
-      <!-- Left Cluster: Custom App Emblem + Title + Live Turn & Status + Spoils -->
-      <div class="ios28-glass rounded-full px-3 py-1.5 flex items-center gap-2.5 flex-wrap">
-        <!-- Brand Badge (Click to reopen Device/Launcher Modal) -->
-        <button id="btn-open-launcher" class="flex items-center gap-2 pr-2.5 border-r border-white/15 text-left group" title="Open Launcher & Device Settings">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-300/30 to-indigo-600/40 border border-amber-300/50 flex items-center justify-center shadow-inner group-hover:scale-105 transition">
-            <svg class="w-5 h-5" viewBox="0 0 120 120" fill="none">
-              <path d="M60 18 L74 42 L100 30 L86 72 L34 72 L20 30 L46 42 Z" fill="#fbbf24" />
-              <rect x="30" y="78" width="60" height="12" rx="6" fill="#fef08a" />
-            </svg>
-          </div>
-          <div class="leading-tight">
-            <div class="flex items-center gap-1.5">
-              <span class="font-gothic text-xs sm:text-sm font-extrabold tracking-wider text-amber-100">AETHERIA</span>
-              <span id="hud-device-badge" class="text-[9px] font-mono-code px-1.5 py-0.2 rounded-full bg-white/10 text-sky-200 border border-white/15">PC</span>
+      <!-- Top Row Left: Brand + Turn Indicator + Quick Status -->
+      <div class=" flex items-center justify-between gap-1.5 pointer-events-auto">
+        <div class="spatial-surface rounded-full px-2.5 py-1 flex items-center gap-2 min-w-0 flex-1 sm:flex-initial">
+          <button id="btn-open-launcher" class="flex items-center gap-2 pr-2 border-r border-white/20 text-left shrink-0" title="Open Launcher & Device Settings">
+            <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-rose-200/35 to-sky-200/35 border border-white/40 flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 120 120" fill="none">
+                <path d="M60 18 L74 42 L100 30 L86 72 L34 72 L20 30 L46 42 Z" fill="#fed7aa" />
+                <rect x="30" y="78" width="60" height="12" rx="6" fill="#fbcfe8" />
+              </svg>
             </div>
-            <p class="text-[9px] font-mono-code tracking-widest text-amber-300/90">MADE BY SOU.</p>
-          </div>
-        </button>
+            <div class="leading-tight">
+              <div class="flex items-center gap-1">
+                <span class="font-gothic text-xs font-bold tracking-wider text-rose-100">AETHERIA</span>
+                <span id="hud-device-badge" class="text-[8px] font-mono-code px-1.5 py-0.2 rounded-full bg-white/15 text-sky-100 border border-white/20">PC</span>
+              </div>
+              <p class="text-[8px] font-mono-code tracking-widest text-orange-100/90">MADE BY SOU.</p>
+            </div>
+          </button>
 
-        <!-- Turn Indicator Pill -->
-        <div id="turn-chip" class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 transition-all duration-300">
-          <span id="turn-dot" class="w-2.5 h-2.5 rounded-full bg-amber-200 shadow-[0_0_8px_#fde68a]"></span>
-          <span id="turn-text" class="text-xs font-semibold tracking-wide text-amber-100">Light's Turn</span>
+          <!-- Turn Indicator -->
+          <div id="turn-chip" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border border-white/20 shrink-0">
+            <span id="turn-dot" class="w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa]"></span>
+            <span id="turn-text" class="text-[11px] font-semibold tracking-wide text-orange-100">Pearl's Turn</span>
+          </div>
+
+          <!-- Status Alert -->
+          <div id="status-badge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-pink-300/30 border border-pink-200/60 text-pink-100 shrink-0">
+            <span id="status-badge-text">CHECK</span>
+          </div>
         </div>
 
-        <!-- Dynamic Status Alert (Check / Checkmate / Automaton) -->
-        <div id="status-badge" class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/30 border border-rose-400/60 text-rose-100">
-          <span class="material-symbols-outlined" style="font-size: 15px;">warning</span>
-          <span id="status-badge-text">CHECK</span>
-        </div>
-
-        <!-- Captured Pieces Counters -->
-        <div class="hidden xl:flex items-center gap-3 pl-2 border-l border-white/15 text-xs">
-          <div class="flex items-center gap-1.5" title="Dark pieces shattered by Light">
-            <span class="w-2 h-2 rounded-full bg-amber-200"></span>
-            <span class="text-slate-300 text-[11px]">Shattered:</span>
-            <span id="captured-by-white" class="font-mono-code font-semibold text-amber-200">0</span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Light pieces shattered by Dark">
-            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-            <span class="text-slate-300 text-[11px]">Shattered:</span>
-            <span id="captured-by-black" class="font-mono-code font-semibold text-purple-300">0</span>
-          </div>
+        <!-- Mobile-only Quick Chronicle & Sound Buttons on Row 1 Right -->
+        <div class="flex lg:hidden items-center gap-1 spatial-surface rounded-full p-1 shrink-0">
+          <button id="btn-sound-mobile" class="spatial-pill active-peach !h-7 !px-2" title="Toggle Audio">
+            <svg id="icon-sound-mobile" class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+          </button>
+          <button id="btn-history-mobile" class="spatial-pill !h-7 !px-2.5" title="Toggle Chronicle">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span id="move-count-badge-mobile" class="font-mono-code text-[10px] text-orange-100">0</span>
+          </button>
         </div>
       </div>
 
-      <!-- Right Cluster: iOS 28 Liquid Glass Controls & Realm Switcher -->
-      <nav aria-label="Primary Controls" class="ios28-glass rounded-full p-1.5 flex items-center gap-1.5 flex-wrap">
-
-        <!-- Play Mode Toggle (vs AI Automaton / 2P Pass & Play) -->
-        <button id="btn-mode" class="ios28-pill active-cyan" title="Toggle Game Mode: vs AI Automaton or 2-Player Pass & Play">
-          <span class="material-symbols-outlined" id="icon-mode">smart_toy</span>
+      <!-- Control Strip: Horizontally Scrollable on Small Screens so Nothing Wraps or Glitches -->
+      <nav aria-label="Primary Controls" class="spatial-surface rounded-full p-1 flex items-center gap-1 overflow-x-auto no-scrollbar pointer-events-auto max-w-full">
+        <button id="btn-mode" class="spatial-pill active-sky !h-7 sm:!h-8" title="Toggle vs Automaton or 2P Pass & Play">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/>
+          </svg>
           <span id="label-mode">vs Automaton</span>
         </button>
 
-        <!-- AI Difficulty Cycle Button -->
-        <button id="btn-difficulty" class="ios28-pill" title="Cycle Automaton Intelligence (Novice / Adept / Archmage)">
-          <span class="material-symbols-outlined">psychology</span>
+        <button id="btn-difficulty" class="spatial-pill !h-7 sm:!h-8" title="Cycle Automaton Intelligence">
           <span id="label-difficulty">Adept</span>
         </button>
 
-        <!-- Divider -->
-        <div class="h-5 w-[1px] bg-white/15 mx-0.5 hidden sm:block"></div>
+        <div class="h-4 w-[1px] bg-white/20 mx-0.5 shrink-0"></div>
 
-        <!-- Camera Perspective Presets -->
-        <button id="btn-cam-white" class="ios28-pill active-gold" title="Light Side Camera Perspective">
-          <span class="material-symbols-outlined">visibility</span>
-          <span class="hidden md:inline">Light</span>
+        <button id="btn-cam-white" class="spatial-pill active-peach !h-7 sm:!h-8" title="Pearl Camera View">
+          <span>Pearl</span>
         </button>
-        <button id="btn-cam-black" class="ios28-pill" title="Dark Side Camera Perspective">
-          <span class="material-symbols-outlined">flip_camera_android</span>
-          <span class="hidden md:inline">Dark</span>
+        <button id="btn-cam-black" class="spatial-pill !h-7 sm:!h-8" title="Lavender Camera View">
+          <span>Lilac</span>
         </button>
-        <button id="btn-cam-top" class="ios28-pill" title="Overhead Tactical View">
-          <span class="material-symbols-outlined">grid_view</span>
-          <span class="hidden md:inline">Overhead</span>
+        <button id="btn-cam-top" class="spatial-pill !h-7 sm:!h-8" title="Overhead Tactical View">
+          <span>Top</span>
         </button>
-        <button id="btn-cam-cinematic" class="ios28-pill active-cyan" title="Toggle Dynamic Action Camera on Captures">
-          <span class="material-symbols-outlined">movie_filter</span>
-          <span class="hidden lg:inline">Action Cam</span>
+        <button id="btn-cam-cinematic" class="spatial-pill active-sky !h-7 sm:!h-8" title="Toggle Action Camera on Captures">
+          <span>Action Cam</span>
         </button>
 
-        <!-- Divider -->
-        <div class="h-5 w-[1px] bg-white/15 mx-0.5 hidden sm:block"></div>
+        <div class="h-4 w-[1px] bg-white/20 mx-0.5 shrink-0"></div>
 
-        <!-- Instant Shatter Strike Demo -->
-        <button id="btn-strike-demo" class="ios28-pill action-crimson" title="Trigger an immediate Wizard's Chess capture and 3D physics shatter (Shortcut: C)">
-          <span class="material-symbols-outlined">bolt</span>
-          <span>Strike Demo</span>
+        <button id="btn-strike-demo" class="spatial-pill action-blush !h-7 sm:!h-8" title="Trigger Instant Capture & Shatter">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Strike</span>
         </button>
 
-        <!-- Undo Move -->
-        <button id="btn-undo" class="ios28-pill" title="Undo Move (Shortcut: U)" disabled>
-          <span class="material-symbols-outlined">undo</span>
-          <span class="hidden md:inline">Undo</span>
+        <button id="btn-undo" class="spatial-pill !h-7 sm:!h-8" title="Undo Move" disabled>
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+          </svg>
+          <span class="hidden sm:inline">Undo</span>
         </button>
 
-        <!-- New Game / Reset -->
-        <button id="btn-reset" class="ios28-pill" title="Reset Board to Starting Sanctuary">
-          <span class="material-symbols-outlined">restart_alt</span>
-          <span class="hidden md:inline">Reset</span>
+        <button id="btn-reset" class="spatial-pill !h-7 sm:!h-8" title="Reset Sanctuary">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
+          </svg>
+          <span class="hidden sm:inline">Reset</span>
         </button>
 
-        <!-- Sound Effects Toggle -->
-        <button id="btn-sound" class="ios28-pill active-gold !px-2.5" title="Toggle Synthesizer Audio">
-          <span class="material-symbols-outlined" id="icon-sound">volume_up</span>
+        <button id="btn-sound" class="spatial-pill active-peach !h-7 sm:!h-8 !px-2.5 hidden lg:inline-flex" title="Toggle Audio">
+          <svg id="icon-sound" class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
         </button>
 
-        <!-- Move Log Pill Toggle -->
-        <button id="btn-history-toggle" class="ios28-pill" title="Toggle Chronicle of Moves">
-          <span class="material-symbols-outlined">history_edu</span>
-          <span id="move-count-badge" class="font-mono-code text-xs text-amber-200">0</span>
+        <button id="btn-history-toggle" class="spatial-pill !h-7 sm:!h-8 hidden lg:inline-flex" title="Toggle Chronicle">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span id="move-count-badge" class="font-mono-code text-xs text-orange-100">0</span>
         </button>
       </nav>
     </div>
 
-    <!-- Second Row: iOS 28 Floating Realm & Board Style Switcher Dock -->
-    <div class="max-w-[1480px] w-full mx-auto flex items-center justify-between pointer-events-none">
-      <div class="ios28-glass rounded-full p-1 px-2 flex items-center gap-1 overflow-x-auto max-w-full pointer-events-auto">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-200/90 px-2 flex items-center gap-1 shrink-0">
-          <span class="material-symbols-outlined" style="font-size: 14px;">palette</span>
+    <!-- Second Row: Horizontally Scrollable Realm Switcher with Non-Squished Pills -->
+    <div class="max-w-[1440px] w-full mx-auto flex items-center pointer-events-none">
+      <div class="spatial-surface rounded-full p-1 px-2 flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full pointer-events-auto">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-rose-100/90 px-1.5 shrink-0">
           Realm:
         </span>
-        <button data-env="cathedral" class="hud-env-btn ios28-pill active-gold !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">castle</span>
+        <button data-env="cathedral" class="hud-env-btn spatial-pill active-peach !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-rose-200"></span>
           <span>Cathedral</span>
         </button>
-        <button data-env="night" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">dark_mode</span>
-          <span>Night</span>
+        <button data-env="night" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-indigo-200"></span>
+          <span>Dream Night</span>
         </button>
-        <button data-env="day" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">wb_sunny</span>
-          <span>Day</span>
+        <button data-env="day" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-sky-200"></span>
+          <span>Morning Sky</span>
         </button>
-        <button data-env="grass" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">park</span>
-          <span>Grass & Leaves</span>
+        <button data-env="grass" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-emerald-200"></span>
+          <span>Mint Meadow</span>
         </button>
-        <button data-env="ocean" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">waves</span>
-          <span>Ocean Waves</span>
+        <button data-env="ocean" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-cyan-200"></span>
+          <span>Aqua Lagoon</span>
         </button>
-        <button data-env="space" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">flare</span>
-          <span>Space</span>
+        <button data-env="space" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-purple-200"></span>
+          <span>Lilac Nebula</span>
         </button>
-        <button data-env="sand" class="hud-env-btn ios28-pill !h-7 !px-2.5 !text-[11px]">
-          <span class="material-symbols-outlined" style="font-size:14px;">landscape</span>
-          <span>Desert Sand</span>
+        <button data-env="sand" class="hud-env-btn spatial-pill !h-6 !px-2.5 !text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-orange-200"></span>
+          <span>Peach Dunes</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- =========================================================================
-       SMARTPHONE TOUCH MODE: FLOATING iOS 28 GLASS D-PAD & ACTION CONTROLLER
-       (Shown when Smartphone Mode is chosen or toggled)
+       SMARTPHONE TOUCH MODE: COMPACT FLOATING D-PAD & CAMERA ORBIT BAR
        ========================================================================= -->
-  <div id="mobile-touch-dock" class="fixed bottom-4 left-4 z-20 hidden items-end gap-2.5 pointer-events-auto">
-    <div class="ios28-glass rounded-[28px] p-2.5 flex flex-col items-center gap-1">
-      <div class="text-[9px] font-mono-code uppercase tracking-widest text-sky-200/80 mb-0.5">Touch Cursor</div>
-      <button data-dpad="up" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
-        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+  <div id="mobile-touch-dock" class="fixed bottom-3 left-3 z-20 hidden items-end gap-2 pointer-events-auto">
+    <div class="spatial-surface rounded-[24px] p-2 flex flex-col items-center gap-1">
+      <div class="text-[8px] font-mono-code uppercase tracking-widest text-sky-100/80">Cursor</div>
+      <button data-dpad="up" class="spatial-pill !w-9 !h-8 !p-0 !rounded-xl" aria-label="Up">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
       </button>
       <div class="flex items-center gap-1">
-        <button data-dpad="left" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
-          <span class="material-symbols-outlined">keyboard_arrow_left</span>
+        <button data-dpad="left" class="spatial-pill !w-9 !h-8 !p-0 !rounded-xl" aria-label="Left">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <button data-dpad="select" class="ios28-pill active-gold !w-12 !h-10 !p-0 !rounded-2xl font-bold text-[10px]">
+        <button data-dpad="select" class="spatial-pill active-peach !w-10 !h-8 !p-0 !rounded-xl font-bold text-[10px]">
           ACT
         </button>
-        <button data-dpad="right" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
-          <span class="material-symbols-outlined">keyboard_arrow_right</span>
+        <button data-dpad="right" class="spatial-pill !w-9 !h-8 !p-0 !rounded-xl" aria-label="Right">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
-      <button data-dpad="down" class="ios28-pill !w-11 !h-10 !p-0 !rounded-2xl">
-        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+      <button data-dpad="down" class="spatial-pill !w-9 !h-8 !p-0 !rounded-xl" aria-label="Down">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
       </button>
     </div>
 
-    <!-- Quick Camera Orbit Buttons for One-Handed Mobile Play -->
-    <div class="ios28-glass rounded-[24px] p-2 flex flex-col gap-1.5">
-      <button id="btn-touch-rot-left" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Orbit Left">
-        <span class="material-symbols-outlined">rotate_left</span>
+    <div class="spatial-surface rounded-[20px] p-1.5 flex flex-col gap-1">
+      <button id="btn-touch-rot-left" class="spatial-pill !w-8 !h-8 !p-0 !rounded-xl" title="Orbit Left">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
-      <button id="btn-touch-rot-right" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Orbit Right">
-        <span class="material-symbols-outlined">rotate_right</span>
+      <button id="btn-touch-rot-right" class="spatial-pill !w-8 !h-8 !p-0 !rounded-xl" title="Orbit Right">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       </button>
-      <button id="btn-touch-zoom" class="ios28-pill !w-10 !h-10 !p-0 !rounded-xl" title="Toggle Close/Wide Zoom">
-        <span class="material-symbols-outlined">zoom_in</span>
+      <button id="btn-touch-zoom" class="spatial-pill !w-8 !h-8 !p-0 !rounded-xl" title="Toggle Zoom">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>
       </button>
     </div>
   </div>
 
   <!-- =========================================================================
-       PC / LAPTOP KEYBOARD & MOUSE HINT PILL (Bottom-Left)
+       PC KEYBOARD HINT BAR (Bottom-Left)
        ========================================================================= -->
-  <div id="pc-control-hint" class="fixed bottom-4 left-4 z-20 pointer-events-none hidden sm:flex items-center gap-2.5 ios28-glass rounded-full px-4 py-2 text-xs text-slate-200">
-    <span class="material-symbols-outlined text-amber-300" style="font-size: 16px;">keyboard</span>
-    <span id="hint-banner">
-      <strong class="text-amber-200">PC Controls:</strong> Click or <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">WASD/Arrows</kbd> + <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Enter</kbd> • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Q/E</kbd> Orbit • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">1-7</kbd> Realms
+  <div id="pc-control-hint" class="fixed bottom-3 left-3 z-20 pointer-events-none hidden md:flex items-center gap-2 spatial-surface rounded-full px-3.5 py-1.5 text-[11px] text-slate-100">
+    <span class="w-2 h-2 rounded-full bg-orange-200"></span>
+    <span>
+      <strong class="text-orange-100">Controls:</strong> Click or <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">WASD/Arrows</kbd> + <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Enter</kbd> • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">Q/E</kbd> Orbit • <kbd class="px-1.5 py-0.5 rounded bg-white/15 font-mono-code text-[10px]">1-7</kbd> Realms
     </span>
   </div>
 
   <!-- =========================================================================
-       COMPACT COLLAPSIBLE MOVE CHRONICLE & SPOILS OVERLAY (Bottom-Right)
+       COLLAPSIBLE MOVE CHRONICLE & SPOILS OVERLAY (Bottom-Right)
        ========================================================================= -->
-  <aside id="history-panel" class="fixed bottom-4 right-4 z-20 w-72 sm:w-80 ios28-glass rounded-[30px] p-4 transition-all duration-300 transform translate-y-0 opacity-100 pointer-events-auto">
-    <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-white/15">
+  <aside id="history-panel" class="fixed bottom-3 right-3 z-30 w-68 sm:w-76 spatial-surface rounded-[26px] p-3.5 transition-all duration-300 transform translate-y-0 opacity-100 pointer-events-auto">
+    <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/15">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-amber-300">menu_book</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-pink-200"></span>
         <div>
-          <h2 class="font-gothic text-xs font-bold uppercase tracking-wider text-amber-100">Aetheria Chronicle</h2>
-          <p class="text-[9px] font-mono-code text-slate-400" id="active-realm-label">Gothic Sanctuary</p>
+          <h2 class="font-gothic text-[11px] font-bold uppercase tracking-wider text-rose-100">Aetheria Chronicle</h2>
+          <p class="text-[9px] font-mono-code text-slate-300" id="active-realm-label">Pastel Sanctuary</p>
         </div>
       </div>
-      <button id="btn-close-history" class="text-slate-300 hover:text-white transition p-1 rounded-full hover:bg-white/10" title="Minimize Chronicle">
-        <span class="material-symbols-outlined" style="font-size: 16px;">expand_more</span>
+      <button id="btn-close-history" class="text-slate-200 hover:text-white transition p-1 rounded-full hover:bg-white/10" title="Minimize Chronicle">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </button>
     </div>
 
-    <!-- Graveyard Summary Row -->
-    <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
-      <div class="bg-white/5 rounded-2xl p-2 border border-white/10">
-        <div class="text-[10px] uppercase tracking-wider text-amber-200/80 mb-1 flex items-center justify-between">
-          <span>Light Spoils</span>
+    <div class="grid grid-cols-2 gap-2 mb-2.5 text-xs">
+      <div class="bg-white/10 rounded-xl p-2 border border-white/15">
+        <div class="text-[9px] uppercase tracking-wider text-orange-100/90 mb-0.5 flex items-center justify-between">
+          <span>Pearl Spoils</span>
+          <span id="captured-by-white" class="font-mono-code font-bold">0</span>
         </div>
-        <div id="graveyard-white" class="min-h-[20px] flex flex-wrap gap-0.5 text-sm leading-none text-purple-300">
-          <span class="text-[11px] text-slate-400 italic">None</span>
+        <div id="graveyard-white" class="min-h-[18px] flex flex-wrap gap-0.5 text-xs leading-none text-purple-200">
+          <span class="text-[10px] text-slate-300/75 italic">None</span>
         </div>
       </div>
-      <div class="bg-white/5 rounded-2xl p-2 border border-white/10">
-        <div class="text-[10px] uppercase tracking-wider text-purple-300/80 mb-1 flex items-center justify-between">
-          <span>Dark Spoils</span>
+      <div class="bg-white/10 rounded-xl p-2 border border-white/15">
+        <div class="text-[9px] uppercase tracking-wider text-purple-200/90 mb-0.5 flex items-center justify-between">
+          <span>Lilac Spoils</span>
+          <span id="captured-by-black" class="font-mono-code font-bold">0</span>
         </div>
-        <div id="graveyard-black" class="min-h-[20px] flex flex-wrap gap-0.5 text-sm leading-none text-amber-200">
-          <span class="text-[11px] text-slate-400 italic">None</span>
+        <div id="graveyard-black" class="min-h-[18px] flex flex-wrap gap-0.5 text-xs leading-none text-orange-100">
+          <span class="text-[10px] text-slate-300/75 italic">None</span>
         </div>
       </div>
     </div>
 
-    <!-- Scrollable Algebraic Move List -->
-    <div id="move-list" class="max-h-36 overflow-y-auto pr-1 space-y-1 text-xs font-mono-code">
-      <div class="text-slate-300/80 italic text-center py-3 font-sans">Select any piece or use WASD/Touch D-Pad to begin the duel.</div>
+    <div id="move-list" class="max-h-28 overflow-y-auto pr-1 space-y-1 text-[11px] font-mono-code">
+      <div class="text-slate-200/80 italic text-center py-2 font-sans text-[11px]">Tap a piece or use WASD/D-Pad to begin.</div>
     </div>
   </aside>
 
   <!-- =========================================================================
-       PAWN PROMOTION MODAL (iOS 28 Liquid Glass Dialog)
+       PAWN PROMOTION MODAL
        ========================================================================= -->
-  <div id="promotion-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-md p-4">
-    <div class="ios28-modal-glass rounded-[34px] p-6 max-w-sm w-full text-center">
-      <div class="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-300/50 flex items-center justify-center mx-auto mb-3">
-        <span class="material-symbols-outlined text-amber-300" style="font-size: 26px;">auto_awesome</span>
-      </div>
-      <h3 class="font-gothic text-lg font-bold text-amber-100 tracking-wide mb-1">Rite of Ascension</h3>
-      <p class="text-xs text-slate-300 mb-5">Your Pawn has reached the eighth rank. Choose its ascended vessel:</p>
+  <div id="promotion-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/50 backdrop-blur-md p-4">
+    <div class="spatial-modal rounded-[30px] p-6 max-w-sm w-full text-center">
+      <h3 class="font-gothic text-lg font-bold text-rose-100 tracking-wide mb-1">Rite of Ascension</h3>
+      <p class="text-xs text-slate-200 mb-4">Your Pawn has reached the eighth rank. Choose its ascended vessel:</p>
       <div class="grid grid-cols-2 gap-2.5">
-        <button data-promo="q" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl active-gold">
-          <span class="text-lg">♕</span>
+        <button data-promo="q" class="promo-btn spatial-pill justify-center !h-11 !rounded-2xl active-peach">
+          <span class="text-base">♕</span>
           <span class="font-semibold">Queen</span>
         </button>
-        <button data-promo="r" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
-          <span class="text-lg">♖</span>
+        <button data-promo="r" class="promo-btn spatial-pill justify-center !h-11 !rounded-2xl">
+          <span class="text-base">♖</span>
           <span class="font-semibold">Rook</span>
         </button>
-        <button data-promo="b" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
-          <span class="text-lg">♗</span>
+        <button data-promo="b" class="promo-btn spatial-pill justify-center !h-11 !rounded-2xl">
+          <span class="text-base">♗</span>
           <span class="font-semibold">Bishop</span>
         </button>
-        <button data-promo="n" class="promo-btn ios28-pill justify-center !h-12 !rounded-2xl">
-          <span class="text-lg">♘</span>
+        <button data-promo="n" class="promo-btn spatial-pill justify-center !h-11 !rounded-2xl">
+          <span class="text-base">♘</span>
           <span class="font-semibold">Knight</span>
         </button>
       </div>
@@ -727,22 +735,18 @@
   </div>
 
   <!-- =========================================================================
-       ENDGAME BANNER MODAL (Checkmate / Stalemate)
+       ENDGAME BANNER MODAL
        ========================================================================= -->
-  <div id="gameover-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/60 backdrop-blur-md p-4 pointer-events-auto">
-    <div class="ios28-modal-glass rounded-[36px] p-7 max-w-md w-full text-center">
-      <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-300/50 flex items-center justify-center mx-auto mb-4">
-        <span class="material-symbols-outlined text-amber-300" style="font-size: 30px;">military_tech</span>
-      </div>
-      <h2 id="gameover-title" class="font-gothic text-2xl font-extrabold text-amber-100 tracking-wider mb-1">Checkmate</h2>
-      <p class="text-[10px] font-mono-code tracking-widest text-amber-300 mb-3">AETHERIA • MADE BY SOU.</p>
-      <p id="gameover-subtitle" class="text-sm text-slate-200 mb-6">Luminous Marble triumphs in the Sanctuary.</p>
+  <div id="gameover-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/55 backdrop-blur-md p-4 pointer-events-auto">
+    <div class="spatial-modal rounded-[32px] p-6 max-w-md w-full text-center">
+      <h2 id="gameover-title" class="font-gothic text-2xl font-extrabold text-rose-100 tracking-wider mb-1">Checkmate</h2>
+      <p class="text-[10px] font-mono-code tracking-widest text-orange-200 mb-3">AETHERIA • MADE BY SOU.</p>
+      <p id="gameover-subtitle" class="text-sm text-slate-100 mb-6">Pastel Pearl triumphs in the Sanctuary.</p>
       <div class="flex items-center justify-center gap-3">
-        <button id="btn-modal-newgame" class="ios28-pill active-gold !h-11 !px-6 !text-sm font-semibold">
-          <span class="material-symbols-outlined">restart_alt</span>
+        <button id="btn-modal-newgame" class="spatial-pill active-peach !h-10 !px-5 !text-xs font-semibold">
           <span>Play Again</span>
         </button>
-        <button id="btn-modal-close" class="ios28-pill !h-11 !px-5 !text-sm">
+        <button id="btn-modal-close" class="spatial-pill !h-10 !px-5 !text-xs">
           <span>Inspect Board</span>
         </button>
       </div>
@@ -750,11 +754,11 @@
   </div>
 
   <!-- =========================================================================
-       APPLICATION SCRIPT: WEB AUDIO, CHESS ENGINE, 7 REALMS & 3D SHATTER
+       MAIN APPLICATION SCRIPT
        ========================================================================= -->
   <script>
     /***************************************************************************
-     * 1. PROCEDURAL WEB AUDIO SYNTHESIZER
+     * 1. WEB AUDIO SYNTHESIZER
      ***************************************************************************/
     class CathedralAudio {
       constructor() {
@@ -768,7 +772,7 @@
           if (AudioCtx) this.ctx = new AudioCtx();
         }
         if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
+          this.ctx.resume().catch(() => {});
         }
       }
 
@@ -786,18 +790,18 @@
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sine';
-        const baseFreq = isWhite ? 560 : 420;
+        const baseFreq = isWhite ? 580 : 440;
         osc.frequency.setValueAtTime(baseFreq, now);
-        osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.45, now + 0.16);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.4, now + 0.15);
 
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.11, now + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+        gain.gain.linearRampToValueAtTime(0.09, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.34);
+        osc.stop(now + 0.30);
       }
 
       playCursorStep() {
@@ -808,17 +812,17 @@
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(480, now + 0.05);
-        gain.gain.setValueAtTime(0.05, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+        osc.frequency.setValueAtTime(360, now);
+        osc.frequency.exponentialRampToValueAtTime(500, now + 0.045);
+        gain.gain.setValueAtTime(0.04, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.065);
+        osc.stop(now + 0.06);
       }
 
-      playStoneSlide(duration = 0.45, isJump = false) {
+      playStoneSlide(duration = 0.42, isJump = false) {
         if (!this.enabled) return;
         this.init();
         if (!this.ctx) return;
@@ -828,12 +832,12 @@
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(290, now + duration * 0.5);
-          osc.frequency.exponentialRampToValueAtTime(65, now + duration);
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.exponentialRampToValueAtTime(310, now + duration * 0.5);
+          osc.frequency.exponentialRampToValueAtTime(80, now + duration);
 
           gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.12, now + duration * 0.5);
+          gain.gain.linearRampToValueAtTime(0.1, now + duration * 0.5);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           osc.connect(gain);
@@ -847,7 +851,7 @@
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * 0.55;
+          data[i] = (Math.random() * 2 - 1) * 0.45;
         }
 
         const noise = this.ctx.createBufferSource();
@@ -855,40 +859,20 @@
 
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(165, now);
-        filter.frequency.linearRampToValueAtTime(235, now + duration * 0.7);
-        filter.Q.value = 2.2;
+        filter.frequency.setValueAtTime(180, now);
+        filter.frequency.linearRampToValueAtTime(240, now + duration * 0.7);
+        filter.Q.value = 2.0;
 
         const gain = this.ctx.createGain();
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.15, now + 0.06);
-        gain.gain.setValueAtTime(0.13, now + duration - 0.08);
+        gain.gain.linearRampToValueAtTime(0.12, now + 0.05);
+        gain.gain.setValueAtTime(0.10, now + duration - 0.08);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         noise.connect(filter);
         filter.connect(gain);
         gain.connect(this.ctx.destination);
         noise.start(now);
-
-        setTimeout(() => this.playStoneSettle(), Math.max(50, (duration - 0.05) * 1000));
-      }
-
-      playStoneSettle() {
-        if (!this.enabled || !this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(125, now);
-        osc.frequency.exponentialRampToValueAtTime(42, now + 0.09);
-
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.11);
       }
 
       playAttackCharge() {
@@ -899,24 +883,18 @@
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(110, now);
-        osc.frequency.exponentialRampToValueAtTime(640, now + 0.32);
-
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(300, now);
-        filter.frequency.exponentialRampToValueAtTime(2400, now + 0.32);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(620, now + 0.28);
 
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.14, now + 0.25);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        gain.gain.linearRampToValueAtTime(0.12, now + 0.22);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
 
-        osc.connect(filter);
-        filter.connect(gain);
+        osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.36);
+        osc.stop(now + 0.31);
       }
 
       playShatterImpact() {
@@ -928,58 +906,31 @@
         const subOsc = this.ctx.createOscillator();
         const subGain = this.ctx.createGain();
         subOsc.type = 'sine';
-        subOsc.frequency.setValueAtTime(135, now);
-        subOsc.frequency.exponentialRampToValueAtTime(28, now + 0.55);
-        subGain.gain.setValueAtTime(0.42, now);
-        subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        subOsc.frequency.setValueAtTime(130, now);
+        subOsc.frequency.exponentialRampToValueAtTime(32, now + 0.5);
+        subGain.gain.setValueAtTime(0.32, now);
+        subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
         subOsc.connect(subGain);
         subGain.connect(this.ctx.destination);
         subOsc.start(now);
-        subOsc.stop(now + 0.62);
+        subOsc.stop(now + 0.56);
 
-        const duration = 0.65;
-        const bufferSize = Math.floor(this.ctx.sampleRate * duration);
-        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.ctx.sampleRate * 0.18));
-        }
-
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = buffer;
-
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(950, now);
-        filter.frequency.exponentialRampToValueAtTime(280, now + duration);
-        filter.Q.value = 0.9;
-
-        const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.38, now);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        noise.connect(filter);
-        filter.connect(noiseGain);
-        noiseGain.connect(this.ctx.destination);
-        noise.start(now);
-
-        for (let i = 0; i < 11; i++) {
-          const delay = 0.04 + Math.random() * 0.55;
+        for (let i = 0; i < 8; i++) {
+          const delay = 0.03 + Math.random() * 0.4;
           const shardOsc = this.ctx.createOscillator();
           const shardGain = this.ctx.createGain();
-          shardOsc.type = i % 2 === 0 ? 'triangle' : 'sine';
-          const freq = 900 + Math.random() * 2200;
+          shardOsc.type = 'triangle';
+          const freq = 950 + Math.random() * 1800;
           shardOsc.frequency.setValueAtTime(freq, now + delay);
-          shardOsc.frequency.exponentialRampToValueAtTime(freq * 0.65, now + delay + 0.08);
+          shardOsc.frequency.exponentialRampToValueAtTime(freq * 0.7, now + delay + 0.07);
 
-          const amp = (0.09 * (1 - delay)) * (0.5 + Math.random() * 0.5);
-          shardGain.gain.setValueAtTime(amp, now + delay);
-          shardGain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.09);
+          shardGain.gain.setValueAtTime(0.06, now + delay);
+          shardGain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.08);
 
           shardOsc.connect(shardGain);
           shardGain.connect(this.ctx.destination);
           shardOsc.start(now + delay);
-          shardOsc.stop(now + delay + 0.1);
+          shardOsc.stop(now + delay + 0.09);
         }
       }
 
@@ -989,18 +940,18 @@
         if (!this.ctx) return;
 
         const now = this.ctx.currentTime;
-        [220, 277.18].forEach((freq, idx) => {
+        [261.63, 329.63].forEach((freq, idx) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(freq, now + idx * 0.12);
           gain.gain.setValueAtTime(0.001, now + idx * 0.12);
-          gain.gain.linearRampToValueAtTime(0.16, now + idx * 0.12 + 0.03);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.7);
+          gain.gain.linearRampToValueAtTime(0.12, now + idx * 0.12 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 0.6);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now + idx * 0.12);
-          osc.stop(now + idx * 0.12 + 0.72);
+          osc.stop(now + idx * 0.12 + 0.62);
         });
       }
     }
@@ -1008,7 +959,7 @@
     const soundFX = new CathedralAudio();
 
     /***************************************************************************
-     * 2. COMPLETE LEGAL FIDE CHESS ENGINE + MINIMAX AI AUTOMATON
+     * 2. COMPLETE LEGAL FIDE CHESS ENGINE + MINIMAX AUTOMATON
      ***************************************************************************/
     class WizardChessEngine {
       constructor() {
@@ -1527,7 +1478,7 @@
     }
 
     /***************************************************************************
-     * 3. PROCEDURAL TEXTURES & GEOMETRY HELPERS
+     * 3. PASTEL TEXTURE & GEOMETRY HELPERS
      ***************************************************************************/
     const SQUARE_SIZE = 1.35;
     const BOARD_OFFSET = (7 * SQUARE_SIZE) / 2;
@@ -1540,7 +1491,7 @@
       );
     }
 
-    function createStoneTexture(baseHex, veinHex, noiseStrength = 18) {
+    function createStoneTexture(baseHex, veinHex, noiseStrength = 12) {
       const canvas = document.createElement('canvas');
       canvas.width = 256;
       canvas.height = 256;
@@ -1549,24 +1500,24 @@
       ctx.fillStyle = baseHex;
       ctx.fillRect(0, 0, 256, 256);
 
-      for (let i = 0; i < 2400; i++) {
+      for (let i = 0; i < 1800; i++) {
         const x = Math.random() * 256;
         const y = Math.random() * 256;
         const alpha = Math.random() * (noiseStrength / 255);
-        ctx.fillStyle = Math.random() > 0.5 ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+        ctx.fillStyle = Math.random() > 0.5 ? `rgba(255,255,255,${alpha})` : `rgba(30,25,50,${alpha})`;
         ctx.fillRect(x, y, 2, 2);
       }
 
       ctx.strokeStyle = veinHex;
-      ctx.lineWidth = 1.5;
-      for (let v = 0; v < 7; v++) {
+      ctx.lineWidth = 1.4;
+      for (let v = 0; v < 6; v++) {
         ctx.beginPath();
         let x = Math.random() * 256;
         let y = 0;
         ctx.moveTo(x, y);
         while (y < 256) {
-          y += 16 + Math.random() * 20;
-          x += (Math.random() - 0.5) * 38;
+          y += 18 + Math.random() * 22;
+          x += (Math.random() - 0.5) * 34;
           ctx.lineTo(x, y);
         }
         ctx.stroke();
@@ -1584,8 +1535,8 @@
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, 64, 64);
-      ctx.font = 'bold 34px "Cinzel", serif';
-      ctx.fillStyle = 'rgba(245, 196, 81, 0.82)';
+      ctx.font = 'bold 32px "Cinzel", serif';
+      ctx.fillStyle = 'rgba(254, 215, 170, 0.85)';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(char, 32, 34);
@@ -1593,127 +1544,127 @@
     }
 
     /***************************************************************************
-     * 4. ENVIRONMENT REALM DEFINITIONS (7 SELECTABLE REALMS + BOARD STYLES)
+     * 4. SOFT PASTEL REALM CONFIGURATIONS
      ***************************************************************************/
     const REALM_CONFIGS = {
       cathedral: {
-        name: 'Gothic Sanctuary',
-        bgHex: 0x09080e,
-        fogDensity: 0.020,
-        ambientHex: 0x282338,
-        ambientIntensity: 1.35,
-        spotHex: 0xfff1d0,
-        spotIntensity: 2.6,
-        rimWestHex: 0x7c5cff,
-        rimEastHex: 0xffa94d,
-        lightSqBase: '#dfd8cd',
-        lightSqVein: 'rgba(150, 140, 125, 0.25)',
-        darkSqBase: '#23202c',
-        darkSqVein: 'rgba(65, 58, 85, 0.28)',
-        frameColor: 0x221f2d,
-        trimColor: 0xc89d3c
+        name: 'Pastel Sanctuary',
+        bgHex: 0x231f33,
+        fogDensity: 0.017,
+        ambientHex: 0x5e548e,
+        ambientIntensity: 1.55,
+        spotHex: 0xfff1f2,
+        spotIntensity: 2.1,
+        rimWestHex: 0xe9d5ff,
+        rimEastHex: 0xfed7aa,
+        lightSqBase: '#fdf2f8',
+        lightSqVein: 'rgba(244, 162, 184, 0.22)',
+        darkSqBase: '#5e548e',
+        darkSqVein: 'rgba(233, 213, 255, 0.24)',
+        frameColor: 0x3b3355,
+        trimColor: 0xf9dcc4
       },
       night: {
-        name: 'Starlit Night Glade',
-        bgHex: 0x040716,
-        fogDensity: 0.015,
-        ambientHex: 0x162447,
-        ambientIntensity: 1.45,
-        spotHex: 0xc7d2fe,
-        spotIntensity: 2.4,
-        rimWestHex: 0x38bdf8,
-        rimEastHex: 0x818cf8,
-        lightSqBase: '#cbd5e1',
-        lightSqVein: 'rgba(100, 116, 139, 0.3)',
-        darkSqBase: '#0f172a',
-        darkSqVein: 'rgba(56, 189, 248, 0.25)',
-        frameColor: 0x0f172a,
-        trimColor: 0x38bdf8
+        name: 'Dream Night Glade',
+        bgHex: 0x1a1b2f,
+        fogDensity: 0.014,
+        ambientHex: 0x43497a,
+        ambientIntensity: 1.6,
+        spotHex: 0xe0e7ff,
+        spotIntensity: 2.0,
+        rimWestHex: 0xbae6fd,
+        rimEastHex: 0xc7d2fe,
+        lightSqBase: '#eef2ff',
+        lightSqVein: 'rgba(165, 180, 252, 0.25)',
+        darkSqBase: '#3b4270',
+        darkSqVein: 'rgba(186, 230, 253, 0.25)',
+        frameColor: 0x262947,
+        trimColor: 0xbae6fd
       },
       day: {
-        name: 'Sunlit Alpine Day',
-        bgHex: 0x68a6e8,
-        fogDensity: 0.010,
-        ambientHex: 0xdbeafe,
-        ambientIntensity: 1.65,
+        name: 'Morning Sky Citadel',
+        bgHex: 0x8ecae6,
+        fogDensity: 0.009,
+        ambientHex: 0xe0f2fe,
+        ambientIntensity: 1.7,
         spotHex: 0xfffbeb,
-        spotIntensity: 2.9,
-        rimWestHex: 0x93c5fd,
+        spotIntensity: 2.2,
+        rimWestHex: 0xbae6fd,
         rimEastHex: 0xfde68a,
-        lightSqBase: '#fef9ef',
-        lightSqVein: 'rgba(217, 179, 130, 0.28)',
-        darkSqBase: '#2b4c7e',
-        darkSqVein: 'rgba(147, 197, 253, 0.25)',
-        frameColor: 0xe2e8f0,
-        trimColor: 0xf59e0b
+        lightSqBase: '#fffbeb',
+        lightSqVein: 'rgba(253, 230, 138, 0.25)',
+        darkSqBase: '#6b9ac4',
+        darkSqVein: 'rgba(224, 242, 254, 0.25)',
+        frameColor: 0xf1f5f9,
+        trimColor: 0xfed7aa
       },
       grass: {
-        name: 'Verdant Meadow & Leaves',
-        bgHex: 0x132a1c,
-        fogDensity: 0.016,
-        ambientHex: 0x344e41,
-        ambientIntensity: 1.5,
+        name: 'Mint Blossom Meadow',
+        bgHex: 0x2b413c,
+        fogDensity: 0.015,
+        ambientHex: 0x52796f,
+        ambientIntensity: 1.6,
         spotHex: 0xfef3c7,
-        spotIntensity: 2.6,
-        rimWestHex: 0x4ade80,
-        rimEastHex: 0xfbbf24,
-        lightSqBase: '#e2e8ce',
-        lightSqVein: 'rgba(101, 163, 13, 0.28)',
-        darkSqBase: '#283618',
-        darkSqVein: 'rgba(163, 177, 138, 0.25)',
-        frameColor: 0x3a2618,
-        trimColor: 0x84cc16
+        spotIntensity: 2.1,
+        rimWestHex: 0xbbf7d0,
+        rimEastHex: 0xfbcfe8,
+        lightSqBase: '#f0fdf4',
+        lightSqVein: 'rgba(134, 239, 172, 0.25)',
+        darkSqBase: '#4a6b5d',
+        darkSqVein: 'rgba(187, 247, 208, 0.24)',
+        frameColor: 0x3b5249,
+        trimColor: 0xbbf7d0
       },
       ocean: {
-        name: 'Tempest Ocean Waves',
-        bgHex: 0x061a2e,
-        fogDensity: 0.014,
-        ambientHex: 0x0f3460,
-        ambientIntensity: 1.5,
+        name: 'Aqua Pastel Lagoon',
+        bgHex: 0x1d3549,
+        fogDensity: 0.013,
+        ambientHex: 0x457b9d,
+        ambientIntensity: 1.6,
         spotHex: 0xe0f2fe,
-        spotIntensity: 2.7,
-        rimWestHex: 0x06b6d4,
-        rimEastHex: 0x3b82f6,
-        lightSqBase: '#e0f7fa',
-        lightSqVein: 'rgba(6, 182, 212, 0.28)',
-        darkSqBase: '#082f49',
-        darkSqVein: 'rgba(56, 189, 248, 0.30)',
-        frameColor: 0x0c4a6e,
-        trimColor: 0x22d3ee
+        spotIntensity: 2.1,
+        rimWestHex: 0xa5f3fc,
+        rimEastHex: 0xcddafd,
+        lightSqBase: '#ecfeff',
+        lightSqVein: 'rgba(165, 243, 252, 0.28)',
+        darkSqBase: '#3d637d',
+        darkSqVein: 'rgba(186, 230, 253, 0.28)',
+        frameColor: 0x2b4c65,
+        trimColor: 0xa5f3fc
       },
       space: {
-        name: 'Astral Nebula Void',
-        bgHex: 0x03010a,
+        name: 'Lilac Astral Nebula',
+        bgHex: 0x191326,
         fogDensity: 0.008,
-        ambientHex: 0x241242,
-        ambientIntensity: 1.55,
-        spotHex: 0xf3e8ff,
-        spotIntensity: 2.6,
-        rimWestHex: 0xc084fc,
-        rimEastHex: 0x22d3ee,
-        lightSqBase: '#e9d5ff',
-        lightSqVein: 'rgba(168, 85, 247, 0.32)',
-        darkSqBase: '#13072e',
-        darkSqVein: 'rgba(34, 211, 238, 0.32)',
-        frameColor: 0x1e1b4b,
-        trimColor: 0xa855f7
+        ambientHex: 0x4a3b69,
+        ambientIntensity: 1.65,
+        spotHex: 0xf5f3ff,
+        spotIntensity: 2.1,
+        rimWestHex: 0xe9d5ff,
+        rimEastHex: 0xfbcfe8,
+        lightSqBase: '#faf5ff',
+        lightSqVein: 'rgba(216, 180, 254, 0.28)',
+        darkSqBase: '#44355b',
+        darkSqVein: 'rgba(251, 207, 232, 0.28)',
+        frameColor: 0x2e2340,
+        trimColor: 0xe9d5ff
       },
       sand: {
-        name: 'Golden Dunes Sanctuary',
-        bgHex: 0x331d0c,
-        fogDensity: 0.017,
-        ambientHex: 0x6b3e26,
-        ambientIntensity: 1.55,
-        spotHex: 0xffedd5,
-        spotIntensity: 2.8,
-        rimWestHex: 0xf97316,
-        rimEastHex: 0xfacc15,
-        lightSqBase: '#fde6bd',
-        lightSqVein: 'rgba(217, 119, 6, 0.28)',
-        darkSqBase: '#451a03',
-        darkSqVein: 'rgba(245, 158, 11, 0.28)',
-        frameColor: 0x5c2d0c,
-        trimColor: 0xfbbf24
+        name: 'Peach Blush Dunes',
+        bgHex: 0x4a3531,
+        fogDensity: 0.015,
+        ambientHex: 0x8d6e63,
+        ambientIntensity: 1.65,
+        spotHex: 0xfff7ed,
+        spotIntensity: 2.2,
+        rimWestHex: 0xfed7aa,
+        rimEastHex: 0xfbcfe8,
+        lightSqBase: '#fff7ed',
+        lightSqVein: 'rgba(254, 215, 170, 0.28)',
+        darkSqBase: '#7c5850',
+        darkSqVein: 'rgba(251, 207, 232, 0.26)',
+        frameColor: 0x5c4038,
+        trimColor: 0xfed7aa
       }
     };
 
@@ -1724,10 +1675,9 @@
       constructor() {
         this.engine = new WizardChessEngine();
 
-        // Device & Gameplay state
-        this.controlPlatform = 'pc'; // 'pc' | 'mobile'
+        this.controlPlatform = 'pc';
         this.currentRealm = 'cathedral';
-        this.gameMode = 'ai'; // 'ai' | '2p'
+        this.gameMode = 'ai';
         this.aiDifficulty = 'adept';
         this.dynamicActionCam = true;
         this.isAnimating = false;
@@ -1735,17 +1685,14 @@
         this.legalMovesForSelected = [];
         this.pendingPromotionMove = null;
 
-        // 3D Board Cursor for Keyboard (WASD/Arrows) & Mobile D-Pad
-        this.cursorSquare = { r: 6, c: 4 }; // Starts on e2
+        this.cursorSquare = { r: 6, c: 4 };
 
-        // 3D Scene registries
         this.squareMeshes = [];
         this.pieceMeshes = new Map();
         this.shatterFragments = [];
         this.trailParticles = [];
         this.shockwaves = [];
 
-        // Dynamic environment references for per-frame animation
         this.envGroup = null;
         this.oceanMesh = null;
         this.oceanBasePositions = null;
@@ -1755,16 +1702,17 @@
         this.envParticles = null;
         this.spaceRings = [];
 
-        // Spherical Camera Orbit State
+        // Base Camera Radius (automatically scaled by screen aspect ratio)
+        this.baseRadius = 15.6;
         this.cameraState = {
           theta: 0,
-          phi: 0.92,
-          radius: 15.8,
-          target: new THREE.Vector3(0, 0.4, 0),
+          phi: 0.90,
+          radius: 15.6,
+          target: new THREE.Vector3(0, 0.35, 0),
           desiredTheta: 0,
-          desiredPhi: 0.92,
-          desiredRadius: 15.8,
-          desiredTarget: new THREE.Vector3(0, 0.4, 0),
+          desiredPhi: 0.90,
+          desiredRadius: 15.6,
+          desiredTarget: new THREE.Vector3(0, 0.35, 0),
           shakeIntensity: 0,
           savedBeforeAction: null
         };
@@ -1781,104 +1729,141 @@
         this.syncPiecesWithEngine();
         this.initLauncherAndDeviceDetection();
         this.initControlsAndEvents();
+        this.adaptCameraToScreenAspect(true);
         this.updateHUD();
 
         this.animate = this.animate.bind(this);
         requestAnimationFrame(this.animate);
       }
 
+      /**
+       * Automatically adapts Camera FOV and Orbit Distance so the entire 8x8
+       * chessboard fits inside ANY screen aspect ratio (portrait phone, fold, tablet, desktop)
+       */
+      getAspectAdjustedRadius(baseR = this.baseRadius) {
+        const container = document.getElementById('canvas-container');
+        const w = container ? container.clientWidth : window.innerWidth;
+        const h = container ? container.clientHeight : window.innerHeight;
+        const aspect = Math.max(0.35, w / Math.max(1, h));
+
+        if (aspect < 1.0) {
+          // Portrait screen: scale camera distance inversely with aspect so board never clips horizontally
+          return Math.min(30, baseR / Math.pow(aspect, 0.78));
+        }
+        return baseR;
+      }
+
+      adaptCameraToScreenAspect(instant = false) {
+        const container = document.getElementById('canvas-container');
+        const w = container ? container.clientWidth : window.innerWidth;
+        const h = container ? container.clientHeight : window.innerHeight;
+        const aspect = w / Math.max(1, h);
+
+        this.camera.aspect = aspect;
+        this.camera.fov = aspect < 0.85 ? 46 : 42;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(w, h, false);
+
+        const targetRadius = this.getAspectAdjustedRadius(this.baseRadius);
+        this.cameraState.desiredRadius = targetRadius;
+        if (instant) {
+          this.cameraState.radius = targetRadius;
+        }
+      }
+
       initThreeScene() {
         const container = document.getElementById('canvas-container');
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x09080e);
-        this.scene.fog = new THREE.FogExp2(0x09080e, 0.020);
+        const w = container.clientWidth || window.innerWidth;
+        const h = container.clientHeight || window.innerHeight;
 
-        this.camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 180);
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x231f33);
+        this.scene.fog = new THREE.FogExp2(0x231f33, 0.017);
+
+        this.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 180);
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setSize(w, h, false);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.15;
+        this.renderer.toneMappingExposure = 1.08;
         container.appendChild(this.renderer.domElement);
 
-        this.ambientLight = new THREE.AmbientLight(0x282338, 1.35);
+        this.ambientLight = new THREE.AmbientLight(0x5e548e, 1.55);
         this.scene.add(this.ambientLight);
 
-        this.mainSpotLight = new THREE.SpotLight(0xfff1d0, 2.6);
+        this.mainSpotLight = new THREE.SpotLight(0xfff1f2, 2.1);
         this.mainSpotLight.position.set(4, 21, 6);
-        this.mainSpotLight.angle = Math.PI / 3.0;
-        this.mainSpotLight.penumbra = 0.65;
-        this.mainSpotLight.decay = 1.2;
+        this.mainSpotLight.angle = Math.PI / 2.8;
+        this.mainSpotLight.penumbra = 0.75;
+        this.mainSpotLight.decay = 1.1;
         this.mainSpotLight.distance = 75;
         this.mainSpotLight.castShadow = true;
-        this.mainSpotLight.shadow.mapSize.width = 2048;
-        this.mainSpotLight.shadow.mapSize.height = 2048;
+        this.mainSpotLight.shadow.mapSize.width = 1024;
+        this.mainSpotLight.shadow.mapSize.height = 1024;
         this.mainSpotLight.shadow.bias = -0.0005;
         this.scene.add(this.mainSpotLight);
 
-        this.rimLightWest = new THREE.DirectionalLight(0x7c5cff, 1.15);
+        this.rimLightWest = new THREE.DirectionalLight(0xe9d5ff, 1.0);
         this.rimLightWest.position.set(-18, 12, -8);
         this.scene.add(this.rimLightWest);
 
-        this.rimLightEast = new THREE.DirectionalLight(0xffa94d, 0.95);
+        this.rimLightEast = new THREE.DirectionalLight(0xfed7aa, 0.9);
         this.rimLightEast.position.set(18, 9, 10);
         this.scene.add(this.rimLightEast);
 
-        this.actionLight = new THREE.PointLight(0xff3b5c, 0, 12);
+        this.actionLight = new THREE.PointLight(0xfbcfe8, 0, 12);
         this.actionLight.position.set(0, 3, 0);
         this.scene.add(this.actionLight);
       }
 
       initSharedMaterials() {
-        const marbleTex = createStoneTexture('#f5f0e6', 'rgba(185, 165, 135, 0.25)', 12);
-        const obsidianTex = createStoneTexture('#1a1822', 'rgba(98, 70, 145, 0.28)', 16);
+        // Soft Pastel Pearl (Light Pieces) & Pastel Dusk Lavender (Dark Pieces)
+        const pearlTex = createStoneTexture('#fff5f7', 'rgba(244, 162, 184, 0.20)', 9);
+        const lilacSlateTex = createStoneTexture('#483d5e', 'rgba(216, 180, 254, 0.24)', 12);
 
         this.matMarble = new THREE.MeshStandardMaterial({
-          map: marbleTex,
-          color: 0xfaf5eb,
-          roughness: 0.18,
-          metalness: 0.08
+          map: pearlTex,
+          color: 0xfff7f9,
+          roughness: 0.25,
+          metalness: 0.05
         });
         this.matWhiteRune = new THREE.MeshStandardMaterial({
-          color: 0xffd56b,
-          emissive: 0xf59e0b,
-          emissiveIntensity: 1.45,
-          roughness: 0.2,
-          metalness: 0.8
+          color: 0xfed7aa,
+          emissive: 0xfbbf24,
+          emissiveIntensity: 0.95,
+          roughness: 0.25,
+          metalness: 0.5
         });
 
         this.matObsidian = new THREE.MeshStandardMaterial({
-          map: obsidianTex,
-          color: 0x1c1926,
-          roughness: 0.14,
-          metalness: 0.55
+          map: lilacSlateTex,
+          color: 0x4f4366,
+          roughness: 0.22,
+          metalness: 0.32
         });
         this.matBlackRune = new THREE.MeshStandardMaterial({
-          color: 0xc084fc,
-          emissive: 0x9333ea,
-          emissiveIntensity: 1.65,
-          roughness: 0.2,
-          metalness: 0.8
+          color: 0xe9d5ff,
+          emissive: 0xc084fc,
+          emissiveIntensity: 1.1,
+          roughness: 0.25,
+          metalness: 0.5
         });
 
         this.matCathedralStone = new THREE.MeshStandardMaterial({
-          color: 0x191722,
-          roughness: 0.82,
-          metalness: 0.12
+          color: 0x2e2842,
+          roughness: 0.80,
+          metalness: 0.10
         });
         this.matPedestalStone = new THREE.MeshStandardMaterial({
-          color: 0x221f2d,
+          color: 0x3b3354,
           roughness: 0.55,
-          metalness: 0.25
+          metalness: 0.20
         });
       }
 
-      /*************************************************************************
-       * 3D BOARD & INTERACTIVE KEYBOARD / D-PAD SELECTOR CURSOR
-       *************************************************************************/
       buildChessBoard() {
         this.boardGroup = new THREE.Group();
         this.scene.add(this.boardGroup);
@@ -1894,9 +1879,9 @@
 
         const trimGeo = new THREE.BoxGeometry(boardSpan + 0.18, 0.54, boardSpan + 0.18);
         this.boardTrimMat = new THREE.MeshStandardMaterial({
-          color: 0xc89d3c,
-          roughness: 0.28,
-          metalness: 0.85
+          color: 0xf9dcc4,
+          roughness: 0.32,
+          metalness: 0.65
         });
         this.boardTrimMesh = new THREE.Mesh(trimGeo, this.boardTrimMat);
         this.boardTrimMesh.position.y = -0.31;
@@ -1916,20 +1901,19 @@
         this.lowerPedestal.receiveShadow = true;
         this.boardGroup.add(this.lowerPedestal);
 
-        // 64 Squares
         this.squareMeshes = Array.from({ length: 8 }, () => Array(8).fill(null));
         const squareGeo = new THREE.BoxGeometry(SQUARE_SIZE * 0.985, 0.22, SQUARE_SIZE * 0.985);
 
-        const lightTex = createStoneTexture('#dfd8cd', 'rgba(150, 140, 125, 0.22)', 14);
-        const darkTex = createStoneTexture('#23202c', 'rgba(65, 58, 85, 0.25)', 18);
+        const lightTex = createStoneTexture('#fdf2f8', 'rgba(244, 162, 184, 0.22)', 10);
+        const darkTex = createStoneTexture('#5e548e', 'rgba(233, 213, 255, 0.24)', 12);
 
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
             const isLight = (r + c) % 2 === 0;
             const mat = new THREE.MeshStandardMaterial({
               map: isLight ? lightTex : darkTex,
-              roughness: isLight ? 0.24 : 0.28,
-              metalness: isLight ? 0.08 : 0.22
+              roughness: isLight ? 0.26 : 0.30,
+              metalness: isLight ? 0.06 : 0.16
             });
             const sqMesh = new THREE.Mesh(squareGeo, mat);
             const worldPos = boardToWorld(r, c);
@@ -1941,10 +1925,9 @@
           }
         }
 
-        // Coordinate Labels
         const files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
         const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
-        const labelGeo = new THREE.PlaneGeometry(0.45, 0.45);
+        const labelGeo = new THREE.PlaneGeometry(0.42, 0.42);
 
         for (let i = 0; i < 8; i++) {
           const pos = i * SQUARE_SIZE - BOARD_OFFSET;
@@ -1984,15 +1967,14 @@
         this.scene.add(this.indicatorGroup);
       }
 
-      /** Builds the 3D spatial cursor ring controlled by Keyboard (WASD/Arrows) or Touch D-Pad */
       buildCursorMesh() {
         this.cursorGroup = new THREE.Group();
-        const ringGeo = new THREE.RingGeometry(0.50, 0.62, 4);
+        const ringGeo = new THREE.RingGeometry(0.50, 0.60, 4);
         const ringMat = new THREE.MeshBasicMaterial({
-          color: 0x38bdf8,
+          color: 0xbae6fd,
           side: THREE.DoubleSide,
           transparent: true,
-          opacity: 0.88
+          opacity: 0.85
         });
         const ring = new THREE.Mesh(ringGeo, ringMat);
         ring.rotation.x = -Math.PI / 2;
@@ -2002,7 +1984,7 @@
         const innerRing = new THREE.Mesh(
           new THREE.RingGeometry(0.42, 0.45, 32),
           new THREE.MeshBasicMaterial({
-            color: 0xfef08a,
+            color: 0xfed7aa,
             side: THREE.DoubleSide,
             transparent: true,
             opacity: 0.75
@@ -2022,21 +2004,19 @@
       }
 
       /*************************************************************************
-       * 7 LIVE-SWITCHABLE 3D ENVIRONMENTS & MATCHING BOARD STYLES
+       * 7 PASTEL 3D ENVIRONMENTS
        *************************************************************************/
       setEnvironmentRealm(realmKey) {
         if (!REALM_CONFIGS[realmKey]) return;
         this.currentRealm = realmKey;
         const cfg = REALM_CONFIGS[realmKey];
 
-        // Update UI active states
         document.querySelectorAll('.hud-env-btn, .start-env-btn').forEach(btn => {
-          btn.classList.toggle('active-gold', btn.getAttribute('data-env') === realmKey);
+          btn.classList.toggle('active-peach', btn.getAttribute('data-env') === realmKey);
         });
         const realmLabel = document.getElementById('active-realm-label');
         if (realmLabel) realmLabel.textContent = cfg.name;
 
-        // Update Scene Atmosphere & Lights
         this.scene.background.setHex(cfg.bgHex);
         this.scene.fog.color.setHex(cfg.bgHex);
         this.scene.fog.density = cfg.fogDensity;
@@ -2048,24 +2028,22 @@
         this.rimLightWest.color.setHex(cfg.rimWestHex);
         this.rimLightEast.color.setHex(cfg.rimEastHex);
 
-        // Update Board Square & Frame Materials to match Realm
-        const lightTex = createStoneTexture(cfg.lightSqBase, cfg.lightSqVein, 14);
-        const darkTex = createStoneTexture(cfg.darkSqBase, cfg.darkSqVein, 18);
+        const lightTex = createStoneTexture(cfg.lightSqBase, cfg.lightSqVein, 10);
+        const darkTex = createStoneTexture(cfg.darkSqBase, cfg.darkSqVein, 12);
 
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
             const isLight = (r + c) % 2 === 0;
             const sq = this.squareMeshes[r][c];
             sq.material.map = isLight ? lightTex : darkTex;
-            sq.material.roughness = realmKey === 'space' ? 0.12 : (isLight ? 0.24 : 0.28);
-            sq.material.metalness = realmKey === 'space' ? 0.45 : (isLight ? 0.08 : 0.22);
+            sq.material.roughness = realmKey === 'space' ? 0.18 : (isLight ? 0.26 : 0.30);
+            sq.material.metalness = realmKey === 'space' ? 0.32 : (isLight ? 0.06 : 0.16);
             sq.material.needsUpdate = true;
           }
         }
         this.boardFrameMesh.material.color.setHex(cfg.frameColor);
         this.boardTrimMat.color.setHex(cfg.trimColor);
 
-        // Clear previous environment objects
         if (this.envGroup) {
           this.scene.remove(this.envGroup);
         }
@@ -2080,28 +2058,17 @@
         this.envParticles = null;
         this.spaceRings = [];
 
-        // Show/hide lower pedestals for floating space/ocean feel
         this.lowerPedestal.visible = realmKey !== 'space';
 
-        // Build specific 3D Realm Geometry
-        if (realmKey === 'cathedral') {
-          this.buildRealmCathedral();
-        } else if (realmKey === 'night') {
-          this.buildRealmNightGlade();
-        } else if (realmKey === 'day') {
-          this.buildRealmSunlitDay();
-        } else if (realmKey === 'grass') {
-          this.buildRealmVerdantGrass();
-        } else if (realmKey === 'ocean') {
-          this.buildRealmOceanWaves();
-        } else if (realmKey === 'space') {
-          this.buildRealmDeepSpace();
-        } else if (realmKey === 'sand') {
-          this.buildRealmGoldenSand();
-        }
+        if (realmKey === 'cathedral') this.buildRealmCathedral();
+        else if (realmKey === 'night') this.buildRealmNightGlade();
+        else if (realmKey === 'day') this.buildRealmSunlitDay();
+        else if (realmKey === 'grass') this.buildRealmVerdantGrass();
+        else if (realmKey === 'ocean') this.buildRealmOceanWaves();
+        else if (realmKey === 'space') this.buildRealmDeepSpace();
+        else if (realmKey === 'sand') this.buildRealmGoldenSand();
       }
 
-      /** 1. GOTHIC SANCTUARY (CATHEDRAL) */
       buildRealmCathedral() {
         const floorGeo = new THREE.CylinderGeometry(48, 48, 0.5, 48);
         const floorMesh = new THREE.Mesh(floorGeo, this.matCathedralStone);
@@ -2111,7 +2078,7 @@
 
         const inlayMesh = new THREE.Mesh(
           new THREE.RingGeometry(8.2, 8.6, 64),
-          new THREE.MeshBasicMaterial({ color: 0xe5c158, side: THREE.DoubleSide, transparent: true, opacity: 0.25 })
+          new THREE.MeshBasicMaterial({ color: 0xfed7aa, side: THREE.DoubleSide, transparent: true, opacity: 0.30 })
         );
         inlayMesh.rotation.x = -Math.PI / 2;
         inlayMesh.position.y = -3.32;
@@ -2127,7 +2094,6 @@
 
           const colMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 1.05, 26, 12), this.matCathedralStone);
           colMesh.position.y = 13;
-          colMesh.castShadow = true;
           pillarGroup.add(colMesh);
 
           const archCurve = new THREE.QuadraticBezierCurve3(
@@ -2135,20 +2101,20 @@
             new THREE.Vector3(0, 28, 9),
             new THREE.Vector3(0, 31, radius)
           );
-          const archMesh = new THREE.Mesh(new THREE.TubeGeometry(archCurve, 14, 0.28, 8, false), this.matCathedralStone);
+          const archMesh = new THREE.Mesh(new THREE.TubeGeometry(archCurve, 12, 0.28, 8, false), this.matCathedralStone);
           pillarGroup.add(archMesh);
 
           if (i % 2 === 0) {
-            const glassColor = i % 4 === 0 ? 0xf59e0b : 0x7c3aed;
+            const glassColor = i % 4 === 0 ? 0xfbcfe8 : 0xe9d5ff;
             const rayMat = new THREE.MeshBasicMaterial({
               color: glassColor,
               transparent: true,
-              opacity: 0.032,
+              opacity: 0.035,
               side: THREE.DoubleSide,
               depthWrite: false,
               blending: THREE.AdditiveBlending
             });
-            const ray = new THREE.Mesh(new THREE.ConeGeometry(3.2, 18, 16, 1, true), rayMat);
+            const ray = new THREE.Mesh(new THREE.ConeGeometry(3.2, 18, 12, 1, true), rayMat);
             ray.position.set(0, 11, 2.3);
             ray.rotation.x = -Math.PI / 3.4;
             pillarGroup.add(ray);
@@ -2156,41 +2122,38 @@
           this.envGroup.add(pillarGroup);
         }
 
-        this.createAmbientParticles(260, 0xffe4a0, 0.09, 28);
+        this.createAmbientParticles(180, 0xfed7aa, 0.09, 28);
       }
 
-      /** 2. STARLIT NIGHT GLADE */
       buildRealmNightGlade() {
-        const groundMat = new THREE.MeshStandardMaterial({ color: 0x0b132b, roughness: 0.85, metalness: 0.1 });
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x222642, roughness: 0.85, metalness: 0.1 });
         const ground = new THREE.Mesh(new THREE.CylinderGeometry(55, 55, 0.6, 48), groundMat);
         ground.position.y = -3.6;
         ground.receiveShadow = true;
         this.envGroup.add(ground);
 
-        // Glowing Full Moon high in the night sky
-        const moonMat = new THREE.MeshBasicMaterial({ color: 0xfef9c3 });
-        const moon = new THREE.Mesh(new THREE.SphereGeometry(4.2, 32, 32), moonMat);
+        const moonMat = new THREE.MeshBasicMaterial({ color: 0xfef3c7 });
+        const moon = new THREE.Mesh(new THREE.SphereGeometry(4.0, 24, 24), moonMat);
         moon.position.set(-22, 24, -36);
         this.envGroup.add(moon);
 
         const moonHalo = new THREE.Mesh(
-          new THREE.RingGeometry(4.3, 7.8, 32),
-          new THREE.MeshBasicMaterial({ color: 0x93c5fd, side: THREE.DoubleSide, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending })
+          new THREE.RingGeometry(4.1, 7.5, 32),
+          new THREE.MeshBasicMaterial({ color: 0xbae6fd, side: THREE.DoubleSide, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending })
         );
         moonHalo.position.copy(moon.position);
         moonHalo.lookAt(0, 0, 0);
         this.envGroup.add(moonHalo);
 
-        // Ring of Glowing Moonlight Runestones & Cypress Silhouettes
-        for (let i = 0; i < 14; i++) {
-          const ang = (i / 14) * Math.PI * 2;
+        for (let i = 0; i < 12; i++) {
+          const ang = (i / 12) * Math.PI * 2;
           const dist = 16 + (i % 2) * 4;
           const x = Math.cos(ang) * dist;
           const z = Math.sin(ang) * dist;
 
           const stone = new THREE.Mesh(
             new THREE.BoxGeometry(1.2, 4.5 + (i % 3), 0.7),
-            new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
+            new THREE.MeshStandardMaterial({ color: 0x333963, roughness: 0.6 })
           );
           stone.position.set(x, -1.2, z);
           stone.lookAt(0, -1.2, 0);
@@ -2198,107 +2161,93 @@
 
           const runeCrystal = new THREE.Mesh(
             new THREE.OctahedronGeometry(0.35, 0),
-            new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+            new THREE.MeshBasicMaterial({ color: 0xbae6fd })
           );
           runeCrystal.position.set(x, 1.8 + (i % 3) * 0.5, z);
           this.envGroup.add(runeCrystal);
         }
 
-        // Starfield Dome + Golden Fireflies
-        this.createStarfieldDome(900, 0xe0f2fe);
-        this.createAmbientParticles(320, 0xbef264, 0.12, 24);
+        this.createStarfieldDome(600, 0xe0f2fe);
+        this.createAmbientParticles(200, 0xbbf7d0, 0.11, 24);
       }
 
-      /** 3. SUNLIT ALPINE DAY */
       buildRealmSunlitDay() {
-        // Marble Plaza & Reflecting Pool
-        const poolMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.12, metalness: 0.35 });
+        const poolMat = new THREE.MeshStandardMaterial({ color: 0xbae6fd, roughness: 0.16, metalness: 0.25 });
         const pool = new THREE.Mesh(new THREE.CylinderGeometry(52, 52, 0.4, 48), poolMat);
         pool.position.y = -3.55;
         pool.receiveShadow = true;
         this.envGroup.add(pool);
 
-        const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3, metalness: 0.05 });
+        const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xfff1f2, roughness: 0.3, metalness: 0.05 });
         const plazaRing = new THREE.Mesh(new THREE.RingGeometry(7.2, 16.5, 48), whiteColMat);
         plazaRing.rotation.x = -Math.PI / 2;
         plazaRing.position.y = -3.32;
-        plazaRing.receiveShadow = true;
         this.envGroup.add(plazaRing);
 
-        // Classical White Sunlit Colonnade
         for (let i = 0; i < 12; i++) {
           const ang = (i / 12) * Math.PI * 2;
-          const x = Math.cos(ang) * 15;
-          const z = Math.sin(ang) * 15;
-          const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 9.5, 16), whiteColMat);
-          col.position.set(x, 1.4, z);
-          col.castShadow = true;
-          col.receiveShadow = true;
+          const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 9.5, 14), whiteColMat);
+          col.position.set(Math.cos(ang) * 15, 1.4, Math.sin(ang) * 15);
           this.envGroup.add(col);
         }
 
-        // Drifting Fluffy Volumetric Clouds
         const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, transparent: true, opacity: 0.88 });
-        for (let c = 0; c < 14; c++) {
+        for (let c = 0; c < 12; c++) {
           const cloudGroup = new THREE.Group();
-          const ang = (c / 14) * Math.PI * 2;
+          const ang = (c / 12) * Math.PI * 2;
           const dist = 24 + (c % 3) * 8;
           cloudGroup.position.set(Math.cos(ang) * dist, 11 + (c % 4) * 2.5, Math.sin(ang) * dist);
-          for (let p = 0; p < 4; p++) {
-            const puff = new THREE.Mesh(new THREE.SphereGeometry(1.6 + Math.random() * 1.2, 12, 12), cloudMat);
-            puff.position.set((p - 1.5) * 1.4, Math.random() * 0.6, (Math.random() - 0.5) * 1.2);
+          for (let p = 0; p < 3; p++) {
+            const puff = new THREE.Mesh(new THREE.SphereGeometry(1.6 + Math.random() * 1.1, 10, 10), cloudMat);
+            puff.position.set((p - 1) * 1.4, Math.random() * 0.5, (Math.random() - 0.5) * 1.1);
             cloudGroup.add(puff);
           }
           this.envGroup.add(cloudGroup);
-          this.spaceRings.push({ mesh: cloudGroup, speed: 0.04 + (c % 3) * 0.02, isCloud: true });
+          this.spaceRings.push({ mesh: cloudGroup, speed: 0.035 + (c % 3) * 0.015, isCloud: true });
         }
 
-        this.createAmbientParticles(200, 0xfef08a, 0.09, 26);
+        this.createAmbientParticles(160, 0xfef3c7, 0.09, 26);
       }
 
-      /** 4. VERDANT MEADOW (PROPER 3D INSTANCED SWAYING GRASS & FALLING LEAVES) */
       buildRealmVerdantGrass() {
-        const meadowMat = new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.88, metalness: 0.05 });
+        const meadowMat = new THREE.MeshStandardMaterial({ color: 0x3b594f, roughness: 0.88, metalness: 0.05 });
         const ground = new THREE.Mesh(new THREE.CylinderGeometry(50, 50, 0.8, 48), meadowMat);
         ground.position.y = -3.5;
         ground.receiveShadow = true;
         this.envGroup.add(ground);
 
-        // 4,500 Proper 3D Grass Blades using InstancedMesh around the sanctuary
-        const bladeCount = 4500;
-        const bladeGeo = new THREE.ConeGeometry(0.08, 0.95, 4);
+        const bladeCount = 2400;
+        const bladeGeo = new THREE.ConeGeometry(0.08, 0.9, 4);
         bladeGeo.translate(0, 0.45, 0);
         const bladeMat = new THREE.MeshStandardMaterial({
-          color: 0x4ade80,
+          color: 0xa7f3d0,
           roughness: 0.55,
           metalness: 0.05
         });
 
         this.grassInstancedMesh = new THREE.InstancedMesh(bladeGeo, bladeMat, bladeCount);
-        this.grassInstancedMesh.receiveShadow = true;
-
         const dummy = new THREE.Object3D();
         const colorVar = new THREE.Color();
         this.grassDummyMatrices = [];
 
         for (let i = 0; i < bladeCount; i++) {
-          const rDist = 6.2 + Math.random() * 24;
+          const rDist = 6.2 + Math.random() * 22;
           const theta = Math.random() * Math.PI * 2;
           const x = Math.cos(theta) * rDist;
           const z = Math.sin(theta) * rDist;
-          const scaleY = 0.6 + Math.random() * 1.1;
+          const scaleY = 0.6 + Math.random() * 1.0;
           const rotY = Math.random() * Math.PI * 2;
 
           dummy.position.set(x, -3.12, z);
-          dummy.rotation.set((Math.random() - 0.5) * 0.25, rotY, (Math.random() - 0.5) * 0.25);
+          dummy.rotation.set((Math.random() - 0.5) * 0.2, rotY, (Math.random() - 0.5) * 0.2);
           dummy.scale.set(1, scaleY, 1);
           dummy.updateMatrix();
           this.grassInstancedMesh.setMatrixAt(i, dummy.matrix);
 
-          colorVar.setHSL(0.28 + (Math.random() - 0.5) * 0.08, 0.65, 0.32 + Math.random() * 0.22);
+          colorVar.setHSL(0.36 + (Math.random() - 0.5) * 0.08, 0.55, 0.58 + Math.random() * 0.18);
           this.grassInstancedMesh.setColorAt(i, colorVar);
 
-          if (i < 900) {
+          if (i < 450) {
             this.grassDummyMatrices.push({ index: i, x, z, scaleY, rotY, phase: Math.random() * Math.PI * 2 });
           }
         }
@@ -2306,18 +2255,16 @@
         if (this.grassInstancedMesh.instanceColor) this.grassInstancedMesh.instanceColor.needsUpdate = true;
         this.envGroup.add(this.grassInstancedMesh);
 
-        // Ancient Forest Trees surrounding the meadow
-        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a2c11, roughness: 0.9 });
-        const canopyColors = [0x2d6a4f, 0x40916c, 0xd97706, 0x65a30d];
-        for (let t = 0; t < 16; t++) {
-          const ang = (t / 16) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
-          const dist = 16.5 + (t % 3) * 4.5;
+        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6d5950, roughness: 0.9 });
+        const canopyColors = [0xa7f3d0, 0xfbcfe8, 0xfde68a, 0xbae6fd];
+        for (let t = 0; t < 14; t++) {
+          const ang = (t / 14) * Math.PI * 2;
+          const dist = 16.5 + (t % 3) * 4;
           const tree = new THREE.Group();
           tree.position.set(Math.cos(ang) * dist, -3.1, Math.sin(ang) * dist);
 
-          const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.75, 5.5, 8), trunkMat);
-          trunk.position.y = 2.75;
-          trunk.castShadow = true;
+          const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.70, 5.2, 8), trunkMat);
+          trunk.position.y = 2.6;
           tree.add(trunk);
 
           const foliageMat = new THREE.MeshStandardMaterial({
@@ -2325,44 +2272,41 @@
             roughness: 0.75
           });
           for (let c = 0; c < 3; c++) {
-            const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(2.4 - c * 0.45, 1), foliageMat);
-            crown.position.set((Math.random() - 0.5) * 0.8, 5.5 + c * 1.4, (Math.random() - 0.5) * 0.8);
-            crown.castShadow = true;
+            const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(2.2 - c * 0.4, 1), foliageMat);
+            crown.position.set((Math.random() - 0.5) * 0.7, 5.2 + c * 1.3, (Math.random() - 0.5) * 0.7);
             tree.add(crown);
           }
           this.envGroup.add(tree);
         }
 
-        // 160 Gently Tumbling 3D Forest Leaves (Emerald & Golden Autumn Leaves)
-        const leafGeo = new THREE.PlaneGeometry(0.24, 0.16);
-        const leafColors = [0x4ade80, 0xfacc15, 0xf97316, 0xa3e635];
-        for (let l = 0; l < 160; l++) {
+        const leafGeo = new THREE.PlaneGeometry(0.22, 0.15);
+        const leafColors = [0xfbcfe8, 0xbbf7d0, 0xfef3c7, 0xe9d5ff];
+        for (let l = 0; l < 110; l++) {
           const leafMat = new THREE.MeshBasicMaterial({
             color: leafColors[l % leafColors.length],
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.9
+            opacity: 0.88
           });
           const leaf = new THREE.Mesh(leafGeo, leafMat);
           leaf.position.set(
-            (Math.random() - 0.5) * 28,
-            -2 + Math.random() * 16,
-            (Math.random() - 0.5) * 28
+            (Math.random() - 0.5) * 26,
+            -2 + Math.random() * 15,
+            (Math.random() - 0.5) * 26
           );
           leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
           this.envGroup.add(leaf);
           this.fallingLeaves.push({
             mesh: leaf,
-            speedY: 0.6 + Math.random() * 0.9,
+            speedY: 0.55 + Math.random() * 0.75,
             swayPhase: Math.random() * Math.PI * 2,
-            rotSpeed: 1.5 + Math.random() * 2.5
+            rotSpeed: 1.2 + Math.random() * 2.0
           });
         }
       }
 
-      /** 5. TEMPEST OCEAN (SEA WATER WITH PROPER ANIMATED 3D WAVES) */
       buildRealmOceanWaves() {
-        const seaGeo = new THREE.PlaneGeometry(110, 110, 76, 76);
+        const seaGeo = new THREE.PlaneGeometry(100, 100, 44, 44);
         seaGeo.rotateX(-Math.PI / 2);
 
         const posAttr = seaGeo.attributes.position;
@@ -2370,11 +2314,11 @@
         this.oceanBasePositions.set(posAttr.array);
 
         const seaMat = new THREE.MeshStandardMaterial({
-          color: 0x0284c7,
-          emissive: 0x082f49,
-          emissiveIntensity: 0.4,
-          roughness: 0.14,
-          metalness: 0.68,
+          color: 0x7dd3fc,
+          emissive: 0x2b4c65,
+          emissiveIntensity: 0.35,
+          roughness: 0.18,
+          metalness: 0.48,
           flatShading: true
         });
 
@@ -2383,42 +2327,39 @@
         this.oceanMesh.receiveShadow = true;
         this.envGroup.add(this.oceanMesh);
 
-        // Glowing Atlantis Sea Spires rising from the waves
-        const spireMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3, metalness: 0.5 });
-        const crystalMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+        const spireMat = new THREE.MeshStandardMaterial({ color: 0x3d5a80, roughness: 0.35, metalness: 0.35 });
+        const crystalMat = new THREE.MeshBasicMaterial({ color: 0xa5f3fc });
         for (let i = 0; i < 10; i++) {
           const ang = (i / 10) * Math.PI * 2;
           const dist = 17 + (i % 2) * 5;
-          const spire = new THREE.Mesh(new THREE.ConeGeometry(1.4, 9 + (i % 3) * 3, 6), spireMat);
+          const spire = new THREE.Mesh(new THREE.ConeGeometry(1.4, 9 + (i % 3) * 2.5, 6), spireMat);
           spire.position.set(Math.cos(ang) * dist, 0.5, Math.sin(ang) * dist);
           this.envGroup.add(spire);
 
-          const beacon = new THREE.Mesh(new THREE.OctahedronGeometry(0.45, 0), crystalMat);
-          beacon.position.set(Math.cos(ang) * dist, 5.8 + (i % 3) * 1.5, Math.sin(ang) * dist);
+          const beacon = new THREE.Mesh(new THREE.OctahedronGeometry(0.42, 0), crystalMat);
+          beacon.position.set(Math.cos(ang) * dist, 5.6 + (i % 3) * 1.3, Math.sin(ang) * dist);
           this.envGroup.add(beacon);
         }
 
-        this.createAmbientParticles(300, 0x67e8f9, 0.1, 28);
+        this.createAmbientParticles(180, 0xa5f3fc, 0.1, 28);
       }
 
-      /** 6. ASTRAL NEBULA (DEEP SPACE WITH STARS & ASTEROID RING) */
       buildRealmDeepSpace() {
-        this.createStarfieldDome(1400, 0xffffff);
+        this.createStarfieldDome(900, 0xf5f3ff);
 
-        // Rotating Cosmic Nebula Rings around the board
         const ringConfigs = [
-          { rIn: 9.5, rOut: 10.2, color: 0xa855f7, tiltX: 0.35, tiltZ: -0.2, speed: 0.18 },
-          { rIn: 12.5, rOut: 13.6, color: 0x22d3ee, tiltX: -0.45, tiltZ: 0.3, speed: -0.12 },
-          { rIn: 16.5, rOut: 17.1, color: 0xf43f5e, tiltX: 0.2, tiltZ: 0.5, speed: 0.08 }
+          { rIn: 9.5, rOut: 10.2, color: 0xe9d5ff, tiltX: 0.35, tiltZ: -0.2, speed: 0.16 },
+          { rIn: 12.5, rOut: 13.5, color: 0xbae6fd, tiltX: -0.45, tiltZ: 0.3, speed: -0.11 },
+          { rIn: 16.2, rOut: 16.8, color: 0xfbcfe8, tiltX: 0.2, tiltZ: 0.5, speed: 0.08 }
         ];
 
         for (const rc of ringConfigs) {
-          const ringGeo = new THREE.RingGeometry(rc.rIn, rc.rOut, 64);
+          const ringGeo = new THREE.RingGeometry(rc.rIn, rc.rOut, 56);
           const ringMat = new THREE.MeshBasicMaterial({
             color: rc.color,
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.34,
+            opacity: 0.38,
             blending: THREE.AdditiveBlending
           });
           const ring = new THREE.Mesh(ringGeo, ringMat);
@@ -2428,27 +2369,24 @@
           this.spaceRings.push({ mesh: ring, speed: rc.speed });
         }
 
-        // Orbiting Asteroid Belt Shards
         const astGroup = new THREE.Group();
-        const astMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.7, metalness: 0.3 });
-        for (let a = 0; a < 90; a++) {
-          const ang = (a / 90) * Math.PI * 2;
-          const rad = 11.5 + (Math.random() - 0.5) * 4.5;
-          const ast = new THREE.Mesh(new THREE.DodecahedronGeometry(0.18 + Math.random() * 0.38, 0), astMat);
-          ast.position.set(Math.cos(ang) * rad, (Math.random() - 0.5) * 3.5, Math.sin(ang) * rad);
+        const astMat = new THREE.MeshStandardMaterial({ color: 0xcddafd, roughness: 0.6, metalness: 0.2 });
+        for (let a = 0; a < 70; a++) {
+          const ang = (a / 70) * Math.PI * 2;
+          const rad = 11.5 + (Math.random() - 0.5) * 4.2;
+          const ast = new THREE.Mesh(new THREE.DodecahedronGeometry(0.16 + Math.random() * 0.32, 0), astMat);
+          ast.position.set(Math.cos(ang) * rad, (Math.random() - 0.5) * 3.2, Math.sin(ang) * rad);
           ast.rotation.set(Math.random() * 3, Math.random() * 3, 0);
           astGroup.add(ast);
         }
         this.envGroup.add(astGroup);
-        this.spaceRings.push({ mesh: astGroup, speed: 0.14, isYOrbit: true });
+        this.spaceRings.push({ mesh: astGroup, speed: 0.12, isYOrbit: true });
 
-        this.createAmbientParticles(340, 0xd8b4fe, 0.11, 30);
+        this.createAmbientParticles(220, 0xe9d5ff, 0.11, 30);
       }
 
-      /** 7. GOLDEN DUNES (DESERT SAND & OBELISKS) */
       buildRealmGoldenSand() {
-        // Sculpted 3D Desert Sand Dunes
-        const sandGeo = new THREE.PlaneGeometry(110, 110, 64, 64);
+        const sandGeo = new THREE.PlaneGeometry(100, 100, 48, 48);
         sandGeo.rotateX(-Math.PI / 2);
         const pos = sandGeo.attributes.position;
 
@@ -2458,19 +2396,19 @@
           const dist = Math.hypot(vx, vz);
           if (dist > 8.5) {
             const duneHeight =
-              Math.sin(vx * 0.14 + vz * 0.08) * 1.65 +
-              Math.cos(vz * 0.18) * 1.1;
+              Math.sin(vx * 0.14 + vz * 0.08) * 1.5 +
+              Math.cos(vz * 0.18) * 1.0;
             pos.setY(i, duneHeight * Math.min(1, (dist - 8.5) / 8));
           }
         }
         sandGeo.computeVertexNormals();
 
-        const sandTex = createStoneTexture('#e6b87c', 'rgba(180, 83, 9, 0.22)', 22);
+        const sandTex = createStoneTexture('#f9dcc4', 'rgba(244, 162, 184, 0.20)', 14);
         const sandMat = new THREE.MeshStandardMaterial({
           map: sandTex,
-          color: 0xfbbf24,
+          color: 0xfed7aa,
           roughness: 0.82,
-          metalness: 0.08
+          metalness: 0.06
         });
 
         const dunesMesh = new THREE.Mesh(sandGeo, sandMat);
@@ -2478,9 +2416,8 @@
         dunesMesh.receiveShadow = true;
         this.envGroup.add(dunesMesh);
 
-        // Ancient Desert Sandstone Obelisks & Pyramids on Horizon
-        const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.7 });
-        const goldCapMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.25, metalness: 0.85 });
+        const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x9d756d, roughness: 0.7 });
+        const goldCapMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.3, metalness: 0.6 });
 
         for (let i = 0; i < 8; i++) {
           const ang = (i / 8) * Math.PI * 2 + 0.2;
@@ -2488,27 +2425,25 @@
           const obGroup = new THREE.Group();
           obGroup.position.set(Math.cos(ang) * dist, -3.1, Math.sin(ang) * dist);
 
-          const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.85, 8.5, 4), obeliskMat);
-          pillar.position.y = 4.25;
-          pillar.castShadow = true;
+          const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.85, 8.2, 4), obeliskMat);
+          pillar.position.y = 4.1;
           obGroup.add(pillar);
 
           const cap = new THREE.Mesh(new THREE.ConeGeometry(0.48, 1.1, 4), goldCapMat);
-          cap.position.y = 9.05;
+          cap.position.y = 8.75;
           obGroup.add(cap);
 
           this.envGroup.add(obGroup);
         }
 
-        // Distant Great Pyramids
-        for (const [px, pz, scale] of [[-28, -32, 11], [32, -26, 9], [0, -38, 14]]) {
-          const pyr = new THREE.Mesh(new THREE.ConeGeometry(scale, scale * 1.15, 4), obeliskMat);
-          pyr.position.set(px, -3.1 + (scale * 1.15) / 2, pz);
+        for (const [px, pz, scale] of [[-28, -32, 10], [32, -26, 8.5], [0, -38, 13]]) {
+          const pyr = new THREE.Mesh(new THREE.ConeGeometry(scale, scale * 1.1, 4), obeliskMat);
+          pyr.position.set(px, -3.1 + (scale * 1.1) / 2, pz);
           pyr.rotation.y = Math.PI / 4;
           this.envGroup.add(pyr);
         }
 
-        this.createAmbientParticles(320, 0xfde68a, 0.09, 30);
+        this.createAmbientParticles(180, 0xfed7aa, 0.09, 28);
       }
 
       createStarfieldDome(count, colorHex) {
@@ -2540,7 +2475,7 @@
           posArray[i * 3] = (Math.random() - 0.5) * spread;
           posArray[i * 3 + 1] = -2 + Math.random() * 14;
           posArray[i * 3 + 2] = (Math.random() - 0.5) * spread;
-          speedArray[i] = 0.18 + Math.random() * 0.35;
+          speedArray[i] = 0.16 + Math.random() * 0.30;
         }
 
         const particleGeo = new THREE.BufferGeometry();
@@ -2551,7 +2486,7 @@
           color: colorHex,
           size,
           transparent: true,
-          opacity: 0.65,
+          opacity: 0.60,
           blending: THREE.AdditiveBlending,
           depthWrite: false
         });
@@ -2561,7 +2496,7 @@
       }
 
       /*************************************************************************
-       * PROCEDURAL 3D WIZARD'S CHESS PIECES
+       * PROCEDURAL 3D PASTEL CHESS PIECES
        *************************************************************************/
       createPieceMesh(type, color, id) {
         const group = new THREE.Group();
@@ -2571,18 +2506,18 @@
         const matStone = color === 'w' ? this.matMarble : this.matObsidian;
         const matRune = (color === 'w' ? this.matWhiteRune : this.matBlackRune).clone();
 
-        const baseBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.52, 0.14, 24), matStone);
+        const baseBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.52, 0.14, 20), matStone);
         baseBottom.position.y = 0.07;
         baseBottom.castShadow = true;
         baseBottom.receiveShadow = true;
         group.add(baseBottom);
 
-        const baseBevel = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.45, 0.12, 24), matStone);
+        const baseBevel = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.45, 0.12, 20), matStone);
         baseBevel.position.y = 0.19;
         baseBevel.castShadow = true;
         group.add(baseBevel);
 
-        const runeRing = new THREE.Mesh(new THREE.TorusGeometry(0.39, 0.026, 12, 32), matRune);
+        const runeRing = new THREE.Mesh(new THREE.TorusGeometry(0.39, 0.026, 10, 28), matRune);
         runeRing.rotation.x = Math.PI / 2;
         runeRing.position.y = 0.25;
         group.add(runeRing);
@@ -2597,16 +2532,16 @@
         };
 
         if (type === 'p') {
-          const torso = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.35, 0.56, 20), matStone));
+          const torso = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.35, 0.56, 18), matStone));
           torso.position.y = 0.52;
           bodyGroup.add(torso);
 
-          const collar = addCastShadow(new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.04, 10, 24), matStone));
+          const collar = addCastShadow(new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.04, 8, 20), matStone));
           collar.rotation.x = Math.PI / 2;
           collar.position.y = 0.8;
           bodyGroup.add(collar);
 
-          const helm = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.23, 20, 20), matStone));
+          const helm = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.23, 18, 18), matStone));
           helm.position.y = 1.02;
           bodyGroup.add(helm);
 
@@ -2670,7 +2605,7 @@
           bodyGroup.add(headGroup);
           accentGroup.add(headGroup);
         } else if (type === 'b') {
-          const robe = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.37, 0.92, 20), matStone));
+          const robe = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.37, 0.92, 18), matStone));
           robe.position.y = 0.7;
           bodyGroup.add(robe);
 
@@ -2678,7 +2613,7 @@
           mitre.position.y = 1.38;
           bodyGroup.add(mitre);
 
-          const halo = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.025, 10, 28), matRune);
+          const halo = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.025, 10, 24), matRune);
           halo.position.y = 1.38;
           halo.rotation.x = Math.PI / 3;
           accentGroup.add(halo);
@@ -2687,19 +2622,19 @@
           finial.position.y = 1.72;
           accentGroup.add(finial);
         } else if (type === 'q') {
-          const lowerGown = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.39, 0.68, 24), matStone));
+          const lowerGown = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.39, 0.68, 20), matStone));
           lowerGown.position.y = 0.58;
           bodyGroup.add(lowerGown);
 
-          const upperBodice = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.21, 0.52, 24), matStone));
+          const upperBodice = addCastShadow(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.21, 0.52, 20), matStone));
           upperBodice.position.y = 1.15;
           bodyGroup.add(upperBodice);
 
-          const dome = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 20), matStone));
+          const dome = addCastShadow(new THREE.Mesh(new THREE.SphereGeometry(0.24, 18, 18), matStone));
           dome.position.y = 1.46;
           bodyGroup.add(dome);
 
-          const crownRing = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 12, 32), matRune);
+          const crownRing = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 10, 28), matRune);
           crownRing.rotation.x = Math.PI / 2;
           crownRing.position.y = 1.62;
           accentGroup.add(crownRing);
@@ -2803,7 +2738,7 @@
         const selPos = boardToWorld(r, c);
         const selRing = new THREE.Mesh(
           new THREE.RingGeometry(0.45, 0.56, 32),
-          new THREE.MeshBasicMaterial({ color: 0xffe082, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+          new THREE.MeshBasicMaterial({ color: 0xfed7aa, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
         );
         selRing.rotation.x = -Math.PI / 2;
         selRing.position.set(selPos.x, 0.02, selPos.z);
@@ -2821,7 +2756,7 @@
           if (isCapture) {
             const outerRing = new THREE.Mesh(
               new THREE.RingGeometry(0.48, 0.6, 6),
-              new THREE.MeshBasicMaterial({ color: 0xff3b5c, side: THREE.DoubleSide, transparent: true, opacity: 0.92 })
+              new THREE.MeshBasicMaterial({ color: 0xf9a8d4, side: THREE.DoubleSide, transparent: true, opacity: 0.92 })
             );
             outerRing.rotation.x = -Math.PI / 2;
             outerRing.position.set(pos.x, 0.03, pos.z);
@@ -2830,7 +2765,7 @@
           } else {
             const dot = new THREE.Mesh(
               new THREE.RingGeometry(0.12, 0.25, 24),
-              new THREE.MeshBasicMaterial({ color: 0xffe082, side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
+              new THREE.MeshBasicMaterial({ color: 0xbbf7d0, side: THREE.DoubleSide, transparent: true, opacity: 0.88 })
             );
             dot.rotation.x = -Math.PI / 2;
             dot.position.set(pos.x, 0.025, pos.z);
@@ -2850,7 +2785,7 @@
             const worldPos = boardToWorld(kingPos.r, kingPos.c);
             const aura = new THREE.Mesh(
               new THREE.RingGeometry(0.32, 0.64, 32),
-              new THREE.MeshBasicMaterial({ color: 0xff1e42, side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
+              new THREE.MeshBasicMaterial({ color: 0xf472b6, side: THREE.DoubleSide, transparent: true, opacity: 0.88 })
             );
             aura.name = 'check-aura';
             aura.rotation.x = -Math.PI / 2;
@@ -2862,20 +2797,20 @@
       }
 
       /*************************************************************************
-       * 38-SHARD 3D PHYSICS STONE SHATTER EXPLOSION
+       * 3D PHYSICS STONE SHATTER EXPLOSION
        *************************************************************************/
       spawnShatterExplosion(worldPos, victimColor, attackDir) {
         const matStone = victimColor === 'w' ? this.matMarble : this.matObsidian;
         const matRune = victimColor === 'w' ? this.matWhiteRune : this.matBlackRune;
 
-        const shardCount = 38;
+        const shardCount = 34;
         for (let i = 0; i < shardCount; i++) {
           const isRuneShard = i % 5 === 0;
-          const scale = 0.08 + Math.random() * 0.16;
+          const scale = 0.08 + Math.random() * 0.15;
 
           const geo = i % 2 === 0
             ? new THREE.DodecahedronGeometry(scale, 0)
-            : new THREE.TetrahedronGeometry(scale * 1.25, 0);
+            : new THREE.TetrahedronGeometry(scale * 1.2, 0);
 
           geo.scale(0.6 + Math.random() * 0.9, 0.5 + Math.random() * 1.1, 0.6 + Math.random() * 0.9);
 
@@ -2890,20 +2825,19 @@
             worldPos.z + (Math.random() - 0.5) * 0.45
           );
           shard.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-          shard.castShadow = true;
 
           const radialAngle = Math.random() * Math.PI * 2;
-          const radialSpeed = 1.6 + Math.random() * 4.4;
+          const radialSpeed = 1.5 + Math.random() * 4.2;
           const vel = new THREE.Vector3(
-            Math.cos(radialAngle) * radialSpeed + attackDir.x * (2.2 + Math.random() * 2.5),
-            2.4 + Math.random() * 4.8,
-            Math.sin(radialAngle) * radialSpeed + attackDir.z * (2.2 + Math.random() * 2.5)
+            Math.cos(radialAngle) * radialSpeed + attackDir.x * (2.0 + Math.random() * 2.2),
+            2.2 + Math.random() * 4.4,
+            Math.sin(radialAngle) * radialSpeed + attackDir.z * (2.0 + Math.random() * 2.2)
           );
 
           const rotVel = new THREE.Vector3(
-            (Math.random() - 0.5) * 14,
-            (Math.random() - 0.5) * 14,
-            (Math.random() - 0.5) * 14
+            (Math.random() - 0.5) * 12,
+            (Math.random() - 0.5) * 12,
+            (Math.random() - 0.5) * 12
           );
 
           this.scene.add(shard);
@@ -2912,52 +2846,52 @@
             vel,
             rotVel,
             age: 0,
-            maxAge: 2.6 + Math.random() * 1.2
+            maxAge: 2.4 + Math.random() * 1.0
           });
         }
 
         const ringMesh = new THREE.Mesh(
           new THREE.RingGeometry(0.15, 0.34, 32),
           new THREE.MeshBasicMaterial({
-            color: victimColor === 'w' ? 0xc084fc : 0xffd56b,
+            color: victimColor === 'w' ? 0xe9d5ff : 0xfed7aa,
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.95,
+            opacity: 0.9,
             blending: THREE.AdditiveBlending
           })
         );
         ringMesh.rotation.x = -Math.PI / 2;
         ringMesh.position.set(worldPos.x, 0.05, worldPos.z);
         this.scene.add(ringMesh);
-        this.shockwaves.push({ mesh: ringMesh, age: 0, maxAge: 0.65 });
+        this.shockwaves.push({ mesh: ringMesh, age: 0, maxAge: 0.60 });
 
         this.actionLight.position.set(worldPos.x, 2.2, worldPos.z);
-        this.actionLight.color.setHex(victimColor === 'w' ? 0xa855f7 : 0xf59e0b);
-        this.actionLight.intensity = 6.5;
-        this.cameraState.shakeIntensity = 0.36;
+        this.actionLight.color.setHex(victimColor === 'w' ? 0xe9d5ff : 0xfed7aa);
+        this.actionLight.intensity = 4.5;
+        this.cameraState.shakeIntensity = 0.25;
       }
 
       spawnTrailSpark(pos, color) {
         const spark = new THREE.Mesh(
-          new THREE.OctahedronGeometry(0.055, 0),
+          new THREE.OctahedronGeometry(0.05, 0),
           new THREE.MeshBasicMaterial({
-            color: color === 'w' ? 0xffe082 : 0xc084fc,
+            color: color === 'w' ? 0xfed7aa : 0xe9d5ff,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.8,
             blending: THREE.AdditiveBlending
           })
         );
         spark.position.set(
           pos.x + (Math.random() - 0.5) * 0.35,
-          pos.y + 0.15 + Math.random() * 0.6,
+          pos.y + 0.15 + Math.random() * 0.5,
           pos.z + (Math.random() - 0.5) * 0.35
         );
         this.scene.add(spark);
         this.trailParticles.push({
           mesh: spark,
-          vel: new THREE.Vector3((Math.random() - 0.5) * 0.6, 0.8 + Math.random() * 0.8, (Math.random() - 0.5) * 0.6),
+          vel: new THREE.Vector3((Math.random() - 0.5) * 0.5, 0.7 + Math.random() * 0.7, (Math.random() - 0.5) * 0.5),
           age: 0,
-          maxAge: 0.45 + Math.random() * 0.25
+          maxAge: 0.40 + Math.random() * 0.20
         });
       }
 
@@ -2969,7 +2903,6 @@
         this.isAnimating = true;
         this.clearHighlights();
 
-        // Sync cursor to destination square
         this.cursorSquare = { r: move.toR, c: move.toC };
         this.updateCursorMeshPosition();
 
@@ -2989,7 +2922,7 @@
         const isCapture = Boolean(victimMesh);
 
         if (!isCapture) {
-          const duration = 0.44;
+          const duration = 0.42;
           soundFX.playStoneSlide(duration, isJump);
 
           let rookMesh = null, rookStart = null, rookEnd = null;
@@ -3007,10 +2940,10 @@
             if (attackerMesh) {
               attackerMesh.position.lerpVectors(startPos, endPos, ease);
               if (isJump) {
-                attackerMesh.position.y = Math.sin(t * Math.PI) * 1.65;
-                attackerMesh.userData.bodyGroup.rotation.x = Math.sin(t * Math.PI) * 0.35;
+                attackerMesh.position.y = Math.sin(t * Math.PI) * 1.55;
+                attackerMesh.userData.bodyGroup.rotation.x = Math.sin(t * Math.PI) * 0.30;
               }
-              if (Math.random() < 0.45) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
+              if (Math.random() < 0.35) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
             }
             if (rookMesh) rookMesh.position.lerpVectors(rookStart, rookEnd, ease);
           });
@@ -3034,44 +2967,43 @@
               target: this.cameraState.desiredTarget.clone()
             };
             const midFocus = victimPos.clone().lerp(startPos, 0.25);
-            midFocus.y = 0.7;
+            midFocus.y = 0.6;
             this.cameraState.desiredTarget.copy(midFocus);
-            this.cameraState.desiredRadius = 9.2;
+            this.cameraState.desiredRadius = this.getAspectAdjustedRadius(10.5);
             this.cameraState.desiredPhi = 0.78;
-            this.cameraState.desiredTheta += (Math.random() - 0.5) * 0.45;
           }
 
-          const approachDur = 0.38;
+          const approachDur = 0.36;
           soundFX.playStoneSlide(approachDur, isJump);
           await this.tweenProgress(approachDur, (t) => {
             const ease = 1 - Math.pow(1 - t, 3);
             if (attackerMesh) {
               attackerMesh.position.lerpVectors(startPos, strikePos, ease);
-              if (isJump) attackerMesh.position.y = Math.sin(t * Math.PI) * 1.45;
-              if (Math.random() < 0.6) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
+              if (isJump) attackerMesh.position.y = Math.sin(t * Math.PI) * 1.4;
+              if (Math.random() < 0.5) this.spawnTrailSpark(attackerMesh.position, move.piece.color);
             }
           });
 
           soundFX.playAttackCharge();
-          await this.tweenProgress(0.28, (t) => {
+          await this.tweenProgress(0.25, (t) => {
             if (attackerMesh) {
               const body = attackerMesh.userData.bodyGroup;
-              body.position.y = Math.sin(t * Math.PI * 0.5) * 0.35;
-              body.rotation.x = -normDir.z * t * 0.42;
-              body.rotation.z = normDir.x * t * 0.42;
-              attackerMesh.userData.matRune.emissiveIntensity = 1.5 + t * 4.5;
+              body.position.y = Math.sin(t * Math.PI * 0.5) * 0.32;
+              body.rotation.x = -normDir.z * t * 0.38;
+              body.rotation.z = normDir.x * t * 0.38;
+              attackerMesh.userData.matRune.emissiveIntensity = 1.2 + t * 3.0;
             }
             if (victimMesh) {
-              victimMesh.position.x = victimPos.x + (Math.random() - 0.5) * 0.06 * t;
-              victimMesh.position.z = victimPos.z + (Math.random() - 0.5) * 0.06 * t;
+              victimMesh.position.x = victimPos.x + (Math.random() - 0.5) * 0.05 * t;
+              victimMesh.position.z = victimPos.z + (Math.random() - 0.5) * 0.05 * t;
             }
           });
 
-          await this.tweenProgress(0.11, (t) => {
+          await this.tweenProgress(0.10, (t) => {
             if (attackerMesh) {
               const body = attackerMesh.userData.bodyGroup;
-              body.rotation.x = normDir.z * t * 0.65;
-              body.rotation.z = -normDir.x * t * 0.65;
+              body.rotation.x = normDir.z * t * 0.55;
+              body.rotation.z = -normDir.x * t * 0.55;
               attackerMesh.position.lerpVectors(strikePos, victimPos, t * 0.55);
             }
           });
@@ -3085,29 +3017,28 @@
           }
 
           const postStrikePos = attackerMesh ? attackerMesh.position.clone() : strikePos;
-          await this.tweenProgress(0.42, (t) => {
+          await this.tweenProgress(0.38, (t) => {
             const ease = 1 - Math.pow(1 - t, 3);
             if (attackerMesh) {
               attackerMesh.position.lerpVectors(postStrikePos, endPos, ease);
               attackerMesh.position.y = 0;
               const body = attackerMesh.userData.bodyGroup;
-              body.position.y = (1 - ease) * 0.35;
+              body.position.y = (1 - ease) * 0.32;
               body.rotation.x *= (1 - ease);
               body.rotation.z *= (1 - ease);
-              attackerMesh.userData.matRune.emissiveIntensity = 1.5 + (1 - ease) * 3.0;
+              attackerMesh.userData.matRune.emissiveIntensity = 1.1 + (1 - ease) * 2.0;
             }
           });
 
           if (this.dynamicActionCam && this.cameraState.savedBeforeAction) {
+            const saved = this.cameraState.savedBeforeAction;
+            this.cameraState.savedBeforeAction = null;
             setTimeout(() => {
-              if (this.cameraState.savedBeforeAction) {
-                this.cameraState.desiredTarget.copy(this.cameraState.savedBeforeAction.target);
-                this.cameraState.desiredRadius = this.cameraState.savedBeforeAction.radius;
-                this.cameraState.desiredPhi = this.cameraState.savedBeforeAction.phi;
-                this.cameraState.desiredTheta = this.cameraState.savedBeforeAction.theta;
-                this.cameraState.savedBeforeAction = null;
-              }
-            }, 420);
+              this.cameraState.desiredTarget.copy(saved.target);
+              this.cameraState.desiredRadius = this.getAspectAdjustedRadius(this.baseRadius);
+              this.cameraState.desiredPhi = saved.phi;
+              this.cameraState.desiredTheta = saved.theta;
+            }, 350);
           }
         }
 
@@ -3170,13 +3101,13 @@
         const badgeText = document.getElementById('status-badge-text');
         badge.classList.remove('hidden');
         badge.classList.add('flex');
-        badgeText.textContent = 'AUTOMATON PONDERING...';
+        badgeText.textContent = 'PONDERING...';
 
         setTimeout(() => {
           if (this.engine.turn !== 'b' || this.isAnimating) return;
           const aiMove = this.engine.chooseAIMove(this.aiDifficulty);
           if (aiMove) this.executeMoveWithAnimation(aiMove, 'q');
-        }, 420);
+        }, 400);
       }
 
       async triggerStrikeDemo() {
@@ -3209,11 +3140,17 @@
       }
 
       /*************************************************************************
-       * INITIAL SCREEN, DEVICE AUTO-DETECTION & PLATFORM SWITCHING
+       * INITIAL SCREEN & RESPONSIVE PLATFORM SWITCHING
        *************************************************************************/
       initLauncherAndDeviceDetection() {
         const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
         this.applyDevicePlatform(isTouchDevice ? 'mobile' : 'pc');
+
+        // Collapse Chronicle drawer by default on small mobile screens so it never overlaps Touch D-Pad
+        if (window.innerWidth < 768) {
+          const historyPanel = document.getElementById('history-panel');
+          historyPanel.classList.add('translate-y-[130%]', 'opacity-0', 'pointer-events-none');
+        }
 
         const detectedPill = document.getElementById('detected-device-pill');
         if (detectedPill) {
@@ -3226,7 +3163,6 @@
         cardMobile.addEventListener('click', () => this.applyDevicePlatform('mobile'));
         cardPC.addEventListener('click', () => this.applyDevicePlatform('pc'));
 
-        // Environment buttons on Start Screen and HUD
         document.querySelectorAll('.start-env-btn, .hud-env-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const envKey = btn.getAttribute('data-env');
@@ -3235,15 +3171,13 @@
           });
         });
 
-        // Launch Button
         const startModal = document.getElementById('start-screen-modal');
         document.getElementById('btn-launch-game').addEventListener('click', () => {
           soundFX.playSelect(true);
           startModal.classList.add('opacity-0', 'pointer-events-none');
-          setTimeout(() => startModal.classList.add('hidden'), 450);
+          setTimeout(() => startModal.classList.add('hidden'), 320);
         });
 
-        // Reopen Launcher from HUD Brand Badge
         document.getElementById('btn-open-launcher').addEventListener('click', () => {
           startModal.classList.remove('hidden');
           requestAnimationFrame(() => {
@@ -3269,9 +3203,9 @@
           touchDock.classList.remove('hidden');
           touchDock.classList.add('flex');
           pcHint.classList.add('hidden');
-          pcHint.classList.remove('sm:flex');
+          pcHint.classList.remove('md:flex');
           if (hudBadge) hudBadge.textContent = 'TOUCH';
-          this.cameraState.desiredRadius = 17.5;
+          this.baseRadius = 16.0;
         } else {
           cardPC.classList.add('selected-device');
           cardMobile.classList.remove('selected-device');
@@ -3281,97 +3215,135 @@
           touchDock.classList.add('hidden');
           touchDock.classList.remove('flex');
           pcHint.classList.remove('hidden');
-          pcHint.classList.add('sm:flex');
+          pcHint.classList.add('md:flex');
           if (hudBadge) hudBadge.textContent = 'PC';
-          this.cameraState.desiredRadius = 15.8;
+          this.baseRadius = 15.4;
         }
+        this.adaptCameraToScreenAspect();
       }
 
       /*************************************************************************
-       * UNIFIED INPUT SYSTEM:
-       * 1. Pointer / Mouse Raycasting
-       * 2. Multi-Touch Pinch-to-Zoom & 1-Finger Orbit
-       * 3. PC Keyboard Controls (WASD/Arrows, Enter/Space, Q/E, 1-7)
-       * 4. Smartphone Floating iOS 28 Glass D-Pad Controls
+       * GLITCH-FREE TOUCH & MOUSE INPUT CONTROLLER
        *************************************************************************/
       initControlsAndEvents() {
         const dom = this.renderer.domElement;
-        let isDragging = false;
-        let dragStart = { x: 0, y: 0 };
-        let pointerDownPos = { x: 0, y: 0 };
         const activePointers = new Map();
+        let isDragging = false;
+        let lastDragPos = { x: 0, y: 0 };
+        let downStartPos = { x: 0, y: 0 };
         let initialPinchDist = null;
         let initialPinchRadius = this.cameraState.desiredRadius;
 
+        const clearAllPointers = () => {
+          activePointers.clear();
+          initialPinchDist = null;
+          isDragging = false;
+        };
+
         dom.addEventListener('pointerdown', (e) => {
+          if (e.target !== dom) return;
+          e.preventDefault();
+
+          // Reset stale pointers if single touch starts fresh
+          if (e.pointerType === 'touch' && activePointers.size >= 2) {
+            clearAllPointers();
+          }
+
           activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
           if (activePointers.size === 1) {
             isDragging = false;
-            dragStart = { x: e.clientX, y: e.clientY };
-            pointerDownPos = { x: e.clientX, y: e.clientY };
+            downStartPos = { x: e.clientX, y: e.clientY };
+            lastDragPos = { x: e.clientX, y: e.clientY };
           } else if (activePointers.size === 2) {
             const pts = Array.from(activePointers.values());
             initialPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
             initialPinchRadius = this.cameraState.desiredRadius;
             isDragging = true;
           }
-          dom.setPointerCapture(e.pointerId);
-        });
+        }, { passive: false });
 
         dom.addEventListener('pointermove', (e) => {
           if (!activePointers.has(e.pointerId)) return;
+          e.preventDefault();
+
           activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
           if (activePointers.size === 2 && initialPinchDist) {
-            // 2-Finger Pinch-to-Zoom for Smartphone / Touch
             const pts = Array.from(activePointers.values());
             const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-            const scale = initialPinchDist / Math.max(20, dist);
-            this.cameraState.desiredRadius = Math.max(7.5, Math.min(28, initialPinchRadius * scale));
+            if (dist > 15) {
+              const scale = initialPinchDist / dist;
+              this.cameraState.desiredRadius = Math.max(8.5, Math.min(34, initialPinchRadius * scale));
+            }
             return;
           }
 
           if (activePointers.size === 1) {
-            const dx = e.clientX - dragStart.x;
-            const dy = e.clientY - dragStart.y;
-            if (Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y) > 6) {
+            const totalMove = Math.hypot(e.clientX - downStartPos.x, e.clientY - downStartPos.y);
+            const dragThreshold = e.pointerType === 'touch' ? 14 : 6;
+
+            if (!isDragging && totalMove > dragThreshold) {
               isDragging = true;
+              lastDragPos = { x: e.clientX, y: e.clientY };
+              return;
             }
+
             if (isDragging) {
-              this.cameraState.desiredTheta -= dx * 0.0075;
-              this.cameraState.desiredPhi = Math.max(0.22, Math.min(1.38, this.cameraState.desiredPhi - dy * 0.0065));
-              dragStart = { x: e.clientX, y: e.clientY };
+              const dx = e.clientX - lastDragPos.x;
+              const dy = e.clientY - lastDragPos.y;
+              // Clamp sudden delta spikes to prevent touch camera glitching
+              const clampedDx = Math.max(-45, Math.min(45, dx));
+              const clampedDy = Math.max(-45, Math.min(45, dy));
+
+              this.cameraState.desiredTheta -= clampedDx * 0.0065;
+              this.cameraState.desiredPhi = Math.max(0.24, Math.min(1.36, this.cameraState.desiredPhi - clampedDy * 0.0055));
+              lastDragPos = { x: e.clientX, y: e.clientY };
             }
           }
-        });
+        }, { passive: false });
 
-        const handlePointerEnd = (e) => {
+        const onPointerFinish = (e) => {
+          const wasInMap = activePointers.has(e.pointerId);
           activePointers.delete(e.pointerId);
-          if (activePointers.size < 2) initialPinchDist = null;
-          if (dom.hasPointerCapture(e.pointerId)) dom.releasePointerCapture(e.pointerId);
-          if (!isDragging && activePointers.size === 0) {
+
+          if (activePointers.size < 2) {
+            initialPinchDist = null;
+          }
+
+          if (activePointers.size === 1) {
+            // Smoothly re-anchor remaining finger so lifting 2nd finger doesn't jump the camera
+            const remaining = Array.from(activePointers.values())[0];
+            lastDragPos = { x: remaining.x, y: remaining.y };
+          }
+
+          if (wasInMap && !isDragging && activePointers.size === 0 && e.type === 'pointerup') {
             this.handleBoardClick(e.clientX, e.clientY);
           }
-          if (activePointers.size === 0) isDragging = false;
+
+          if (activePointers.size === 0) {
+            isDragging = false;
+          }
         };
 
-        dom.addEventListener('pointerup', handlePointerEnd);
-        dom.addEventListener('pointercancel', handlePointerEnd);
+        dom.addEventListener('pointerup', onPointerFinish);
+        dom.addEventListener('pointercancel', clearAllPointers);
+        dom.addEventListener('pointerleave', (e) => {
+          if (e.pointerType !== 'touch') onPointerFinish(e);
+        });
+        window.addEventListener('blur', clearAllPointers);
 
         dom.addEventListener('wheel', (e) => {
           e.preventDefault();
-          this.cameraState.desiredRadius = Math.max(7.5, Math.min(28, this.cameraState.desiredRadius + e.deltaY * 0.01));
+          this.cameraState.desiredRadius = Math.max(8.5, Math.min(34, this.cameraState.desiredRadius + e.deltaY * 0.01));
         }, { passive: false });
 
-        window.addEventListener('resize', () => {
-          this.camera.aspect = window.innerWidth / window.innerHeight;
-          this.camera.updateProjectionMatrix();
-          this.renderer.setSize(window.innerWidth, window.innerHeight);
+        window.addEventListener('resize', () => this.adaptCameraToScreenAspect());
+        window.addEventListener('orientationchange', () => {
+          setTimeout(() => this.adaptCameraToScreenAspect(), 120);
         });
 
-        // =====================================================================
-        // PC KEYBOARD CONTROLS (WASD / Arrow Keys / Enter / Space / Q / E / 1-7)
-        // =====================================================================
+        // Keyboard Controls
         window.addEventListener('keydown', (e) => {
           const startModal = document.getElementById('start-screen-modal');
           if (startModal && !startModal.classList.contains('hidden')) {
@@ -3384,46 +3356,34 @@
             e.preventDefault();
           }
 
-          // Flip cursor movement direction if viewing from Black's perspective
           const isBlackView = Math.cos(this.cameraState.theta) < 0;
           const dirSign = isBlackView ? -1 : 1;
 
-          if (key === 'w' || key === 'arrowup') {
-            this.moveCursorBy(-1 * dirSign, 0);
-          } else if (key === 's' || key === 'arrowdown') {
-            this.moveCursorBy(1 * dirSign, 0);
-          } else if (key === 'a' || key === 'arrowleft') {
-            this.moveCursorBy(0, -1 * dirSign);
-          } else if (key === 'd' || key === 'arrowright') {
-            this.moveCursorBy(0, 1 * dirSign);
-          } else if (key === 'enter' || key === ' ') {
-            this.activateSquare(this.cursorSquare.r, this.cursorSquare.c);
-          } else if (key === 'escape') {
+          if (key === 'w' || key === 'arrowup') this.moveCursorBy(-1 * dirSign, 0);
+          else if (key === 's' || key === 'arrowdown') this.moveCursorBy(1 * dirSign, 0);
+          else if (key === 'a' || key === 'arrowleft') this.moveCursorBy(0, -1 * dirSign);
+          else if (key === 'd' || key === 'arrowright') this.moveCursorBy(0, 1 * dirSign);
+          else if (key === 'enter' || key === ' ') this.activateSquare(this.cursorSquare.r, this.cursorSquare.c);
+          else if (key === 'escape') {
             this.selectedSquare = null;
             this.legalMovesForSelected = [];
             this.clearHighlights();
             this.updateCheckHighlight();
-          } else if (key === 'q') {
-            this.cameraState.desiredTheta -= 0.35;
-          } else if (key === 'e') {
-            this.cameraState.desiredTheta += 0.35;
-          } else if (key === 'r') {
-            document.getElementById('btn-cam-white').click();
-          } else if (key === 'c') {
-            this.triggerStrikeDemo();
-          } else if (key === 'u') {
-            document.getElementById('btn-undo').click();
-          } else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {
+          } else if (key === 'q') this.cameraState.desiredTheta -= 0.35;
+          else if (key === 'e') this.cameraState.desiredTheta += 0.35;
+          else if (key === 'r') document.getElementById('btn-cam-white').click();
+          else if (key === 'c') this.triggerStrikeDemo();
+          else if (key === 'u') document.getElementById('btn-undo').click();
+          else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {
             const realms = ['cathedral', 'night', 'day', 'grass', 'ocean', 'space', 'sand'];
             this.setEnvironmentRealm(realms[parseInt(key, 10) - 1]);
           }
         });
 
-        // =====================================================================
-        // SMARTPHONE TOUCH D-PAD CONTROLS
-        // =====================================================================
+        // Touch D-Pad Controls
         document.querySelectorAll('[data-dpad]').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const action = btn.getAttribute('data-dpad');
             const isBlackView = Math.cos(this.cameraState.theta) < 0;
             const dirSign = isBlackView ? -1 : 1;
@@ -3442,28 +3402,24 @@
           this.cameraState.desiredTheta += 0.45;
         });
         document.getElementById('btn-touch-zoom').addEventListener('click', () => {
-          this.cameraState.desiredRadius = this.cameraState.desiredRadius > 14 ? 11.5 : 17.5;
+          const base = this.getAspectAdjustedRadius(this.baseRadius);
+          this.cameraState.desiredRadius = this.cameraState.desiredRadius > base * 0.9 ? base * 0.75 : base;
         });
 
-        // =====================================================================
-        // TOP HUD BUTTON BINDINGS
-        // =====================================================================
+        // HUD Buttons
         document.getElementById('btn-mode').addEventListener('click', () => {
           this.gameMode = this.gameMode === 'ai' ? '2p' : 'ai';
           const btn = document.getElementById('btn-mode');
-          const icon = document.getElementById('icon-mode');
           const label = document.getElementById('label-mode');
           const diffBtn = document.getElementById('btn-difficulty');
 
           if (this.gameMode === 'ai') {
-            btn.classList.add('active-cyan');
-            icon.textContent = 'smart_toy';
+            btn.classList.add('active-sky');
             label.textContent = 'vs Automaton';
             diffBtn.style.display = 'inline-flex';
             if (this.engine.turn === 'b' && !this.isAnimating) this.triggerAITurn();
           } else {
-            btn.classList.remove('active-cyan');
-            icon.textContent = 'group';
+            btn.classList.remove('active-sky');
             label.textContent = '2P Pass & Play';
             diffBtn.style.display = 'none';
           }
@@ -3477,24 +3433,25 @@
           document.getElementById('label-difficulty').textContent = names[this.aiDifficulty];
         });
 
-        const setCamPreset = (theta, phi, radius, activeBtnId) => {
+        const setCamPreset = (theta, phi, baseR, activeBtnId) => {
           this.cameraState.savedBeforeAction = null;
-          this.cameraState.desiredTarget.set(0, 0.4, 0);
+          this.baseRadius = baseR;
+          this.cameraState.desiredTarget.set(0, 0.35, 0);
           this.cameraState.desiredTheta = theta;
           this.cameraState.desiredPhi = phi;
-          this.cameraState.desiredRadius = radius;
+          this.cameraState.desiredRadius = this.getAspectAdjustedRadius(baseR);
           ['btn-cam-white', 'btn-cam-black', 'btn-cam-top'].forEach(id => {
-            document.getElementById(id).classList.toggle('active-gold', id === activeBtnId);
+            document.getElementById(id).classList.toggle('active-peach', id === activeBtnId);
           });
         };
 
-        document.getElementById('btn-cam-white').addEventListener('click', () => setCamPreset(0, 0.92, 15.8, 'btn-cam-white'));
-        document.getElementById('btn-cam-black').addEventListener('click', () => setCamPreset(Math.PI, 0.92, 15.8, 'btn-cam-black'));
-        document.getElementById('btn-cam-top').addEventListener('click', () => setCamPreset(0, 0.24, 17.5, 'btn-cam-top'));
+        document.getElementById('btn-cam-white').addEventListener('click', () => setCamPreset(0, 0.90, 15.6, 'btn-cam-white'));
+        document.getElementById('btn-cam-black').addEventListener('click', () => setCamPreset(Math.PI, 0.90, 15.6, 'btn-cam-black'));
+        document.getElementById('btn-cam-top').addEventListener('click', () => setCamPreset(0, 0.24, 17.2, 'btn-cam-top'));
 
         document.getElementById('btn-cam-cinematic').addEventListener('click', (e) => {
           this.dynamicActionCam = !this.dynamicActionCam;
-          e.currentTarget.classList.toggle('active-cyan', this.dynamicActionCam);
+          e.currentTarget.classList.toggle('active-sky', this.dynamicActionCam);
         });
 
         document.getElementById('btn-strike-demo').addEventListener('click', () => this.triggerStrikeDemo());
@@ -3528,19 +3485,22 @@
           document.getElementById('gameover-modal').classList.remove('flex');
         });
 
-        document.getElementById('btn-sound').addEventListener('click', (e) => {
+        const toggleAudio = () => {
           const on = soundFX.toggle();
-          e.currentTarget.classList.toggle('active-gold', on);
-          document.getElementById('icon-sound').textContent = on ? 'volume_up' : 'volume_off';
-        });
+          document.getElementById('btn-sound').classList.toggle('active-peach', on);
+          document.getElementById('btn-sound-mobile').classList.toggle('active-peach', on);
+        };
+        document.getElementById('btn-sound').addEventListener('click', toggleAudio);
+        document.getElementById('btn-sound-mobile').addEventListener('click', toggleAudio);
 
         const historyPanel = document.getElementById('history-panel');
         const toggleHistory = () => {
-          historyPanel.classList.toggle('translate-y-[120%]');
+          historyPanel.classList.toggle('translate-y-[130%]');
           historyPanel.classList.toggle('opacity-0');
           historyPanel.classList.toggle('pointer-events-none');
         };
         document.getElementById('btn-history-toggle').addEventListener('click', toggleHistory);
+        document.getElementById('btn-history-mobile').addEventListener('click', toggleHistory);
         document.getElementById('btn-close-history').addEventListener('click', toggleHistory);
 
         document.querySelectorAll('.promo-btn').forEach(btn => {
@@ -3570,8 +3530,9 @@
         if (this.isAnimating) return;
         if (this.gameMode === 'ai' && this.engine.turn === 'b') return;
 
-        this.pointer.x = (clientX / window.innerWidth) * 2 - 1;
-        this.pointer.y = -(clientY / window.innerHeight) * 2 + 1;
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        this.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
         this.raycaster.setFromCamera(this.pointer, this.camera);
 
         const interactables = [];
@@ -3647,13 +3608,13 @@
         const turnText = document.getElementById('turn-text');
 
         if (isWhiteTurn) {
-          turnDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-200 shadow-[0_0_8px_#fde68a]';
-          turnText.textContent = "Light's Turn";
-          turnText.className = 'text-xs font-semibold tracking-wide text-amber-100';
+          turnDot.className = 'w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa]';
+          turnText.textContent = "Pearl's Turn";
+          turnText.className = 'text-[11px] font-semibold tracking-wide text-orange-100';
         } else {
-          turnDot.className = 'w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]';
-          turnText.textContent = this.gameMode === 'ai' ? 'Automaton (Dark)' : "Dark's Turn";
-          turnText.className = 'text-xs font-semibold tracking-wide text-purple-200';
+          turnDot.className = 'w-2 h-2 rounded-full bg-purple-300 shadow-[0_0_8px_#e9d5ff]';
+          turnText.textContent = this.gameMode === 'ai' ? 'Automaton (Lilac)' : "Lilac's Turn";
+          turnText.className = 'text-[11px] font-semibold tracking-wide text-purple-200';
         }
 
         const badge = document.getElementById('status-badge');
@@ -3671,7 +3632,7 @@
         } else if (inCheck) {
           badge.classList.remove('hidden');
           badge.classList.add('flex', 'check-alert-pulse');
-          badgeText.textContent = 'KING IN CHECK';
+          badgeText.textContent = 'CHECK';
         } else {
           badge.classList.add('hidden');
           badge.classList.remove('flex', 'check-alert-pulse');
@@ -3679,6 +3640,8 @@
 
         document.getElementById('btn-undo').disabled = this.engine.history.length === 0;
         document.getElementById('move-count-badge').textContent = this.engine.history.length;
+        const mobBadge = document.getElementById('move-count-badge-mobile');
+        if (mobBadge) mobBadge.textContent = this.engine.history.length;
 
         document.getElementById('captured-by-white').textContent = this.engine.capturedByWhite.length;
         document.getElementById('captured-by-black').textContent = this.engine.capturedByBlack.length;
@@ -3688,29 +3651,29 @@
 
         document.getElementById('graveyard-white').innerHTML = this.engine.capturedByWhite.length
           ? this.engine.capturedByWhite.map(t => `<span>${iconsW[t]}</span>`).join('')
-          : '<span class="text-[11px] text-slate-400 italic">None</span>';
+          : '<span class="text-[10px] text-slate-300/75 italic">None</span>';
 
         document.getElementById('graveyard-black').innerHTML = this.engine.capturedByBlack.length
           ? this.engine.capturedByBlack.map(t => `<span>${iconsB[t]}</span>`).join('')
-          : '<span class="text-[11px] text-slate-400 italic">None</span>';
+          : '<span class="text-[10px] text-slate-300/75 italic">None</span>';
 
         const moveListEl = document.getElementById('move-list');
         if (this.engine.history.length === 0) {
-          moveListEl.innerHTML = '<div class="text-slate-300/80 italic text-center py-3 font-sans">Select any piece or use WASD/Touch D-Pad to begin the duel.</div>';
+          moveListEl.innerHTML = '<div class="text-slate-200/80 italic text-center py-2 font-sans text-[11px]">Tap a piece or use WASD/D-Pad to begin.</div>';
         } else {
           let html = '';
           for (let i = 0; i < this.engine.history.length; i += 2) {
             const moveNum = Math.floor(i / 2) + 1;
             const wRec = this.engine.history[i];
             const bRec = this.engine.history[i + 1];
-            const wCap = wRec.captured ? '<span class="text-rose-400 ml-0.5">✦</span>' : '';
-            const bCap = bRec && bRec.captured ? '<span class="text-rose-400 ml-0.5">✦</span>' : '';
+            const wCap = wRec.captured ? '<span class="text-pink-300 ml-0.5">✦</span>' : '';
+            const bCap = bRec && bRec.captured ? '<span class="text-pink-300 ml-0.5">✦</span>' : '';
 
             html += `
-              <div class="grid grid-cols-7 items-center px-2 py-1 rounded-lg ${i + 2 >= this.engine.history.length ? 'bg-white/10' : 'bg-white/[0.03]'}">
-                <span class="col-span-1 text-slate-400">${moveNum}.</span>
-                <span class="col-span-3 text-amber-200 font-medium">${wRec.san}${wCap}</span>
-                <span class="col-span-3 text-purple-300 font-medium">${bRec ? bRec.san + bCap : ''}</span>
+              <div class="grid grid-cols-7 items-center px-2 py-0.5 rounded-lg ${i + 2 >= this.engine.history.length ? 'bg-white/15' : 'bg-white/[0.04]'}">
+                <span class="col-span-1 text-slate-300">${moveNum}.</span>
+                <span class="col-span-3 text-orange-100 font-medium">${wRec.san}${wCap}</span>
+                <span class="col-span-3 text-purple-200 font-medium">${bRec ? bRec.san + bCap : ''}</span>
               </div>
             `;
           }
@@ -3725,12 +3688,12 @@
         const subtitle = document.getElementById('gameover-subtitle');
 
         if (record.isCheckmate) {
-          const winner = record.color === 'w' ? 'Luminous Marble' : 'Volcanic Obsidian';
+          const winner = record.color === 'w' ? 'Pastel Pearl' : 'Dusk Lilac';
           title.textContent = 'Checkmate';
           subtitle.textContent = `${winner} triumphs in the ${REALM_CONFIGS[this.currentRealm].name} after ${this.engine.history.length} moves.`;
         } else {
           title.textContent = 'Stalemate';
-          subtitle.textContent = 'Neither arcane host can claim victory — the Sanctuary duel ends in a draw.';
+          subtitle.textContent = 'Neither host can claim victory — the Sanctuary duel ends in a serene draw.';
         }
 
         modal.classList.remove('hidden');
@@ -3738,7 +3701,7 @@
       }
 
       /*************************************************************************
-       * MAIN 60FPS ANIMATION LOOP (Pieces, Shatter, Ocean Waves, Grass, Leaves)
+       * 60FPS ANIMATION LOOP
        *************************************************************************/
       animate() {
         requestAnimationFrame(this.animate);
@@ -3746,43 +3709,40 @@
         const dt = Math.min(0.05, this.clock.getDelta());
         const elapsed = this.clock.getElapsedTime();
 
-        // 1. Piece Idle Levitation & Rune Glow
         for (const [, pGroup] of this.pieceMeshes) {
           const { bodyGroup, accentGroup, runeRing, matRune, phaseOffset, isSelected } = pGroup.userData;
-          const phase = elapsed * 2.2 + phaseOffset;
+          const phase = elapsed * 2.0 + phaseOffset;
 
           if (!this.isAnimating) {
-            const hoverAmp = isSelected ? 0.14 : 0.035;
-            const hoverOffset = isSelected ? 0.16 : 0.02;
+            const hoverAmp = isSelected ? 0.12 : 0.03;
+            const hoverOffset = isSelected ? 0.14 : 0.02;
             bodyGroup.position.y = hoverOffset + Math.sin(phase) * hoverAmp;
-            bodyGroup.rotation.z = Math.sin(phase * 0.7) * 0.022;
+            bodyGroup.rotation.z = Math.sin(phase * 0.7) * 0.018;
           }
 
           if (accentGroup && pGroup.userData.type !== 'n') {
-            accentGroup.rotation.y = elapsed * 0.85 + phaseOffset;
+            accentGroup.rotation.y = elapsed * 0.75 + phaseOffset;
           }
           if (runeRing) {
-            runeRing.scale.setScalar(1 + Math.sin(phase * 1.5) * 0.04);
+            runeRing.scale.setScalar(1 + Math.sin(phase * 1.4) * 0.035);
           }
           if (matRune && !this.isAnimating) {
-            matRune.emissiveIntensity = (isSelected ? 2.8 : 1.35) + Math.sin(phase * 1.8) * 0.35;
+            matRune.emissiveIntensity = (isSelected ? 2.0 : 0.95) + Math.sin(phase * 1.6) * 0.25;
           }
         }
 
-        // 2. Pulse Cursor & Move Indicators
         if (this.cursorGroup) {
-          const cs = 1 + Math.sin(elapsed * 4.5) * 0.06;
+          const cs = 1 + Math.sin(elapsed * 4.0) * 0.05;
           this.cursorGroup.scale.set(cs, 1, cs);
-          this.cursorGroup.children[0].rotation.z = elapsed * 0.6;
+          this.cursorGroup.children[0].rotation.z = elapsed * 0.5;
         }
         for (const child of this.indicatorGroup.children) {
           if (child.userData && child.userData.isPulseIndicator) {
-            const s = 1 + Math.sin(elapsed * 5) * 0.09;
+            const s = 1 + Math.sin(elapsed * 4.5) * 0.08;
             child.scale.set(s, s, 1);
           }
         }
 
-        // 3. Update 3D Physics Shatter Shards
         for (let i = this.shatterFragments.length - 1; i >= 0; i--) {
           const frag = this.shatterFragments[i];
           frag.age += dt;
@@ -3795,7 +3755,7 @@
             continue;
           }
 
-          frag.vel.y -= 13.5 * dt;
+          frag.vel.y -= 13.0 * dt;
           frag.mesh.position.addScaledVector(frag.vel, dt);
           frag.mesh.rotation.x += frag.rotVel.x * dt;
           frag.mesh.rotation.y += frag.rotVel.y * dt;
@@ -3804,7 +3764,7 @@
           const withinBoard = Math.abs(frag.mesh.position.x) < 5.8 && Math.abs(frag.mesh.position.z) < 5.8;
           if (withinBoard && frag.mesh.position.y < 0.06 && frag.vel.y < 0) {
             frag.mesh.position.y = 0.06;
-            frag.vel.y = -frag.vel.y * 0.44;
+            frag.vel.y = -frag.vel.y * 0.42;
             frag.vel.x *= 0.72;
             frag.vel.z *= 0.72;
             frag.rotVel.multiplyScalar(0.68);
@@ -3817,7 +3777,6 @@
           }
         }
 
-        // 4. Update Shockwaves & Trail Particles
         for (let i = this.shockwaves.length - 1; i >= 0; i--) {
           const sw = this.shockwaves[i];
           sw.age += dt;
@@ -3829,9 +3788,9 @@
             continue;
           }
           const p = sw.age / sw.maxAge;
-          const scale = 1 + p * 6.5;
+          const scale = 1 + p * 6.0;
           sw.mesh.scale.set(scale, scale, 1);
-          sw.mesh.material.opacity = (1 - p) * 0.9;
+          sw.mesh.material.opacity = (1 - p) * 0.85;
         }
 
         for (let i = this.trailParticles.length - 1; i >= 0; i--) {
@@ -3846,25 +3805,21 @@
           }
           tp.mesh.position.addScaledVector(tp.vel, dt);
           const p = tp.age / tp.maxAge;
-          tp.mesh.material.opacity = (1 - p) * 0.85;
+          tp.mesh.material.opacity = (1 - p) * 0.8;
           tp.mesh.scale.setScalar(1 - p * 0.7);
         }
 
-        // 5. Dynamic Environment Animations (Ocean Waves, Swaying Grass, Falling Leaves, Space Rings)
         if (this.oceanMesh && this.oceanBasePositions) {
           const posAttr = this.oceanMesh.geometry.attributes.position;
           const arr = posAttr.array;
           for (let i = 0; i < arr.length; i += 3) {
             const bx = this.oceanBasePositions[i];
             const bz = this.oceanBasePositions[i + 2];
-            const waveH =
-              Math.sin(bx * 0.22 + elapsed * 2.1) * 0.42 +
-              Math.cos(bz * 0.18 + elapsed * 1.6) * 0.35 +
-              Math.sin((bx + bz) * 0.12 - elapsed * 1.2) * 0.22;
-            arr[i + 1] = waveH;
+            arr[i + 1] =
+              Math.sin(bx * 0.20 + elapsed * 1.8) * 0.36 +
+              Math.cos(bz * 0.16 + elapsed * 1.4) * 0.30;
           }
           posAttr.needsUpdate = true;
-          this.oceanMesh.geometry.computeVertexNormals();
         }
 
         if (this.grassInstancedMesh && this.grassDummyMatrices.length > 0) {
@@ -3872,7 +3827,7 @@
           for (let i = 0; i < this.grassDummyMatrices.length; i++) {
             const g = this.grassDummyMatrices[i];
             dummy.position.set(g.x, -3.12, g.z);
-            const sway = Math.sin(elapsed * 2.4 + g.phase + g.x * 0.2) * 0.18;
+            const sway = Math.sin(elapsed * 2.0 + g.phase + g.x * 0.2) * 0.15;
             dummy.rotation.set(sway, g.rotY, sway * 0.5);
             dummy.scale.set(1, g.scaleY, 1);
             dummy.updateMatrix();
@@ -3884,7 +3839,7 @@
         if (this.fallingLeaves.length > 0) {
           for (const lf of this.fallingLeaves) {
             lf.mesh.position.y -= lf.speedY * dt;
-            lf.mesh.position.x += Math.sin(elapsed * 1.5 + lf.swayPhase) * 0.015;
+            lf.mesh.position.x += Math.sin(elapsed * 1.4 + lf.swayPhase) * 0.012;
             lf.mesh.rotation.x += lf.rotSpeed * dt;
             lf.mesh.rotation.z += lf.rotSpeed * 0.7 * dt;
             if (lf.mesh.position.y < -3.0) {
@@ -3908,19 +3863,18 @@
           const speeds = this.envParticles.geometry.attributes.aSpeed.array;
           for (let i = 0; i < speeds.length; i++) {
             positions[i * 3 + 1] += speeds[i] * dt;
-            positions[i * 3] += Math.sin(elapsed * 0.5 + i) * 0.003;
+            positions[i * 3] += Math.sin(elapsed * 0.5 + i) * 0.0025;
             if (positions[i * 3 + 1] > 12) positions[i * 3 + 1] = -2;
           }
           this.envParticles.geometry.attributes.position.needsUpdate = true;
         }
 
         if (this.actionLight.intensity > 0) {
-          this.actionLight.intensity = Math.max(0, this.actionLight.intensity - dt * 11);
+          this.actionLight.intensity = Math.max(0, this.actionLight.intensity - dt * 9);
         }
 
-        // 6. Smooth Camera Damping + Screen Shake
         const cs = this.cameraState;
-        const damping = 1 - Math.exp(-7.5 * dt);
+        const damping = 1 - Math.exp(-8.0 * dt);
         cs.theta += (cs.desiredTheta - cs.theta) * damping;
         cs.phi += (cs.desiredPhi - cs.phi) * damping;
         cs.radius += (cs.desiredRadius - cs.radius) * damping;
@@ -3936,7 +3890,7 @@
           this.camera.position.x += (Math.random() - 0.5) * cs.shakeIntensity;
           this.camera.position.y += (Math.random() - 0.5) * cs.shakeIntensity;
           this.camera.position.z += (Math.random() - 0.5) * cs.shakeIntensity;
-          cs.shakeIntensity *= Math.exp(-8.5 * dt);
+          cs.shakeIntensity *= Math.exp(-9.0 * dt);
         } else {
           cs.shakeIntensity = 0;
         }
@@ -3946,9 +3900,9 @@
       }
     }
 
-    window.onload = function () {
+    window.addEventListener('DOMContentLoaded', () => {
       window.wizardChessApp = new WizardsChessApp();
-    };
+    });
   </script>
 </body>
 </html>
