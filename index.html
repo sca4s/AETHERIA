@@ -36,8 +36,8 @@
   <!-- =========================================================================
        STARTING LAUNCHER MODAL
        ========================================================================= -->
-  <div id="start-screen-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/40 backdrop-blur-md transition-opacity duration-300 overflow-y-auto smooth-scroll-container">
-    <div class="spatial-modal ui-scalable-modal rounded-[28px] sm:rounded-[32px] p-3.5 sm:p-6 max-w-xl w-full my-auto text-center relative overflow-hidden max-h-[94dvh] overflow-y-auto smooth-scroll-container">
+  <div id="start-screen-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-slate-950/40 backdrop-blur-md transition-opacity duration-300 overflow-y-auto smooth-scroll-container">
+    <div class="spatial-modal rounded-[28px] sm:rounded-[32px] p-4 sm:p-6 max-w-xl w-full my-auto text-center relative overflow-hidden max-h-[94dvh] overflow-y-auto smooth-scroll-container">
 
       <!-- Soft Pastel Ambient Orbs -->
       <div class="pointer-events-none absolute -top-20 -left-20 w-52 h-52 rounded-full bg-pink-200/20 blur-3xl ambient-orb"></div>
@@ -112,7 +112,7 @@
                 </span>
               </div>
               <p class="text-[10px] sm:text-[11px] text-slate-200/85 mt-0.5 leading-snug">
-                Touch tap selection, 1-finger orbit, pinch-to-zoom &amp; floating D-Pad controller.
+                Direct touch tap selection, 1-finger orbit &amp; 2-finger pinch-to-zoom.
               </p>
             </div>
           </div>
@@ -366,47 +366,50 @@
   </div>
 
   <!-- =========================================================================
-       PROPORTIONAL & NON-CLIPPING TOP HUD BAR
-       (FITS 100% WITHIN VIEWPORT WIDTH ON ALL SCREEN SIZES)
+       STRICTLY NON-OVERLAPPING, PROPORTIONAL TOP HUD BAR
        ========================================================================= -->
   <header id="top-hud-header" class="fixed top-0 left-0 right-0 z-20 pointer-events-none flex flex-col hud-header-shell">
-    <div class="w-full max-w-[1920px] mx-auto flex flex-col gap-1">
+    <div class="w-full max-w-[1880px] mx-auto flex flex-col gap-1">
 
-      <!-- Row 1: Brand + Turn Status + Primary Action Strip (Wraps cleanly so right side is NEVER cut off) -->
-      <div class="w-full flex flex-wrap items-center justify-between gap-1 pointer-events-auto">
+      <!-- Top Row: Brand & Turn Status (Left) + Mobile Quick Utilities (Right) + Desktop Controls -->
+      <div class="w-full flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-1">
 
-        <!-- Brand & Turn Chip Group -->
-        <div class="spatial-surface rounded-full hud-brand-bar flex items-center gap-1.5 min-w-0 max-w-full overflow-hidden">
-          <button id="btn-open-launcher" class="flex items-center gap-1.5 pr-1.5 border-r border-white/20 text-left shrink-0" title="Open Launcher, Side Selection, Names & Graphics Settings">
-            <div class="hud-logo-box rounded-xl bg-gradient-to-br from-rose-200/35 to-sky-200/35 border border-white/40 flex items-center justify-center shrink-0">
-              <svg class="w-3.5 h-3.5" viewBox="0 0 120 120" fill="none">
-                <path d="M60 18 L74 42 L100 30 L86 72 L34 72 L20 30 L46 42 Z" fill="#fed7aa" />
-                <rect x="30" y="78" width="60" height="12" rx="6" fill="#fbcfe8" />
-              </svg>
-            </div>
-            <div class="leading-tight">
-              <div class="flex items-center gap-1">
-                <span class="font-gothic hud-brand-title font-bold tracking-wider text-rose-100">AETHERIA</span>
-                <span id="hud-device-badge" class="hud-micro-badge font-mono-code rounded-full bg-white/15 text-sky-100 border border-white/20">PC</span>
-                <span id="hud-def-badge" class="hud-micro-badge font-mono-code rounded-full bg-emerald-300/20 text-emerald-100 border border-emerald-200/30">HD</span>
+        <!-- Row 1A: Brand + Turn Indicator (Left) AND Separate Mobile Quick Pill (Right) -->
+        <div class="w-full lg:w-auto flex items-center justify-between gap-1.5 pointer-events-auto min-w-0">
+
+          <!-- Left Pill: Brand + Turn Chip (Strictly separated with shrink-0 so texts NEVER overlap) -->
+          <div class="spatial-surface rounded-full hud-brand-bar flex items-center gap-1.5 min-w-0 flex-1 lg:flex-initial overflow-hidden">
+            <button id="btn-open-launcher" class="flex items-center gap-1.5 pr-1.5 border-r border-white/20 text-left shrink-0" title="Open Launcher, Side Selection, Names & Graphics Settings">
+              <div class="hud-logo-box rounded-xl bg-gradient-to-br from-rose-200/35 to-sky-200/35 border border-white/40 flex items-center justify-center shrink-0">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 120 120" fill="none">
+                  <path d="M60 18 L74 42 L100 30 L86 72 L34 72 L20 30 L46 42 Z" fill="#fed7aa" />
+                  <rect x="30" y="78" width="60" height="12" rx="6" fill="#fbcfe8" />
+                </svg>
               </div>
-              <p class="hud-sub-credit font-mono-code tracking-widest text-orange-100/90">MADE BY SOU.</p>
+              <div class="leading-tight shrink-0">
+                <div class="flex items-center gap-1">
+                  <span class="font-gothic hud-brand-title font-bold tracking-wider text-rose-100">AETHERIA</span>
+                  <span id="hud-device-badge" class="hud-micro-badge font-mono-code rounded-full bg-white/15 text-sky-100 border border-white/20">PC</span>
+                  <span id="hud-def-badge" class="hud-micro-badge font-mono-code rounded-full bg-emerald-300/20 text-emerald-100 border border-emerald-200/30">HD</span>
+                </div>
+                <p class="hud-sub-credit font-mono-code tracking-widest text-orange-100/90">MADE BY SOU.</p>
+              </div>
+            </button>
+
+            <!-- Turn Indicator Chip -->
+            <div id="turn-chip" class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 border border-white/20 min-w-0 shrink">
+              <span id="turn-dot" class="w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa] shrink-0"></span>
+              <span id="turn-text" class="hud-turn-label font-semibold tracking-wide text-orange-100 truncate">Pearl's Turn</span>
             </div>
-          </button>
 
-          <!-- Turn Indicator -->
-          <div id="turn-chip" class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 border border-white/20 min-w-0 shrink">
-            <span id="turn-dot" class="w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa] shrink-0"></span>
-            <span id="turn-text" class="hud-turn-label font-semibold tracking-wide text-orange-100 truncate">Pearl's Turn</span>
+            <!-- Check / Checkmate Status Alert -->
+            <div id="status-badge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-pink-300/30 border border-pink-200/60 text-pink-100 shrink-0">
+              <span id="status-badge-text">CHECK</span>
+            </div>
           </div>
 
-          <!-- Status Alert -->
-          <div id="status-badge" class="hidden items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-pink-300/30 border border-pink-200/60 text-pink-100 shrink-0">
-            <span id="status-badge-text">CHECK</span>
-          </div>
-
-          <!-- Mobile-only Quick Chronicle, Def & Sound Buttons Integrated Inside Row 1 so they never clip off-screen -->
-          <div class="flex lg:hidden items-center gap-1 ml-auto pl-1 border-l border-white/15 shrink-0">
+          <!-- Right Pill (Mobile/Tablet): Completely Separate Surface so it NEVER overlaps Turn Text -->
+          <div class="flex lg:hidden items-center gap-1 spatial-surface rounded-full p-1 shrink-0">
             <button id="btn-def-mobile" class="spatial-pill hud-pill-compact" title="Switch High / Low Def (2GB RAM Mode)">
               <span id="label-def-mobile" class="font-mono-code text-emerald-100">HD</span>
             </button>
@@ -424,76 +427,76 @@
           </div>
         </div>
 
-        <!-- Primary Controls Strip: Wraps or Scrolls cleanly inside 100% width so right-side pills never clip -->
-        <nav aria-label="Primary Controls" class="spatial-surface rounded-2xl sm:rounded-full hud-nav-strip flex flex-wrap items-center justify-center sm:justify-start gap-1 pointer-events-auto max-w-full">
-          <button id="btn-mode" class="spatial-pill active-sky hud-pill" title="Toggle vs Automaton or 2P Pass & Play">
+        <!-- Row 1B: Primary Controls Strip (Horizontally scrollable & proportional so no button ever squishes or clips) -->
+        <nav aria-label="Primary Controls" class="spatial-surface rounded-full hud-nav-strip flex items-center gap-1 overflow-x-auto no-scrollbar smooth-scroll-x pointer-events-auto max-w-full">
+          <button id="btn-mode" class="spatial-pill active-sky hud-pill shrink-0" title="Toggle vs Automaton or 2P Pass & Play">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/>
             </svg>
             <span id="label-mode">vs Automaton</span>
           </button>
 
-          <button id="btn-difficulty" class="spatial-pill hud-pill" title="Cycle Automaton Intelligence">
+          <button id="btn-difficulty" class="spatial-pill hud-pill shrink-0" title="Cycle Automaton Intelligence">
             <span id="label-difficulty">Adept</span>
           </button>
 
-          <button id="btn-swap-sides" class="spatial-pill hud-pill" title="Swap Your Side of the Board (Pearl / Lilac)">
+          <button id="btn-swap-sides" class="spatial-pill hud-pill shrink-0" title="Swap Your Side of the Board (Pearl / Lilac)">
             <svg class="svg-icon text-purple-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>
             </svg>
-            <span id="label-player-side" class="max-w-[96px] truncate">Side: Pearl</span>
+            <span id="label-player-side" class="max-w-[92px] truncate">Side: Pearl</span>
           </button>
 
-          <div class="h-3.5 w-[1px] bg-white/20 mx-0.5 shrink-0 hidden sm:block"></div>
+          <div class="h-3.5 w-[1px] bg-white/20 mx-0.5 shrink-0"></div>
 
-          <button id="btn-cam-white" class="spatial-pill active-peach hud-pill" title="Pearl Camera View">
-            <span id="label-cam-white" class="max-w-[78px] truncate">Pearl</span>
+          <button id="btn-cam-white" class="spatial-pill active-peach hud-pill shrink-0" title="Pearl Camera View">
+            <span id="label-cam-white" class="max-w-[72px] truncate">Pearl</span>
           </button>
-          <button id="btn-cam-black" class="spatial-pill hud-pill" title="Lavender Camera View">
-            <span id="label-cam-black" class="max-w-[78px] truncate">Lilac</span>
+          <button id="btn-cam-black" class="spatial-pill hud-pill shrink-0" title="Lavender Camera View">
+            <span id="label-cam-black" class="max-w-[72px] truncate">Lilac</span>
           </button>
-          <button id="btn-cam-top" class="spatial-pill hud-pill" title="Overhead Tactical View">
+          <button id="btn-cam-top" class="spatial-pill hud-pill shrink-0" title="Overhead Tactical View">
             <span>Top</span>
           </button>
-          <button id="btn-cam-cinematic" class="spatial-pill active-sky hud-pill" title="Toggle Action Camera on Captures">
+          <button id="btn-cam-cinematic" class="spatial-pill active-sky hud-pill shrink-0" title="Toggle Action Camera on Captures">
             <span>Action Cam</span>
           </button>
 
-          <div class="h-3.5 w-[1px] bg-white/20 mx-0.5 shrink-0 hidden sm:block"></div>
+          <div class="h-3.5 w-[1px] bg-white/20 mx-0.5 shrink-0"></div>
 
-          <button id="btn-strike-demo" class="spatial-pill action-blush hud-pill" title="Trigger Instant Capture & Shatter">
+          <button id="btn-strike-demo" class="spatial-pill action-blush hud-pill shrink-0" title="Trigger Instant Capture & Shatter">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <span>Strike</span>
           </button>
 
-          <button id="btn-undo" class="spatial-pill hud-pill" title="Undo Move" disabled>
+          <button id="btn-undo" class="spatial-pill hud-pill shrink-0" title="Undo Move" disabled>
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
             </svg>
             <span class="hidden sm:inline">Undo</span>
           </button>
 
-          <button id="btn-reset" class="spatial-pill hud-pill" title="Reset Sanctuary">
+          <button id="btn-reset" class="spatial-pill hud-pill shrink-0" title="Reset Sanctuary">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
             </svg>
             <span class="hidden sm:inline">Reset</span>
           </button>
 
-          <button id="btn-def-toggle" class="spatial-pill hud-pill hidden lg:inline-flex" title="Toggle High Definition / Low Definition (2GB RAM Mode)">
+          <button id="btn-def-toggle" class="spatial-pill hud-pill shrink-0 hidden lg:inline-flex" title="Toggle High Definition / Low Definition (2GB RAM Mode)">
             <svg class="svg-icon text-emerald-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
             </svg>
             <span id="label-def-desktop" class="font-mono-code text-emerald-100">HD</span>
           </button>
 
-          <button id="btn-sound" class="spatial-pill active-peach hud-pill hidden lg:inline-flex" title="Toggle Audio">
+          <button id="btn-sound" class="spatial-pill active-peach hud-pill shrink-0 hidden lg:inline-flex" title="Toggle Audio">
             <svg id="icon-sound" class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
             </svg>
           </button>
 
-          <button id="btn-history-toggle" class="spatial-pill hud-pill hidden lg:inline-flex" title="Toggle Chronicle">
+          <button id="btn-history-toggle" class="spatial-pill hud-pill shrink-0 hidden lg:inline-flex" title="Toggle Chronicle">
             <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
@@ -502,37 +505,37 @@
         </nav>
       </div>
 
-      <!-- Row 2: Realm Switcher Bar (Fits 100% inside screen width) -->
+      <!-- Row 2: Realm Switcher Bar (Non-squished pills with smooth horizontal scroll) -->
       <div class="w-full flex items-center pointer-events-none">
         <div class="spatial-surface rounded-full hud-realm-strip flex items-center gap-1 overflow-x-auto no-scrollbar smooth-scroll-x max-w-full pointer-events-auto">
           <span class="hud-realm-tag font-bold uppercase tracking-wider text-rose-100/90 px-1.5 shrink-0">
             Realm:
           </span>
-          <button data-env="cathedral" class="hud-env-btn spatial-pill active-peach hud-realm-pill">
+          <button data-env="cathedral" class="hud-env-btn spatial-pill active-peach hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-rose-200 shrink-0"></span>
             <span>Cathedral</span>
           </button>
-          <button data-env="night" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="night" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-indigo-200 shrink-0"></span>
             <span>Dream Night</span>
           </button>
-          <button data-env="day" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="day" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-sky-200 shrink-0"></span>
             <span>Morning Sky</span>
           </button>
-          <button data-env="grass" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="grass" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-emerald-200 shrink-0"></span>
             <span>Mint Meadow</span>
           </button>
-          <button data-env="ocean" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="ocean" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-cyan-200 shrink-0"></span>
             <span>Aqua Lagoon</span>
           </button>
-          <button data-env="space" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="space" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-purple-200 shrink-0"></span>
             <span>Lilac Nebula</span>
           </button>
-          <button data-env="sand" class="hud-env-btn spatial-pill hud-realm-pill">
+          <button data-env="sand" class="hud-env-btn spatial-pill hud-realm-pill shrink-0">
             <span class="w-2 h-2 rounded-full bg-orange-200 shrink-0"></span>
             <span>Peach Dunes</span>
           </button>
@@ -543,39 +546,40 @@
   </header>
 
   <!-- =========================================================================
-       SMARTPHONE TOUCH MODE: COMPACT FLOATING D-PAD & CAMERA ORBIT BAR
+       SMARTPHONE TOUCH MODE: FLOATING D-PAD & CAMERA ORBIT BAR
+       (Preserved in DOM, hidden in Touch Mode because direct touch tap & orbit work natively)
        ========================================================================= -->
-  <div id="mobile-touch-dock" class="fixed bottom-2 left-2 z-20 hidden items-end gap-1.5 pointer-events-auto ui-scalable-bottom-left">
-    <div class="spatial-surface rounded-[22px] p-1.5 flex flex-col items-center gap-1">
+  <div id="mobile-touch-dock" class="fixed bottom-2.5 left-2.5 z-20 hidden items-end gap-2 pointer-events-auto touch-dock-retired">
+    <div class="spatial-surface rounded-[22px] p-2 flex flex-col items-center gap-1 shrink-0">
       <div class="text-[8px] font-mono-code uppercase tracking-widest text-sky-100/80">Cursor</div>
-      <button data-dpad="up" class="spatial-pill dpad-btn !p-0 !rounded-xl" aria-label="Up">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+      <button data-dpad="up" class="spatial-pill dpad-btn" aria-label="Up">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
       </button>
-      <div class="flex items-center gap-1">
-        <button data-dpad="left" class="spatial-pill dpad-btn !p-0 !rounded-xl" aria-label="Left">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+      <div class="flex items-center gap-1 shrink-0">
+        <button data-dpad="left" class="spatial-pill dpad-btn" aria-label="Left">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <button data-dpad="select" class="spatial-pill active-peach dpad-act-btn !p-0 !rounded-xl font-bold text-[9px]">
+        <button data-dpad="select" class="spatial-pill active-peach dpad-act-btn font-bold text-[10px]">
           ACT
         </button>
-        <button data-dpad="right" class="spatial-pill dpad-btn !p-0 !rounded-xl" aria-label="Right">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        <button data-dpad="right" class="spatial-pill dpad-btn" aria-label="Right">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
-      <button data-dpad="down" class="spatial-pill dpad-btn !p-0 !rounded-xl" aria-label="Down">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+      <button data-dpad="down" class="spatial-pill dpad-btn" aria-label="Down">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
       </button>
     </div>
 
-    <div class="spatial-surface rounded-[18px] p-1.5 flex flex-col gap-1">
-      <button id="btn-touch-rot-left" class="spatial-pill dpad-aux-btn !p-0 !rounded-xl" title="Orbit Left">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+    <div class="spatial-surface rounded-[18px] p-1.5 flex flex-col gap-1 shrink-0">
+      <button id="btn-touch-rot-left" class="spatial-pill dpad-aux-btn" title="Orbit Left">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
-      <button id="btn-touch-rot-right" class="spatial-pill dpad-aux-btn !p-0 !rounded-xl" title="Orbit Right">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+      <button id="btn-touch-rot-right" class="spatial-pill dpad-aux-btn" title="Orbit Right">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
       </button>
-      <button id="btn-touch-zoom" class="spatial-pill dpad-aux-btn !p-0 !rounded-xl" title="Toggle Zoom">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>
+      <button id="btn-touch-zoom" class="spatial-pill dpad-aux-btn" title="Toggle Zoom">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>
       </button>
     </div>
   </div>
@@ -583,7 +587,7 @@
   <!-- =========================================================================
        PC KEYBOARD HINT BAR (Bottom-Left)
        ========================================================================= -->
-  <div id="pc-control-hint" class="fixed bottom-2.5 left-2.5 z-20 pointer-events-none hidden md:flex items-center gap-2 spatial-surface rounded-full px-3 py-1 text-[10px] sm:text-[11px] text-slate-100 ui-scalable-bottom-left">
+  <div id="pc-control-hint" class="fixed bottom-2.5 left-2.5 z-20 pointer-events-none hidden md:flex items-center gap-2 spatial-surface rounded-full px-3 py-1 text-[10px] sm:text-[11px] text-slate-100">
     <span class="w-2 h-2 rounded-full bg-orange-200 shrink-0"></span>
     <span class="truncate">
       <strong class="text-orange-100">Controls:</strong> Click or <kbd class="px-1 py-0.5 rounded bg-white/15 font-mono-code text-[9px]">WASD/Arrows</kbd> + <kbd class="px-1 py-0.5 rounded bg-white/15 font-mono-code text-[9px]">Enter</kbd> • <kbd class="px-1 py-0.5 rounded bg-white/15 font-mono-code text-[9px]">Q/E</kbd> Orbit • <kbd class="px-1 py-0.5 rounded bg-white/15 font-mono-code text-[9px]">1-7</kbd> Realms
@@ -593,7 +597,7 @@
   <!-- =========================================================================
        COLLAPSIBLE MOVE CHRONICLE & SPOILS OVERLAY (Bottom-Right)
        ========================================================================= -->
-  <aside id="history-panel" class="fixed bottom-2.5 right-2.5 z-30 w-60 sm:w-72 spatial-surface rounded-[24px] p-3 transition-all duration-300 transform translate-y-0 opacity-100 pointer-events-auto ui-scalable-bottom-right">
+  <aside id="history-panel" class="fixed bottom-2.5 right-2.5 z-30 w-64 sm:w-72 spatial-surface rounded-[24px] p-3 transition-all duration-300 transform translate-y-0 opacity-100 pointer-events-auto">
     <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/15">
       <div class="flex items-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-pink-200"></span>
@@ -629,7 +633,7 @@
     </div>
 
     <div id="move-list" class="max-h-24 overflow-y-auto pr-1 space-y-1 text-[10px] sm:text-[11px] font-mono-code smooth-scroll-container">
-      <div class="text-slate-200/80 italic text-center py-1.5 font-sans text-[10px]">Tap a piece or use WASD/D-Pad to begin.</div>
+      <div class="text-slate-200/80 italic text-center py-1.5 font-sans text-[10px]">Tap a piece or use WASD to begin.</div>
     </div>
   </aside>
 
@@ -637,7 +641,7 @@
        PAWN PROMOTION MODAL
        ========================================================================= -->
   <div id="promotion-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/50 backdrop-blur-md p-4">
-    <div class="spatial-modal ui-scalable-modal rounded-[30px] p-6 max-w-sm w-full text-center">
+    <div class="spatial-modal rounded-[30px] p-6 max-w-sm w-full text-center">
       <h3 class="font-gothic text-lg font-bold text-rose-100 tracking-wide mb-1">Rite of Ascension</h3>
       <p class="text-xs text-slate-200 mb-4">Your Pawn has reached the eighth rank. Choose its ascended vessel:</p>
       <div class="grid grid-cols-2 gap-2.5">
@@ -665,7 +669,7 @@
        ENDGAME BANNER MODAL
        ========================================================================= -->
   <div id="gameover-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/55 backdrop-blur-md p-4 pointer-events-auto">
-    <div class="spatial-modal ui-scalable-modal rounded-[32px] p-6 max-w-md w-full text-center">
+    <div class="spatial-modal rounded-[32px] p-6 max-w-md w-full text-center">
       <h2 id="gameover-title" class="font-gothic text-2xl font-extrabold text-rose-100 tracking-wider mb-1">Checkmate</h2>
       <p class="text-[10px] font-mono-code tracking-widest text-orange-200 mb-3">AETHERIA • MADE BY SOU.</p>
       <p id="gameover-subtitle" class="text-sm text-slate-100 mb-6">Pastel Pearl triumphs in the Sanctuary.</p>
