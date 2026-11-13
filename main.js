@@ -247,7 +247,7 @@ class WizardChessEngine {
   restoreState(state) {
     this.board = state.board.map(row => row.map(cell => (cell ? { ...cell } : null)));
     this.turn = state.turn;
-    this.castling = { ...state.castling };
+    this.castling = { ...this.castling };
     this.enPassant = state.enPassant ? { ...state.enPassant } : null;
     this.halfMoveClock = state.halfMoveClock;
     this.fullMoveNumber = state.fullMoveNumber;
@@ -719,10 +719,11 @@ class WizardChessEngine {
 }
 
 /***************************************************************************
- * 3. PASTEL TEXTURE & GEOMETRY HELPERS
+ * 3. PASTEL TEXTURE & GEOMETRY HELPERS (WITH TEXTURE CACHING FOR ZERO LAG)
  ***************************************************************************/
 const SQUARE_SIZE = 1.35;
 const BOARD_OFFSET = (7 * SQUARE_SIZE) / 2;
+const STONE_TEXTURE_CACHE = new Map();
 
 function boardToWorld(r, c) {
   return new THREE.Vector3(
@@ -733,6 +734,11 @@ function boardToWorld(r, c) {
 }
 
 function createStoneTexture(baseHex, veinHex, noiseStrength = 12) {
+  const cacheKey = `${baseHex}_${veinHex}_${noiseStrength}`;
+  if (STONE_TEXTURE_CACHE.has(cacheKey)) {
+    return STONE_TEXTURE_CACHE.get(cacheKey);
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = 256;
   canvas.height = 256;
@@ -767,6 +773,7 @@ function createStoneTexture(baseHex, veinHex, noiseStrength = 12) {
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
+  STONE_TEXTURE_CACHE.set(cacheKey, tex);
   return tex;
 }
 
@@ -790,6 +797,7 @@ function createLabelTexture(char) {
 const REALM_CONFIGS = {
   cathedral: {
     name: 'Pastel Sanctuary',
+    themeMode: 'dark',
     bgHex: 0x231f33,
     fogDensity: 0.017,
     ambientHex: 0x5e548e,
@@ -807,6 +815,7 @@ const REALM_CONFIGS = {
   },
   night: {
     name: 'Dream Night Glade',
+    themeMode: 'dark',
     bgHex: 0x1a1b2f,
     fogDensity: 0.014,
     ambientHex: 0x43497a,
@@ -824,6 +833,7 @@ const REALM_CONFIGS = {
   },
   day: {
     name: 'Morning Sky Citadel',
+    themeMode: 'light',
     bgHex: 0x8ecae6,
     fogDensity: 0.009,
     ambientHex: 0xe0f2fe,
@@ -841,6 +851,7 @@ const REALM_CONFIGS = {
   },
   grass: {
     name: 'Mint Blossom Meadow',
+    themeMode: 'dark',
     bgHex: 0x2b413c,
     fogDensity: 0.015,
     ambientHex: 0x52796f,
@@ -858,6 +869,7 @@ const REALM_CONFIGS = {
   },
   ocean: {
     name: 'Aqua Pastel Lagoon',
+    themeMode: 'dark',
     bgHex: 0x1d3549,
     fogDensity: 0.013,
     ambientHex: 0x457b9d,
@@ -875,6 +887,7 @@ const REALM_CONFIGS = {
   },
   space: {
     name: 'Lilac Astral Nebula',
+    themeMode: 'dark',
     bgHex: 0x191326,
     fogDensity: 0.008,
     ambientHex: 0x4a3b69,
@@ -892,6 +905,7 @@ const REALM_CONFIGS = {
   },
   sand: {
     name: 'Peach Blush Dunes',
+    themeMode: 'light',
     bgHex: 0x4a3531,
     fogDensity: 0.015,
     ambientHex: 0x8d6e63,
@@ -908,6 +922,7 @@ const REALM_CONFIGS = {
     trimColor: 0xfed7aa
   }
 };
+
 /***************************************************************************
  * 5. MAIN 3D AETHERIA CHESS APPLICATION CONTROLLER
  ***************************************************************************/
@@ -916,6 +931,12 @@ class WizardsChessApp {
     this.engine = new WizardChessEngine();
 
     this.controlPlatform = 'pc';
+    this.graphicsDef = 'high'; // 'high' (HD) or 'low' (2GB RAM Optimized)
+    this.playerColor = 'w'; // 'w' (Pastel Pearl / South) or 'b' (Dusk Lilac / North)
+    this.playerNameWhite = 'Pearl';
+    this.playerNameBlack = 'Lilac';
+    this.hasLaunchedSanctuary = false;
+
     this.currentRealm = 'cathedral';
     this.gameMode = 'ai';
     this.aiDifficulty = 'adept';
@@ -929,6 +950,9 @@ class WizardsChessApp {
 
     this.squareMeshes = [];
     this.pieceMeshes = new Map();
+    this.cachedInteractables = [];
+    this.interactablesDirty = true;
+
     this.shatterFragments = [];
     this.trailParticles = [];
     this.shockwaves = [];
@@ -938,11 +962,45 @@ class WizardsChessApp {
     this.oceanBasePositions = null;
     this.grassInstancedMesh = null;
     this.grassDummyMatrices = [];
+    this.reusableDummy = new THREE.Object3D();
     this.fallingLeaves = [];
     this.envParticles = null;
     this.spaceRings = [];
 
-    // Base Camera Radius (automatically scaled by screen aspect ratio)
+    // Smooth Dark <-> White / Realm Chromatic Interpolation State
+    this.themeTransition = {
+      active: false,
+      elapsed: 0,
+      duration: 0.58,
+      fromBg: new THREE.Color(0x231f33),
+      toBg: new THREE.Color(0x231f33),
+      fromFog: new THREE.Color(0x231f33),
+      toFog: new THREE.Color(0x231f33),
+      fromFogDensity: 0.017,
+      toFogDensity: 0.017,
+      fromAmbient: new THREE.Color(0x5e548e),
+      toAmbient: new THREE.Color(0x5e548e),
+      fromAmbientInt: 1.55,
+      toAmbientInt: 1.55,
+      fromSpot: new THREE.Color(0xfff1f2),
+      toSpot: new THREE.Color(0xfff1f2),
+      fromSpotInt: 2.1,
+      toSpotInt: 2.1,
+      fromRimW: new THREE.Color(0xe9d5ff),
+      toRimW: new THREE.Color(0xe9d5ff),
+      fromRimE: new THREE.Color(0xfed7aa),
+      toRimE: new THREE.Color(0xfed7aa),
+      fromFrame: new THREE.Color(0x3b3355),
+      toFrame: new THREE.Color(0x3b3355),
+      fromTrim: new THREE.Color(0xf9dcc4),
+      toTrim: new THREE.Color(0xf9dcc4),
+      fromLightTint: new THREE.Color(0xffffff),
+      toLightTint: new THREE.Color(0xffffff),
+      fromDarkTint: new THREE.Color(0xffffff),
+      toDarkTint: new THREE.Color(0xffffff)
+    };
+
+    // Base Camera Radius (automatically scaled by screen aspect ratio & HUD safe zones)
     this.baseRadius = 15.6;
     this.cameraState = {
       theta: 0,
@@ -960,15 +1018,17 @@ class WizardsChessApp {
     this.clock = new THREE.Clock();
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
+    this.frameCounter = 0;
 
     this.initThreeScene();
     this.initSharedMaterials();
     this.buildChessBoard();
     this.buildCursorMesh();
-    this.setEnvironmentRealm('cathedral');
+    this.setEnvironmentRealm('cathedral', true);
     this.syncPiecesWithEngine();
     this.initLauncherAndDeviceDetection();
     this.initControlsAndEvents();
+    this.computeResponsiveUIScale();
     this.adaptCameraToScreenAspect(true);
     this.updateHUD();
 
@@ -977,8 +1037,36 @@ class WizardsChessApp {
   }
 
   /**
-   * Automatically adapts Camera FOV and Orbit Distance so the entire 8x8
-   * chessboard fits inside ANY screen aspect ratio (portrait phone, fold, tablet, desktop)
+   * Computes fluid proportional UI scale (--ui-scale) based on exact screen dimensions
+   * so larger screens get larger UIs, smaller screens get smaller UIs, and no HUD panels overlap.
+   */
+  computeResponsiveUIScale() {
+    const w = window.innerWidth || 1024;
+    const h = window.innerHeight || 768;
+    const shortSide = Math.min(w, h);
+
+    let scale = 1.0;
+    if (w < 360) scale = 0.76;
+    else if (w < 480) scale = 0.84;
+    else if (w < 640) scale = 0.90;
+    else if (w < 1024) scale = 0.95;
+    else if (w < 1440) scale = 1.0;
+    else if (w < 1920) scale = 1.08;
+    else if (w < 2560) scale = 1.18;
+    else scale = 1.30;
+
+    if (shortSide < 620) {
+      scale = Math.min(scale, 0.78);
+    } else if (shortSide < 720) {
+      scale = Math.min(scale, 0.88);
+    }
+
+    document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
+  }
+
+  /**
+   * Automatically adapts Camera FOV, Vertical Target Offset, and Orbit Distance
+   * so the 8x8 chessboard never overlaps the Top HUD or Bottom Touch Dock / Chronicle.
    */
   getAspectAdjustedRadius(baseR = this.baseRadius) {
     const container = document.getElementById('canvas-container');
@@ -986,14 +1074,20 @@ class WizardsChessApp {
     const h = container ? container.clientHeight : window.innerHeight;
     const aspect = Math.max(0.35, w / Math.max(1, h));
 
+    const headerEl = document.getElementById('top-hud-header');
+    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 84;
+    const topRatio = Math.min(0.35, headerH / Math.max(1, h));
+    const safeClearanceMultiplier = 1 + topRatio * 0.52;
+
     if (aspect < 1.0) {
-      // Portrait screen: scale camera distance inversely with aspect so board never clips horizontally
-      return Math.min(30, baseR / Math.pow(aspect, 0.78));
+      return Math.min(32, (baseR / Math.pow(aspect, 0.78)) * safeClearanceMultiplier);
     }
-    return baseR;
+    return baseR * Math.max(1.0, safeClearanceMultiplier * 0.96);
   }
 
   adaptCameraToScreenAspect(instant = false) {
+    this.computeResponsiveUIScale();
+
     const container = document.getElementById('canvas-container');
     const w = container ? container.clientWidth : window.innerWidth;
     const h = container ? container.clientHeight : window.innerHeight;
@@ -1002,13 +1096,218 @@ class WizardsChessApp {
     this.camera.aspect = aspect;
     this.camera.fov = aspect < 0.85 ? 46 : 42;
     this.camera.updateProjectionMatrix();
+
+    const maxPixelRatio = this.graphicsDef === 'low' ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.75);
+    this.renderer.setPixelRatio(maxPixelRatio);
     this.renderer.setSize(w, h, false);
 
     const targetRadius = this.getAspectAdjustedRadius(this.baseRadius);
     this.cameraState.desiredRadius = targetRadius;
+
+    if (!this.cameraState.savedBeforeAction) {
+      const yOffset = aspect < 0.85 ? 0.65 : 0.42;
+      this.cameraState.desiredTarget.y = yOffset;
+      if (instant) this.cameraState.target.y = yOffset;
+    }
+
     if (instant) {
       this.cameraState.radius = targetRadius;
     }
+  }
+
+  /**
+   * Switches between High Definition (HD) and Low Definition (2GB RAM Smooth Mode)
+   * without removing any visual elements, realms, or gameplay features.
+   */
+  applyGraphicsDefinition(mode, rebuildEnv = true) {
+    this.graphicsDef = mode === 'low' ? 'low' : 'high';
+    document.body.setAttribute('data-perf-mode', this.graphicsDef);
+
+    const cardHigh = document.getElementById('card-def-high');
+    const cardLow = document.getElementById('card-def-low');
+    if (cardHigh && cardLow) {
+      if (this.graphicsDef === 'low') {
+        cardLow.classList.add('selected-device');
+        cardHigh.classList.remove('selected-device');
+        const lowCheck = cardLow.querySelector('.def-check');
+        const highCheck = cardHigh.querySelector('.def-check');
+        if (lowCheck) lowCheck.classList.remove('hidden');
+        if (highCheck) highCheck.classList.add('hidden');
+      } else {
+        cardHigh.classList.add('selected-device');
+        cardLow.classList.remove('selected-device');
+        const lowCheck = cardLow.querySelector('.def-check');
+        const highCheck = cardHigh.querySelector('.def-check');
+        if (highCheck) highCheck.classList.remove('hidden');
+        if (lowCheck) lowCheck.classList.add('hidden');
+      }
+    }
+
+    const badgeText = this.graphicsDef === 'low' ? '2GB LOW' : 'HD';
+    const hudDefBadge = document.getElementById('hud-def-badge');
+    const labelDefMobile = document.getElementById('label-def-mobile');
+    const labelDefDesktop = document.getElementById('label-def-desktop');
+    const btnDefDesktop = document.getElementById('btn-def-toggle');
+    const btnDefMobile = document.getElementById('btn-def-mobile');
+
+    if (hudDefBadge) hudDefBadge.textContent = badgeText;
+    if (labelDefMobile) labelDefMobile.textContent = badgeText;
+    if (labelDefDesktop) labelDefDesktop.textContent = badgeText;
+    if (btnDefDesktop) btnDefDesktop.classList.toggle('active-peach', this.graphicsDef === 'low');
+    if (btnDefMobile) btnDefMobile.classList.toggle('active-peach', this.graphicsDef === 'low');
+
+    if (this.renderer) {
+      const targetPR = this.graphicsDef === 'low' ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.75);
+      this.renderer.setPixelRatio(targetPR);
+      this.renderer.shadowMap.enabled = this.graphicsDef === 'high';
+      if (this.mainSpotLight) {
+        this.mainSpotLight.castShadow = this.graphicsDef === 'high';
+      }
+      this.scene.traverse(obj => {
+        if (obj.isMesh && obj.material) {
+          obj.material.needsUpdate = true;
+        }
+      });
+    }
+
+    this.adaptCameraToScreenAspect(false);
+    if (rebuildEnv && this.currentRealm) {
+      this.setEnvironmentRealm(this.currentRealm, true);
+    }
+  }
+
+  /**
+   * Applies the player's chosen side of the board ('w' for Pearl/South or 'b' for Lilac/North),
+   * rotates the 3D camera to face their side, and triggers the Automaton if it is the AI's turn.
+   */
+  applyPlayerSide(side, triggerAIIfNeeded = false) {
+    this.playerColor = side === 'b' ? 'b' : 'w';
+
+    const cardWhite = document.getElementById('card-side-white');
+    const cardBlack = document.getElementById('card-side-black');
+    if (cardWhite && cardBlack) {
+      if (this.playerColor === 'b') {
+        cardBlack.classList.add('selected-device');
+        cardWhite.classList.remove('selected-device');
+        const bCheck = cardBlack.querySelector('.side-check');
+        const wCheck = cardWhite.querySelector('.side-check');
+        if (bCheck) bCheck.classList.remove('hidden');
+        if (wCheck) wCheck.classList.add('hidden');
+      } else {
+        cardWhite.classList.add('selected-device');
+        cardBlack.classList.remove('selected-device');
+        const bCheck = cardBlack.querySelector('.side-check');
+        const wCheck = cardWhite.querySelector('.side-check');
+        if (wCheck) wCheck.classList.remove('hidden');
+        if (bCheck) bCheck.classList.add('hidden');
+      }
+    }
+
+    // Orient camera & cursor to the chosen side of the board
+    this.cameraState.savedBeforeAction = null;
+    this.cameraState.desiredTheta = this.playerColor === 'b' ? Math.PI : 0;
+    this.cameraState.desiredPhi = 0.90;
+    this.cameraState.desiredRadius = this.getAspectAdjustedRadius(this.baseRadius);
+
+    ['btn-cam-white', 'btn-cam-black', 'btn-cam-top'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const isActive =
+          (this.playerColor === 'w' && id === 'btn-cam-white') ||
+          (this.playerColor === 'b' && id === 'btn-cam-black');
+        el.classList.toggle('active-peach', isActive);
+      }
+    });
+
+    this.cursorSquare = this.playerColor === 'b' ? { r: 1, c: 4 } : { r: 6, c: 4 };
+    this.updateCursorMeshPosition();
+
+    this.selectedSquare = null;
+    this.legalMovesForSelected = [];
+    this.clearHighlights();
+    this.updateCheckHighlight();
+    this.applyPlayerNames();
+
+    if (
+      triggerAIIfNeeded &&
+      this.hasLaunchedSanctuary &&
+      this.gameMode === 'ai' &&
+      this.engine.turn !== this.playerColor &&
+      !this.isAnimating
+    ) {
+      this.triggerAITurn();
+    }
+  }
+
+  /**
+   * Synchronizes custom player names from the launcher inputs across all HUD badges,
+   * camera buttons, spoils headers, and turn indicators.
+   */
+  applyPlayerNames() {
+    const inputW = document.getElementById('input-name-white');
+    const inputB = document.getElementById('input-name-black');
+
+    const rawW = inputW ? inputW.value.trim() : '';
+    const rawB = inputB ? inputB.value.trim() : '';
+
+    this.playerNameWhite = rawW || 'Pearl';
+    this.playerNameBlack = rawB || 'Lilac';
+
+    const camWhiteLabel = document.getElementById('label-cam-white');
+    const camBlackLabel = document.getElementById('label-cam-black');
+    if (camWhiteLabel) camWhiteLabel.textContent = this.playerNameWhite;
+    if (camBlackLabel) camBlackLabel.textContent = this.playerNameBlack;
+
+    const spoilsWhite = document.getElementById('spoils-title-white');
+    const spoilsBlack = document.getElementById('spoils-title-black');
+    if (spoilsWhite) spoilsWhite.textContent = `${this.playerNameWhite} Spoils`;
+    if (spoilsBlack) spoilsBlack.textContent = `${this.playerNameBlack} Spoils`;
+
+    const sidePill = document.getElementById('selected-side-pill');
+    if (sidePill) {
+      sidePill.textContent =
+        this.playerColor === 'w'
+          ? `Playing as ${this.playerNameWhite} (White)`
+          : `Playing as ${this.playerNameBlack} (Black)`;
+    }
+
+    const hudSideBtnLabel = document.getElementById('label-player-side');
+    if (hudSideBtnLabel) {
+      hudSideBtnLabel.textContent =
+        this.playerColor === 'w'
+          ? `Side: ${this.playerNameWhite}`
+          : `Side: ${this.playerNameBlack}`;
+    }
+
+    this.updateHUD();
+  }
+
+  disposeGroupResources(group) {
+    if (!group) return;
+    const sharedMats = new Set([
+      this.matMarble,
+      this.matWhiteRune,
+      this.matObsidian,
+      this.matBlackRune,
+      this.matCathedralStone,
+      this.matPedestalStone,
+      this.boardTrimMat
+    ]);
+
+    group.traverse(obj => {
+      if (obj.geometry) {
+        obj.geometry.dispose();
+      }
+      if (obj.material) {
+        if (Array.isArray(obj.material)) {
+          obj.material.forEach(m => {
+            if (m && !sharedMats.has(m)) m.dispose();
+          });
+        } else if (!sharedMats.has(obj.material)) {
+          obj.material.dispose();
+        }
+      }
+    });
   }
 
   initThreeScene() {
@@ -1022,9 +1321,13 @@ class WizardsChessApp {
 
     this.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 180);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      powerPreference: 'high-performance',
+      precision: 'mediump'
+    });
     this.renderer.setSize(w, h, false);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1144,18 +1447,27 @@ class WizardsChessApp {
     this.squareMeshes = Array.from({ length: 8 }, () => Array(8).fill(null));
     const squareGeo = new THREE.BoxGeometry(SQUARE_SIZE * 0.985, 0.22, SQUARE_SIZE * 0.985);
 
-    const lightTex = createStoneTexture('#fdf2f8', 'rgba(244, 162, 184, 0.22)', 10);
-    const darkTex = createStoneTexture('#5e548e', 'rgba(233, 213, 255, 0.24)', 12);
+    const neutralLightTex = createStoneTexture('#ffffff', 'rgba(244, 162, 184, 0.20)', 10);
+    const neutralDarkTex = createStoneTexture('#ffffff', 'rgba(233, 213, 255, 0.22)', 12);
+
+    this.lightSquareMat = new THREE.MeshStandardMaterial({
+      map: neutralLightTex,
+      color: new THREE.Color('#fdf2f8'),
+      roughness: 0.26,
+      metalness: 0.06
+    });
+
+    this.darkSquareMat = new THREE.MeshStandardMaterial({
+      map: neutralDarkTex,
+      color: new THREE.Color('#5e548e'),
+      roughness: 0.30,
+      metalness: 0.16
+    });
 
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const isLight = (r + c) % 2 === 0;
-        const mat = new THREE.MeshStandardMaterial({
-          map: isLight ? lightTex : darkTex,
-          roughness: isLight ? 0.26 : 0.30,
-          metalness: isLight ? 0.06 : 0.16
-        });
-        const sqMesh = new THREE.Mesh(squareGeo, mat);
+        const sqMesh = new THREE.Mesh(squareGeo, isLight ? this.lightSquareMat : this.darkSquareMat);
         const worldPos = boardToWorld(r, c);
         sqMesh.position.set(worldPos.x, -0.11, worldPos.z);
         sqMesh.receiveShadow = true;
@@ -1244,9 +1556,9 @@ class WizardsChessApp {
   }
 
   /*************************************************************************
-   * 7 PASTEL 3D ENVIRONMENTS
+   * 7 PASTEL 3D ENVIRONMENTS (WITH SMOOTH DARK <-> WHITE TRANSITION)
    *************************************************************************/
-  setEnvironmentRealm(realmKey) {
+  setEnvironmentRealm(realmKey, instant = false) {
     if (!REALM_CONFIGS[realmKey]) return;
     this.currentRealm = realmKey;
     const cfg = REALM_CONFIGS[realmKey];
@@ -1257,35 +1569,87 @@ class WizardsChessApp {
     const realmLabel = document.getElementById('active-realm-label');
     if (realmLabel) realmLabel.textContent = cfg.name;
 
-    this.scene.background.setHex(cfg.bgHex);
-    this.scene.fog.color.setHex(cfg.bgHex);
-    this.scene.fog.density = cfg.fogDensity;
+    const prevTheme = document.body.getAttribute('data-theme-mode') || 'dark';
+    const nextTheme = cfg.themeMode || 'dark';
+    document.body.setAttribute('data-theme-mode', nextTheme);
 
-    this.ambientLight.color.setHex(cfg.ambientHex);
-    this.ambientLight.intensity = cfg.ambientIntensity;
-    this.mainSpotLight.color.setHex(cfg.spotHex);
-    this.mainSpotLight.intensity = cfg.spotIntensity;
-    this.rimLightWest.color.setHex(cfg.rimWestHex);
-    this.rimLightEast.color.setHex(cfg.rimEastHex);
-
-    const lightTex = createStoneTexture(cfg.lightSqBase, cfg.lightSqVein, 10);
-    const darkTex = createStoneTexture(cfg.darkSqBase, cfg.darkSqVein, 12);
-
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const isLight = (r + c) % 2 === 0;
-        const sq = this.squareMeshes[r][c];
-        sq.material.map = isLight ? lightTex : darkTex;
-        sq.material.roughness = realmKey === 'space' ? 0.18 : (isLight ? 0.26 : 0.30);
-        sq.material.metalness = realmKey === 'space' ? 0.32 : (isLight ? 0.06 : 0.16);
-        sq.material.needsUpdate = true;
-      }
+    const veil = document.getElementById('theme-transition-veil');
+    if (veil && !instant) {
+      const veilColor = nextTheme === 'light'
+        ? 'rgba(240, 249, 255, 0.34)'
+        : (prevTheme === 'light' ? 'rgba(30, 27, 46, 0.38)' : 'rgba(233, 213, 255, 0.18)');
+      document.documentElement.style.setProperty('--veil-color', veilColor);
+      veil.classList.add('veil-active');
+      if (this.veilTimeout) clearTimeout(this.veilTimeout);
+      this.veilTimeout = setTimeout(() => {
+        veil.classList.remove('veil-active');
+      }, 360);
     }
-    this.boardFrameMesh.material.color.setHex(cfg.frameColor);
-    this.boardTrimMat.color.setHex(cfg.trimColor);
+
+    if (instant) {
+      this.scene.background.setHex(cfg.bgHex);
+      this.scene.fog.color.setHex(cfg.bgHex);
+      this.scene.fog.density = cfg.fogDensity;
+
+      this.ambientLight.color.setHex(cfg.ambientHex);
+      this.ambientLight.intensity = cfg.ambientIntensity;
+      this.mainSpotLight.color.setHex(cfg.spotHex);
+      this.mainSpotLight.intensity = cfg.spotIntensity;
+      this.rimLightWest.color.setHex(cfg.rimWestHex);
+      this.rimLightEast.color.setHex(cfg.rimEastHex);
+
+      this.boardFrameMesh.material.color.setHex(cfg.frameColor);
+      this.boardTrimMat.color.setHex(cfg.trimColor);
+      this.lightSquareMat.color.set(cfg.lightSqBase);
+      this.darkSquareMat.color.set(cfg.darkSqBase);
+      this.themeTransition.active = false;
+    } else {
+      const tt = this.themeTransition;
+      tt.active = true;
+      tt.elapsed = 0;
+      tt.duration = 0.58;
+
+      tt.fromBg.copy(this.scene.background);
+      tt.toBg.setHex(cfg.bgHex);
+      tt.fromFog.copy(this.scene.fog.color);
+      tt.toFog.setHex(cfg.bgHex);
+      tt.fromFogDensity = this.scene.fog.density;
+      tt.toFogDensity = cfg.fogDensity;
+
+      tt.fromAmbient.copy(this.ambientLight.color);
+      tt.toAmbient.setHex(cfg.ambientHex);
+      tt.fromAmbientInt = this.ambientLight.intensity;
+      tt.toAmbientInt = cfg.ambientIntensity;
+
+      tt.fromSpot.copy(this.mainSpotLight.color);
+      tt.toSpot.setHex(cfg.spotHex);
+      tt.fromSpotInt = this.mainSpotLight.intensity;
+      tt.toSpotInt = cfg.spotIntensity;
+
+      tt.fromRimW.copy(this.rimLightWest.color);
+      tt.toRimW.setHex(cfg.rimWestHex);
+      tt.fromRimE.copy(this.rimLightEast.color);
+      tt.toRimE.setHex(cfg.rimEastHex);
+
+      tt.fromFrame.copy(this.boardFrameMesh.material.color);
+      tt.toFrame.setHex(cfg.frameColor);
+      tt.fromTrim.copy(this.boardTrimMat.color);
+      tt.toTrim.setHex(cfg.trimColor);
+
+      tt.fromLightTint.copy(this.lightSquareMat.color);
+      tt.toLightTint.set(cfg.lightSqBase);
+      tt.fromDarkTint.copy(this.darkSquareMat.color);
+      tt.toDarkTint.set(cfg.darkSqBase);
+    }
+
+    this.lightSquareMat.roughness = realmKey === 'space' ? 0.18 : 0.26;
+    this.lightSquareMat.metalness = realmKey === 'space' ? 0.32 : 0.06;
+    this.darkSquareMat.roughness = realmKey === 'space' ? 0.18 : 0.30;
+    this.darkSquareMat.metalness = realmKey === 'space' ? 0.32 : 0.16;
 
     if (this.envGroup) {
       this.scene.remove(this.envGroup);
+      this.disposeGroupResources(this.envGroup);
     }
     this.envGroup = new THREE.Group();
     this.scene.add(this.envGroup);
@@ -1309,15 +1673,50 @@ class WizardsChessApp {
     else if (realmKey === 'sand') this.buildRealmGoldenSand();
   }
 
+  updateThemeTransition(dt) {
+    const tt = this.themeTransition;
+    if (!tt.active) return;
+
+    tt.elapsed += dt;
+    const rawT = Math.min(1, tt.elapsed / tt.duration);
+    const ease = rawT < 0.5
+      ? 4 * rawT * rawT * rawT
+      : 1 - Math.pow(-2 * rawT + 2, 3) / 2;
+
+    this.scene.background.copy(tt.fromBg).lerp(tt.toBg, ease);
+    this.scene.fog.color.copy(tt.fromFog).lerp(tt.toFog, ease);
+    this.scene.fog.density = tt.fromFogDensity + (tt.toFogDensity - tt.fromFogDensity) * ease;
+
+    this.ambientLight.color.copy(tt.fromAmbient).lerp(tt.toAmbient, ease);
+    this.ambientLight.intensity = tt.fromAmbientInt + (tt.toAmbientInt - tt.fromAmbientInt) * ease;
+
+    this.mainSpotLight.color.copy(tt.fromSpot).lerp(tt.toSpot, ease);
+    this.mainSpotLight.intensity = tt.fromSpotInt + (tt.toSpotInt - tt.fromSpotInt) * ease;
+
+    this.rimLightWest.color.copy(tt.fromRimW).lerp(tt.toRimW, ease);
+    this.rimLightEast.color.copy(tt.fromRimE).lerp(tt.toRimE, ease);
+
+    this.boardFrameMesh.material.color.copy(tt.fromFrame).lerp(tt.toFrame, ease);
+    this.boardTrimMat.color.copy(tt.fromTrim).lerp(tt.toTrim, ease);
+
+    this.lightSquareMat.color.copy(tt.fromLightTint).lerp(tt.toLightTint, ease);
+    this.darkSquareMat.color.copy(tt.fromDarkTint).lerp(tt.toDarkTint, ease);
+
+    if (rawT >= 1) {
+      tt.active = false;
+    }
+  }
+
   buildRealmCathedral() {
-    const floorGeo = new THREE.CylinderGeometry(48, 48, 0.5, 48);
+    const isLow = this.graphicsDef === 'low';
+    const floorGeo = new THREE.CylinderGeometry(48, 48, 0.5, isLow ? 28 : 48);
     const floorMesh = new THREE.Mesh(floorGeo, this.matCathedralStone);
     floorMesh.position.y = -3.6;
-    floorMesh.receiveShadow = true;
+    floorMesh.receiveShadow = !isLow;
     this.envGroup.add(floorMesh);
 
     const inlayMesh = new THREE.Mesh(
-      new THREE.RingGeometry(8.2, 8.6, 64),
+      new THREE.RingGeometry(8.2, 8.6, isLow ? 32 : 64),
       new THREE.MeshBasicMaterial({ color: 0xfed7aa, side: THREE.DoubleSide, transparent: true, opacity: 0.30 })
     );
     inlayMesh.rotation.x = -Math.PI / 2;
@@ -1332,7 +1731,7 @@ class WizardsChessApp {
       pillarGroup.position.set(Math.cos(angle) * radius, -3.4, Math.sin(angle) * radius);
       pillarGroup.lookAt(0, -3.4, 0);
 
-      const colMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 1.05, 26, 12), this.matCathedralStone);
+      const colMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 1.05, 26, isLow ? 8 : 12), this.matCathedralStone);
       colMesh.position.y = 13;
       pillarGroup.add(colMesh);
 
@@ -1341,7 +1740,7 @@ class WizardsChessApp {
         new THREE.Vector3(0, 28, 9),
         new THREE.Vector3(0, 31, radius)
       );
-      const archMesh = new THREE.Mesh(new THREE.TubeGeometry(archCurve, 12, 0.28, 8, false), this.matCathedralStone);
+      const archMesh = new THREE.Mesh(new THREE.TubeGeometry(archCurve, isLow ? 8 : 12, 0.28, isLow ? 6 : 8, false), this.matCathedralStone);
       pillarGroup.add(archMesh);
 
       if (i % 2 === 0) {
@@ -1354,7 +1753,7 @@ class WizardsChessApp {
           depthWrite: false,
           blending: THREE.AdditiveBlending
         });
-        const ray = new THREE.Mesh(new THREE.ConeGeometry(3.2, 18, 12, 1, true), rayMat);
+        const ray = new THREE.Mesh(new THREE.ConeGeometry(3.2, 18, isLow ? 8 : 12, 1, true), rayMat);
         ray.position.set(0, 11, 2.3);
         ray.rotation.x = -Math.PI / 3.4;
         pillarGroup.add(ray);
@@ -1362,18 +1761,19 @@ class WizardsChessApp {
       this.envGroup.add(pillarGroup);
     }
 
-    this.createAmbientParticles(180, 0xfed7aa, 0.09, 28);
+    this.createAmbientParticles(isLow ? 75 : 180, 0xfed7aa, 0.09, 28);
   }
 
   buildRealmNightGlade() {
+    const isLow = this.graphicsDef === 'low';
     const groundMat = new THREE.MeshStandardMaterial({ color: 0x222642, roughness: 0.85, metalness: 0.1 });
-    const ground = new THREE.Mesh(new THREE.CylinderGeometry(55, 55, 0.6, 48), groundMat);
+    const ground = new THREE.Mesh(new THREE.CylinderGeometry(55, 55, 0.6, isLow ? 28 : 48), groundMat);
     ground.position.y = -3.6;
-    ground.receiveShadow = true;
+    ground.receiveShadow = !isLow;
     this.envGroup.add(ground);
 
     const moonMat = new THREE.MeshBasicMaterial({ color: 0xfef3c7 });
-    const moon = new THREE.Mesh(new THREE.SphereGeometry(4.0, 24, 24), moonMat);
+    const moon = new THREE.Mesh(new THREE.SphereGeometry(4.0, isLow ? 16 : 24, isLow ? 16 : 24), moonMat);
     moon.position.set(-22, 24, -36);
     this.envGroup.add(moon);
 
@@ -1407,26 +1807,27 @@ class WizardsChessApp {
       this.envGroup.add(runeCrystal);
     }
 
-    this.createStarfieldDome(600, 0xe0f2fe);
-    this.createAmbientParticles(200, 0xbbf7d0, 0.11, 24);
+    this.createStarfieldDome(isLow ? 260 : 600, 0xe0f2fe);
+    this.createAmbientParticles(isLow ? 85 : 200, 0xbbf7d0, 0.11, 24);
   }
 
   buildRealmSunlitDay() {
+    const isLow = this.graphicsDef === 'low';
     const poolMat = new THREE.MeshStandardMaterial({ color: 0xbae6fd, roughness: 0.16, metalness: 0.25 });
-    const pool = new THREE.Mesh(new THREE.CylinderGeometry(52, 52, 0.4, 48), poolMat);
+    const pool = new THREE.Mesh(new THREE.CylinderGeometry(52, 52, 0.4, isLow ? 28 : 48), poolMat);
     pool.position.y = -3.55;
-    pool.receiveShadow = true;
+    pool.receiveShadow = !isLow;
     this.envGroup.add(pool);
 
     const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xfff1f2, roughness: 0.3, metalness: 0.05 });
-    const plazaRing = new THREE.Mesh(new THREE.RingGeometry(7.2, 16.5, 48), whiteColMat);
+    const plazaRing = new THREE.Mesh(new THREE.RingGeometry(7.2, 16.5, isLow ? 28 : 48), whiteColMat);
     plazaRing.rotation.x = -Math.PI / 2;
     plazaRing.position.y = -3.32;
     this.envGroup.add(plazaRing);
 
     for (let i = 0; i < 12; i++) {
       const ang = (i / 12) * Math.PI * 2;
-      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 9.5, 14), whiteColMat);
+      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 9.5, isLow ? 10 : 14), whiteColMat);
       col.position.set(Math.cos(ang) * 15, 1.4, Math.sin(ang) * 15);
       this.envGroup.add(col);
     }
@@ -1438,7 +1839,7 @@ class WizardsChessApp {
       const dist = 24 + (c % 3) * 8;
       cloudGroup.position.set(Math.cos(ang) * dist, 11 + (c % 4) * 2.5, Math.sin(ang) * dist);
       for (let p = 0; p < 3; p++) {
-        const puff = new THREE.Mesh(new THREE.SphereGeometry(1.6 + Math.random() * 1.1, 10, 10), cloudMat);
+        const puff = new THREE.Mesh(new THREE.SphereGeometry(1.6 + Math.random() * 1.1, isLow ? 7 : 10, isLow ? 7 : 10), cloudMat);
         puff.position.set((p - 1) * 1.4, Math.random() * 0.5, (Math.random() - 0.5) * 1.1);
         cloudGroup.add(puff);
       }
@@ -1446,17 +1847,19 @@ class WizardsChessApp {
       this.spaceRings.push({ mesh: cloudGroup, speed: 0.035 + (c % 3) * 0.015, isCloud: true });
     }
 
-    this.createAmbientParticles(160, 0xfef3c7, 0.09, 26);
+    this.createAmbientParticles(isLow ? 70 : 160, 0xfef3c7, 0.09, 26);
   }
 
   buildRealmVerdantGrass() {
+    const isLow = this.graphicsDef === 'low';
     const meadowMat = new THREE.MeshStandardMaterial({ color: 0x3b594f, roughness: 0.88, metalness: 0.05 });
-    const ground = new THREE.Mesh(new THREE.CylinderGeometry(50, 50, 0.8, 48), meadowMat);
+    const ground = new THREE.Mesh(new THREE.CylinderGeometry(50, 50, 0.8, isLow ? 28 : 48), meadowMat);
     ground.position.y = -3.5;
-    ground.receiveShadow = true;
+    ground.receiveShadow = !isLow;
     this.envGroup.add(ground);
 
-    const bladeCount = 2400;
+    const bladeCount = isLow ? 800 : 2400;
+    const animatedBladesLimit = isLow ? 140 : 450;
     const bladeGeo = new THREE.ConeGeometry(0.08, 0.9, 4);
     bladeGeo.translate(0, 0.45, 0);
     const bladeMat = new THREE.MeshStandardMaterial({
@@ -1466,7 +1869,7 @@ class WizardsChessApp {
     });
 
     this.grassInstancedMesh = new THREE.InstancedMesh(bladeGeo, bladeMat, bladeCount);
-    const dummy = new THREE.Object3D();
+    const dummy = this.reusableDummy;
     const colorVar = new THREE.Color();
     this.grassDummyMatrices = [];
 
@@ -1487,7 +1890,7 @@ class WizardsChessApp {
       colorVar.setHSL(0.36 + (Math.random() - 0.5) * 0.08, 0.55, 0.58 + Math.random() * 0.18);
       this.grassInstancedMesh.setColorAt(i, colorVar);
 
-      if (i < 450) {
+      if (i < animatedBladesLimit) {
         this.grassDummyMatrices.push({ index: i, x, z, scaleY, rotY, phase: Math.random() * Math.PI * 2 });
       }
     }
@@ -1512,16 +1915,17 @@ class WizardsChessApp {
         roughness: 0.75
       });
       for (let c = 0; c < 3; c++) {
-        const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(2.2 - c * 0.4, 1), foliageMat);
+        const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(2.2 - c * 0.4, isLow ? 0 : 1), foliageMat);
         crown.position.set((Math.random() - 0.5) * 0.7, 5.2 + c * 1.3, (Math.random() - 0.5) * 0.7);
         tree.add(crown);
       }
       this.envGroup.add(tree);
     }
 
+    const leafCount = isLow ? 45 : 110;
     const leafGeo = new THREE.PlaneGeometry(0.22, 0.15);
     const leafColors = [0xfbcfe8, 0xbbf7d0, 0xfef3c7, 0xe9d5ff];
-    for (let l = 0; l < 110; l++) {
+    for (let l = 0; l < leafCount; l++) {
       const leafMat = new THREE.MeshBasicMaterial({
         color: leafColors[l % leafColors.length],
         side: THREE.DoubleSide,
@@ -1546,7 +1950,9 @@ class WizardsChessApp {
   }
 
   buildRealmOceanWaves() {
-    const seaGeo = new THREE.PlaneGeometry(100, 100, 44, 44);
+    const isLow = this.graphicsDef === 'low';
+    const segs = isLow ? 24 : 44;
+    const seaGeo = new THREE.PlaneGeometry(100, 100, segs, segs);
     seaGeo.rotateX(-Math.PI / 2);
 
     const posAttr = seaGeo.attributes.position;
@@ -1564,7 +1970,7 @@ class WizardsChessApp {
 
     this.oceanMesh = new THREE.Mesh(seaGeo, seaMat);
     this.oceanMesh.position.y = -2.15;
-    this.oceanMesh.receiveShadow = true;
+    this.oceanMesh.receiveShadow = !isLow;
     this.envGroup.add(this.oceanMesh);
 
     const spireMat = new THREE.MeshStandardMaterial({ color: 0x3d5a80, roughness: 0.35, metalness: 0.35 });
@@ -1581,11 +1987,12 @@ class WizardsChessApp {
       this.envGroup.add(beacon);
     }
 
-    this.createAmbientParticles(180, 0xa5f3fc, 0.1, 28);
+    this.createAmbientParticles(isLow ? 80 : 180, 0xa5f3fc, 0.1, 28);
   }
 
   buildRealmDeepSpace() {
-    this.createStarfieldDome(900, 0xf5f3ff);
+    const isLow = this.graphicsDef === 'low';
+    this.createStarfieldDome(isLow ? 380 : 900, 0xf5f3ff);
 
     const ringConfigs = [
       { rIn: 9.5, rOut: 10.2, color: 0xe9d5ff, tiltX: 0.35, tiltZ: -0.2, speed: 0.16 },
@@ -1594,7 +2001,7 @@ class WizardsChessApp {
     ];
 
     for (const rc of ringConfigs) {
-      const ringGeo = new THREE.RingGeometry(rc.rIn, rc.rOut, 56);
+      const ringGeo = new THREE.RingGeometry(rc.rIn, rc.rOut, isLow ? 32 : 56);
       const ringMat = new THREE.MeshBasicMaterial({
         color: rc.color,
         side: THREE.DoubleSide,
@@ -1611,8 +2018,9 @@ class WizardsChessApp {
 
     const astGroup = new THREE.Group();
     const astMat = new THREE.MeshStandardMaterial({ color: 0xcddafd, roughness: 0.6, metalness: 0.2 });
-    for (let a = 0; a < 70; a++) {
-      const ang = (a / 70) * Math.PI * 2;
+    const astCount = isLow ? 36 : 70;
+    for (let a = 0; a < astCount; a++) {
+      const ang = (a / astCount) * Math.PI * 2;
       const rad = 11.5 + (Math.random() - 0.5) * 4.2;
       const ast = new THREE.Mesh(new THREE.DodecahedronGeometry(0.16 + Math.random() * 0.32, 0), astMat);
       ast.position.set(Math.cos(ang) * rad, (Math.random() - 0.5) * 3.2, Math.sin(ang) * rad);
@@ -1622,11 +2030,13 @@ class WizardsChessApp {
     this.envGroup.add(astGroup);
     this.spaceRings.push({ mesh: astGroup, speed: 0.12, isYOrbit: true });
 
-    this.createAmbientParticles(220, 0xe9d5ff, 0.11, 30);
+    this.createAmbientParticles(isLow ? 95 : 220, 0xe9d5ff, 0.11, 30);
   }
 
   buildRealmGoldenSand() {
-    const sandGeo = new THREE.PlaneGeometry(100, 100, 48, 48);
+    const isLow = this.graphicsDef === 'low';
+    const segs = isLow ? 26 : 48;
+    const sandGeo = new THREE.PlaneGeometry(100, 100, segs, segs);
     sandGeo.rotateX(-Math.PI / 2);
     const pos = sandGeo.attributes.position;
 
@@ -1653,7 +2063,7 @@ class WizardsChessApp {
 
     const dunesMesh = new THREE.Mesh(sandGeo, sandMat);
     dunesMesh.position.y = -3.1;
-    dunesMesh.receiveShadow = true;
+    dunesMesh.receiveShadow = !isLow;
     this.envGroup.add(dunesMesh);
 
     const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x9d756d, roughness: 0.7 });
@@ -1683,7 +2093,7 @@ class WizardsChessApp {
       this.envGroup.add(pyr);
     }
 
-    this.createAmbientParticles(180, 0xfed7aa, 0.09, 28);
+    this.createAmbientParticles(isLow ? 80 : 180, 0xfed7aa, 0.09, 28);
   }
 
   createStarfieldDome(count, colorHex) {
@@ -1745,16 +2155,17 @@ class WizardsChessApp {
 
     const matStone = color === 'w' ? this.matMarble : this.matObsidian;
     const matRune = (color === 'w' ? this.matWhiteRune : this.matBlackRune).clone();
+    const castShadows = this.graphicsDef === 'high';
 
     const baseBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.52, 0.14, 20), matStone);
     baseBottom.position.y = 0.07;
-    baseBottom.castShadow = true;
-    baseBottom.receiveShadow = true;
+    baseBottom.castShadow = castShadows;
+    baseBottom.receiveShadow = castShadows;
     group.add(baseBottom);
 
     const baseBevel = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.45, 0.12, 20), matStone);
     baseBevel.position.y = 0.19;
-    baseBevel.castShadow = true;
+    baseBevel.castShadow = castShadows;
     group.add(baseBevel);
 
     const runeRing = new THREE.Mesh(new THREE.TorusGeometry(0.39, 0.026, 10, 28), matRune);
@@ -1766,8 +2177,8 @@ class WizardsChessApp {
     bodyGroup.add(accentGroup);
 
     const addCastShadow = (mesh) => {
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
+      mesh.castShadow = castShadows;
+      mesh.receiveShadow = castShadows;
       return mesh;
     };
 
@@ -1938,9 +2349,25 @@ class WizardsChessApp {
     return group;
   }
 
+  rebuildInteractablesCache() {
+    this.cachedInteractables = [];
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        this.cachedInteractables.push(this.squareMeshes[r][c]);
+      }
+    }
+    for (const [, pGroup] of this.pieceMeshes) {
+      pGroup.traverse(ch => {
+        if (ch.isMesh) this.cachedInteractables.push(ch);
+      });
+    }
+    this.interactablesDirty = false;
+  }
+
   syncPiecesWithEngine() {
     for (const [, mesh] of this.pieceMeshes) {
       this.scene.remove(mesh);
+      this.disposeGroupResources(mesh);
     }
     this.pieceMeshes.clear();
 
@@ -1958,13 +2385,17 @@ class WizardsChessApp {
       }
     }
 
+    this.interactablesDirty = true;
     this.clearHighlights();
     this.updateCheckHighlight();
   }
 
   clearHighlights() {
     while (this.indicatorGroup.children.length > 0) {
-      this.indicatorGroup.remove(this.indicatorGroup.children[0]);
+      const ch = this.indicatorGroup.children[0];
+      this.indicatorGroup.remove(ch);
+      if (ch.geometry) ch.geometry.dispose();
+      if (ch.material) ch.material.dispose();
     }
     for (const [, mesh] of this.pieceMeshes) {
       mesh.userData.isSelected = false;
@@ -2017,7 +2448,11 @@ class WizardsChessApp {
 
   updateCheckHighlight() {
     const prev = this.indicatorGroup.getObjectByName('check-aura');
-    if (prev) this.indicatorGroup.remove(prev);
+    if (prev) {
+      this.indicatorGroup.remove(prev);
+      if (prev.geometry) prev.geometry.dispose();
+      if (prev.material) prev.material.dispose();
+    }
 
     if (this.engine.isInCheck(this.engine.turn)) {
       const kingPos = this.engine.findKing(this.engine.turn);
@@ -2035,6 +2470,7 @@ class WizardsChessApp {
       }
     }
   }
+
   /*************************************************************************
    * 3D PHYSICS STONE SHATTER EXPLOSION
    *************************************************************************/
@@ -2042,7 +2478,7 @@ class WizardsChessApp {
     const matStone = victimColor === 'w' ? this.matMarble : this.matObsidian;
     const matRune = victimColor === 'w' ? this.matWhiteRune : this.matBlackRune;
 
-    const shardCount = 34;
+    const shardCount = this.graphicsDef === 'low' ? 16 : 34;
     for (let i = 0; i < shardCount; i++) {
       const isRuneShard = i % 5 === 0;
       const scale = 0.08 + Math.random() * 0.15;
@@ -2111,6 +2547,7 @@ class WizardsChessApp {
   }
 
   spawnTrailSpark(pos, color) {
+    if (this.graphicsDef === 'low' && Math.random() < 0.55) return;
     const spark = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.05, 0),
       new THREE.MeshBasicMaterial({
@@ -2252,7 +2689,9 @@ class WizardsChessApp {
 
       if (victimMesh) {
         this.scene.remove(victimMesh);
+        this.disposeGroupResources(victimMesh);
         this.pieceMeshes.delete(victimPiece.id);
+        this.interactablesDirty = true;
       }
 
       const postStrikePos = attackerMesh ? attackerMesh.position.clone() : strikePos;
@@ -2285,13 +2724,17 @@ class WizardsChessApp {
 
     if (chosenPromotion || move.promotion) {
       const oldMesh = this.pieceMeshes.get(record.pieceAfter.id);
-      if (oldMesh) this.scene.remove(oldMesh);
+      if (oldMesh) {
+        this.scene.remove(oldMesh);
+        this.disposeGroupResources(oldMesh);
+      }
       const promotedMesh = this.createPieceMesh(record.pieceAfter.type, record.pieceAfter.color, record.pieceAfter.id);
       promotedMesh.position.copy(endPos);
       promotedMesh.userData.r = move.toR;
       promotedMesh.userData.c = move.toC;
       this.scene.add(promotedMesh);
       this.pieceMeshes.set(record.pieceAfter.id, promotedMesh);
+      this.interactablesDirty = true;
     } else if (attackerMesh) {
       attackerMesh.userData.r = move.toR;
       attackerMesh.userData.c = move.toC;
@@ -2316,7 +2759,7 @@ class WizardsChessApp {
       return;
     }
 
-    if (this.gameMode === 'ai' && this.engine.turn === 'b') {
+    if (this.gameMode === 'ai' && this.engine.turn !== this.playerColor) {
       this.triggerAITurn();
     }
   }
@@ -2336,6 +2779,9 @@ class WizardsChessApp {
   }
 
   triggerAITurn() {
+    const aiColor = this.playerColor === 'w' ? 'b' : 'w';
+    if (this.engine.turn !== aiColor || this.isAnimating) return;
+
     const badge = document.getElementById('status-badge');
     const badgeText = document.getElementById('status-badge-text');
     badge.classList.remove('hidden');
@@ -2343,7 +2789,7 @@ class WizardsChessApp {
     badgeText.textContent = 'PONDERING...';
 
     setTimeout(() => {
-      if (this.engine.turn !== 'b' || this.isAnimating) return;
+      if (this.engine.turn !== aiColor || this.isAnimating) return;
       const aiMove = this.engine.chooseAIMove(this.aiDifficulty);
       if (aiMove) this.executeMoveWithAnimation(aiMove, 'q');
     }, 400);
@@ -2379,13 +2825,24 @@ class WizardsChessApp {
   }
 
   /*************************************************************************
-   * INITIAL SCREEN & RESPONSIVE PLATFORM SWITCHING
+   * INITIAL SCREEN & RESPONSIVE PLATFORM, DEFINITION, SIDE & NAME SWITCHING
    *************************************************************************/
   initLauncherAndDeviceDetection() {
     const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 768;
     this.applyDevicePlatform(isTouchDevice ? 'mobile' : 'pc');
 
-    // Collapse Chronicle drawer by default on small mobile screens so it never overlaps Touch D-Pad
+    const devMem = navigator.deviceMemory || 4;
+    const hwCores = navigator.hardwareConcurrency || 4;
+    const isLowSpecDevice = devMem <= 2 || hwCores <= 4;
+    this.applyGraphicsDefinition(isLowSpecDevice ? 'low' : 'high', true);
+
+    const detectedRamPill = document.getElementById('detected-ram-pill');
+    if (detectedRamPill) {
+      detectedRamPill.textContent = isLowSpecDevice
+        ? '2GB/Low-RAM Recommended'
+        : 'High-Def Ready';
+    }
+
     if (window.innerWidth < 768) {
       const historyPanel = document.getElementById('history-panel');
       historyPanel.classList.add('translate-y-[130%]', 'opacity-0', 'pointer-events-none');
@@ -2399,22 +2856,75 @@ class WizardsChessApp {
     const cardMobile = document.getElementById('card-device-mobile');
     const cardPC = document.getElementById('card-device-pc');
 
-    cardMobile.addEventListener('click', () => this.applyDevicePlatform('mobile'));
-    cardPC.addEventListener('click', () => this.applyDevicePlatform('pc'));
+    cardMobile.addEventListener('click', () => {
+      soundFX.playSelect(true);
+      this.applyDevicePlatform('mobile');
+    });
+    cardPC.addEventListener('click', () => {
+      soundFX.playSelect(true);
+      this.applyDevicePlatform('pc');
+    });
+
+    // High Definition vs Low Definition (2GB RAM) Cards on 1st Initiation Screen
+    const cardDefHigh = document.getElementById('card-def-high');
+    const cardDefLow = document.getElementById('card-def-low');
+    if (cardDefHigh && cardDefLow) {
+      cardDefHigh.addEventListener('click', () => {
+        soundFX.playSelect(true);
+        this.applyGraphicsDefinition('high', true);
+      });
+      cardDefLow.addEventListener('click', () => {
+        soundFX.playSelect(false);
+        this.applyGraphicsDefinition('low', true);
+      });
+    }
+
+    // Side of the Board Cards (Pearl / White vs Lilac / Black) on 1st Initiation Screen
+    const cardSideWhite = document.getElementById('card-side-white');
+    const cardSideBlack = document.getElementById('card-side-black');
+    if (cardSideWhite && cardSideBlack) {
+      cardSideWhite.addEventListener('click', () => {
+        soundFX.playSelect(true);
+        this.applyPlayerSide('w', false);
+      });
+      cardSideBlack.addEventListener('click', () => {
+        soundFX.playSelect(false);
+        this.applyPlayerSide('b', false);
+      });
+    }
+
+    // Custom Sovereign Names Inputs
+    const inputNameWhite = document.getElementById('input-name-white');
+    const inputNameBlack = document.getElementById('input-name-black');
+    if (inputNameWhite) {
+      inputNameWhite.addEventListener('input', () => this.applyPlayerNames());
+    }
+    if (inputNameBlack) {
+      inputNameBlack.addEventListener('input', () => this.applyPlayerNames());
+    }
+    this.applyPlayerNames();
 
     document.querySelectorAll('.start-env-btn, .hud-env-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const envKey = btn.getAttribute('data-env');
         soundFX.playSelect(true);
-        this.setEnvironmentRealm(envKey);
+        this.setEnvironmentRealm(envKey, false);
       });
     });
 
     const startModal = document.getElementById('start-screen-modal');
     document.getElementById('btn-launch-game').addEventListener('click', () => {
       soundFX.playSelect(true);
+      this.hasLaunchedSanctuary = true;
+      this.applyPlayerNames();
       startModal.classList.add('opacity-0', 'pointer-events-none');
-      setTimeout(() => startModal.classList.add('hidden'), 320);
+      setTimeout(() => {
+        startModal.classList.add('hidden');
+        this.adaptCameraToScreenAspect(false);
+        if (this.gameMode === 'ai' && this.engine.turn !== this.playerColor && !this.isAnimating) {
+          this.triggerAITurn();
+        }
+      }, 320);
     });
 
     document.getElementById('btn-open-launcher').addEventListener('click', () => {
@@ -2483,7 +2993,6 @@ class WizardsChessApp {
       if (e.target !== dom) return;
       e.preventDefault();
 
-      // Reset stale pointers if single touch starts fresh
       if (e.pointerType === 'touch' && activePointers.size >= 2) {
         clearAllPointers();
       }
@@ -2531,7 +3040,6 @@ class WizardsChessApp {
         if (isDragging) {
           const dx = e.clientX - lastDragPos.x;
           const dy = e.clientY - lastDragPos.y;
-          // Clamp sudden delta spikes to prevent touch camera glitching
           const clampedDx = Math.max(-45, Math.min(45, dx));
           const clampedDy = Math.max(-45, Math.min(45, dy));
 
@@ -2551,7 +3059,6 @@ class WizardsChessApp {
       }
 
       if (activePointers.size === 1) {
-        // Smoothly re-anchor remaining finger so lifting 2nd finger doesn't jump the camera
         const remaining = Array.from(activePointers.values())[0];
         lastDragPos = { x: remaining.x, y: remaining.y };
       }
@@ -2582,8 +3089,16 @@ class WizardsChessApp {
       setTimeout(() => this.adaptCameraToScreenAspect(), 120);
     });
 
-    // Keyboard Controls
+    // Keyboard Controls (ignores WASD shortcuts while typing in name inputs)
     window.addEventListener('keydown', (e) => {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      if (activeTag === 'input' || activeTag === 'textarea') {
+        if (e.key === 'Enter') {
+          document.activeElement.blur();
+        }
+        return;
+      }
+
       const startModal = document.getElementById('start-screen-modal');
       if (startModal && !startModal.classList.contains('hidden')) {
         if (e.key === 'Enter') document.getElementById('btn-launch-game').click();
@@ -2615,7 +3130,7 @@ class WizardsChessApp {
       else if (key === 'u') document.getElementById('btn-undo').click();
       else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {
         const realms = ['cathedral', 'night', 'day', 'grass', 'ocean', 'space', 'sand'];
-        this.setEnvironmentRealm(realms[parseInt(key, 10) - 1]);
+        this.setEnvironmentRealm(realms[parseInt(key, 10) - 1], false);
       }
     });
 
@@ -2656,12 +3171,15 @@ class WizardsChessApp {
         btn.classList.add('active-sky');
         label.textContent = 'vs Automaton';
         diffBtn.style.display = 'inline-flex';
-        if (this.engine.turn === 'b' && !this.isAnimating) this.triggerAITurn();
+        if (this.engine.turn !== this.playerColor && !this.isAnimating) {
+          this.triggerAITurn();
+        }
       } else {
         btn.classList.remove('active-sky');
         label.textContent = '2P Pass & Play';
         diffBtn.style.display = 'none';
       }
+      this.updateHUD();
     });
 
     document.getElementById('btn-difficulty').addEventListener('click', () => {
@@ -2671,6 +3189,16 @@ class WizardsChessApp {
       this.aiDifficulty = order[idx];
       document.getElementById('label-difficulty').textContent = names[this.aiDifficulty];
     });
+
+    const btnSwapSides = document.getElementById('btn-swap-sides');
+    if (btnSwapSides) {
+      btnSwapSides.addEventListener('click', () => {
+        if (this.isAnimating) return;
+        const nextSide = this.playerColor === 'w' ? 'b' : 'w';
+        soundFX.playSelect(nextSide === 'w');
+        this.applyPlayerSide(nextSide, true);
+      });
+    }
 
     const setCamPreset = (theta, phi, baseR, activeBtnId) => {
       this.cameraState.savedBeforeAction = null;
@@ -2698,7 +3226,7 @@ class WizardsChessApp {
     document.getElementById('btn-undo').addEventListener('click', () => {
       if (this.isAnimating || this.engine.history.length === 0) return;
       this.engine.undo();
-      if (this.gameMode === 'ai' && this.engine.turn === 'b' && this.engine.history.length > 0) {
+      if (this.gameMode === 'ai' && this.engine.turn !== this.playerColor && this.engine.history.length > 0) {
         this.engine.undo();
       }
       this.selectedSquare = null;
@@ -2716,6 +3244,9 @@ class WizardsChessApp {
       this.legalMovesForSelected = [];
       this.syncPiecesWithEngine();
       this.updateHUD();
+      if (this.gameMode === 'ai' && this.playerColor === 'b' && this.hasLaunchedSanctuary) {
+        this.triggerAITurn();
+      }
     };
     document.getElementById('btn-reset').addEventListener('click', resetGame);
     document.getElementById('btn-modal-newgame').addEventListener('click', resetGame);
@@ -2723,6 +3254,16 @@ class WizardsChessApp {
       document.getElementById('gameover-modal').classList.add('hidden');
       document.getElementById('gameover-modal').classList.remove('flex');
     });
+
+    const toggleDefMode = () => {
+      const nextMode = this.graphicsDef === 'high' ? 'low' : 'high';
+      soundFX.playSelect(nextMode === 'high');
+      this.applyGraphicsDefinition(nextMode, true);
+    };
+    const btnDefDesktop = document.getElementById('btn-def-toggle');
+    const btnDefMobile = document.getElementById('btn-def-mobile');
+    if (btnDefDesktop) btnDefDesktop.addEventListener('click', toggleDefMode);
+    if (btnDefMobile) btnDefMobile.addEventListener('click', toggleDefMode);
 
     const toggleAudio = () => {
       const on = soundFX.toggle();
@@ -2767,22 +3308,18 @@ class WizardsChessApp {
 
   handleBoardClick(clientX, clientY) {
     if (this.isAnimating) return;
-    if (this.gameMode === 'ai' && this.engine.turn === 'b') return;
+    if (this.gameMode === 'ai' && this.engine.turn !== this.playerColor) return;
 
     const rect = this.renderer.domElement.getBoundingClientRect();
     this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
     this.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const interactables = [];
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) interactables.push(this.squareMeshes[r][c]);
-    }
-    for (const [, pGroup] of this.pieceMeshes) {
-      pGroup.traverse(ch => { if (ch.isMesh) interactables.push(ch); });
+    if (this.interactablesDirty) {
+      this.rebuildInteractablesCache();
     }
 
-    const hits = this.raycaster.intersectObjects(interactables, false);
+    const hits = this.raycaster.intersectObjects(this.cachedInteractables, false);
     if (hits.length === 0) {
       this.selectedSquare = null;
       this.legalMovesForSelected = [];
@@ -2810,7 +3347,7 @@ class WizardsChessApp {
 
   activateSquare(r, c) {
     if (this.isAnimating) return;
-    if (this.gameMode === 'ai' && this.engine.turn === 'b') return;
+    if (this.gameMode === 'ai' && this.engine.turn !== this.playerColor) return;
 
     if (this.selectedSquare) {
       const matchingMove = this.legalMovesForSelected.find(m => m.toR === r && m.toC === c);
@@ -2845,15 +3382,23 @@ class WizardsChessApp {
     const isWhiteTurn = this.engine.turn === 'w';
     const turnDot = document.getElementById('turn-dot');
     const turnText = document.getElementById('turn-text');
+    const whiteName = this.playerNameWhite || 'Pearl';
+    const blackName = this.playerNameBlack || 'Lilac';
 
     if (isWhiteTurn) {
       turnDot.className = 'w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa]';
-      turnText.textContent = "Pearl's Turn";
-      turnText.className = 'text-[11px] font-semibold tracking-wide text-orange-100';
+      turnText.textContent =
+        this.gameMode === 'ai' && this.playerColor !== 'w'
+          ? `Automaton (${whiteName})`
+          : `${whiteName}'s Turn`;
+      turnText.className = 'text-[11px] font-semibold tracking-wide text-orange-100 whitespace-nowrap';
     } else {
       turnDot.className = 'w-2 h-2 rounded-full bg-purple-300 shadow-[0_0_8px_#e9d5ff]';
-      turnText.textContent = this.gameMode === 'ai' ? 'Automaton (Lilac)' : "Lilac's Turn";
-      turnText.className = 'text-[11px] font-semibold tracking-wide text-purple-200';
+      turnText.textContent =
+        this.gameMode === 'ai' && this.playerColor !== 'b'
+          ? `Automaton (${blackName})`
+          : `${blackName}'s Turn`;
+      turnText.className = 'text-[11px] font-semibold tracking-wide text-purple-200 whitespace-nowrap';
     }
 
     const badge = document.getElementById('status-badge');
@@ -2917,7 +3462,9 @@ class WizardsChessApp {
         `;
       }
       moveListEl.innerHTML = html;
-      moveListEl.scrollTop = moveListEl.scrollHeight;
+      requestAnimationFrame(() => {
+        moveListEl.scrollTop = moveListEl.scrollHeight;
+      });
     }
   }
 
@@ -2927,7 +3474,10 @@ class WizardsChessApp {
     const subtitle = document.getElementById('gameover-subtitle');
 
     if (record.isCheckmate) {
-      const winner = record.color === 'w' ? 'Pastel Pearl' : 'Dusk Lilac';
+      const winner =
+        record.color === 'w'
+          ? (this.playerNameWhite || 'Pastel Pearl')
+          : (this.playerNameBlack || 'Dusk Lilac');
       title.textContent = 'Checkmate';
       subtitle.textContent = `${winner} triumphs in the ${REALM_CONFIGS[this.currentRealm].name} after ${this.engine.history.length} moves.`;
     } else {
@@ -2940,16 +3490,25 @@ class WizardsChessApp {
   }
 
   /*************************************************************************
-   * 60FPS ANIMATION LOOP
+   * 60FPS ANIMATION LOOP (OPTIMIZED FOR BOTH HD & 2GB RAM LOW-DEF MODES)
    *************************************************************************/
   animate() {
     requestAnimationFrame(this.animate);
 
     const dt = Math.min(0.05, this.clock.getDelta());
     const elapsed = this.clock.getElapsedTime();
+    this.frameCounter++;
+    const isLow = this.graphicsDef === 'low';
+
+    if (this.themeTransition.active) {
+      this.updateThemeTransition(dt);
+    }
 
     for (const [, pGroup] of this.pieceMeshes) {
       const { bodyGroup, accentGroup, runeRing, matRune, phaseOffset, isSelected } = pGroup.userData;
+      if (isLow && !isSelected && !this.isAnimating && (this.frameCounter & 1) === 1) {
+        continue;
+      }
       const phase = elapsed * 2.0 + phaseOffset;
 
       if (!this.isAnimating) {
@@ -3048,7 +3607,7 @@ class WizardsChessApp {
       tp.mesh.scale.setScalar(1 - p * 0.7);
     }
 
-    if (this.oceanMesh && this.oceanBasePositions) {
+    if (this.oceanMesh && this.oceanBasePositions && (!isLow || (this.frameCounter & 1) === 0)) {
       const posAttr = this.oceanMesh.geometry.attributes.position;
       const arr = posAttr.array;
       for (let i = 0; i < arr.length; i += 3) {
@@ -3061,8 +3620,8 @@ class WizardsChessApp {
       posAttr.needsUpdate = true;
     }
 
-    if (this.grassInstancedMesh && this.grassDummyMatrices.length > 0) {
-      const dummy = new THREE.Object3D();
+    if (this.grassInstancedMesh && this.grassDummyMatrices.length > 0 && (!isLow || (this.frameCounter & 1) === 0)) {
+      const dummy = this.reusableDummy;
       for (let i = 0; i < this.grassDummyMatrices.length; i++) {
         const g = this.grassDummyMatrices[i];
         dummy.position.set(g.x, -3.12, g.z);
@@ -3097,11 +3656,12 @@ class WizardsChessApp {
       }
     }
 
-    if (this.envParticles) {
+    if (this.envParticles && (!isLow || (this.frameCounter & 1) === 0)) {
       const positions = this.envParticles.geometry.attributes.position.array;
       const speeds = this.envParticles.geometry.attributes.aSpeed.array;
+      const stepDt = isLow ? dt * 2 : dt;
       for (let i = 0; i < speeds.length; i++) {
-        positions[i * 3 + 1] += speeds[i] * dt;
+        positions[i * 3 + 1] += speeds[i] * stepDt;
         positions[i * 3] += Math.sin(elapsed * 0.5 + i) * 0.0025;
         if (positions[i * 3 + 1] > 12) positions[i * 3 + 1] = -2;
       }
