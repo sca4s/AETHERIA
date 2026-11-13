@@ -7,6 +7,11 @@
   --pastel-butter: #fef3c7;
   --pastel-text: #f8fafc;
   --pastel-muted: #cbd5e1;
+
+  /* Dynamic Screen-Size Proportional UI Scaling & Safe Zones */
+  --ui-scale: 1;
+  --hud-top-offset: 0px;
+  --veil-color: rgba(255, 248, 244, 0.28);
 }
 
 * {
@@ -29,6 +34,7 @@ html, body {
   color: var(--pastel-text);
   touch-action: none;
   overscroll-behavior: none;
+  transition: background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1), color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .font-gothic {
@@ -46,6 +52,8 @@ html, body {
   height: 100%;
   z-index: 1;
   touch-action: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 canvas {
@@ -71,6 +79,13 @@ canvas {
     0 16px 40px -10px rgba(15, 12, 28, 0.45),
     inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.52),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.12);
+  transition:
+    background 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateZ(0);
 }
 
 .spatial-modal {
@@ -88,6 +103,12 @@ canvas {
     0 0 50px rgba(233, 213, 255, 0.12),
     inset 0 2px 2px 0 rgba(255, 255, 255, 0.60),
     inset 0 -1.5px 2px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    background 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateZ(0);
 }
 
 /* Interactive Pastel Pill Button */
@@ -110,10 +131,16 @@ canvas {
   box-shadow:
     0 4px 12px rgba(15, 12, 28, 0.20),
     inset 0 1px 0.5px rgba(255, 255, 255, 0.48);
-  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
+  transform: translateZ(0);
 }
 
 @media (min-width: 640px) {
@@ -166,7 +193,7 @@ canvas {
     inset 0 1px 1px rgba(255, 255, 255, 0.62);
 }
 
-/* Device Selection Cards */
+/* Device & Side Selection Cards */
 .spatial-card {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
   border: 1.5px solid rgba(255, 255, 255, 0.25);
@@ -175,6 +202,7 @@ canvas {
     inset 0 1.5px 1px rgba(255, 255, 255, 0.45);
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
+  transform: translateZ(0);
 }
 
 .spatial-card:hover {
@@ -189,6 +217,36 @@ canvas {
     0 14px 32px rgba(254, 215, 170, 0.18),
     0 0 0 2px rgba(254, 215, 170, 0.25),
     inset 0 2px 1.5px rgba(255, 255, 255, 0.68);
+}
+
+/* Custom Sovereign Name Input Fields */
+.spatial-input-group {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 8px 20px rgba(15, 12, 28, 0.22),
+    inset 0 1px 1px rgba(255, 255, 255, 0.38);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.spatial-input-group:focus-within {
+  border-color: rgba(254, 215, 170, 0.85);
+  background: linear-gradient(160deg, rgba(254, 215, 170, 0.20) 0%, rgba(233, 213, 255, 0.12) 100%);
+  box-shadow:
+    0 10px 24px rgba(254, 215, 170, 0.16),
+    0 0 0 2px rgba(254, 215, 170, 0.22);
+}
+
+.spatial-text-input {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  cursor: text;
+  touch-action: manipulation;
+}
+
+.spatial-text-input::placeholder {
+  color: rgba(226, 232, 240, 0.45);
+  font-weight: 400;
 }
 
 .svg-icon {
@@ -242,4 +300,261 @@ canvas {
   inset: 0;
   z-index: 2;
   background: radial-gradient(circle at 50% 50%, transparent 65%, rgba(20, 18, 32, 0.42) 100%);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), background 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================================
+   ADDITIONAL ELONGATED OPTIMIZATIONS:
+   1. SMOOTH SCROLLING WITHOUT GPU COMPOSITOR STUTTER
+   2. PROPORTIONAL SCREEN-SIZE UI SCALING (SMALL SCREENS -> SMALL UI, LARGE -> LARGE)
+   3. STRICT NON-OVERLAP SAFE ZONES FOR ALL HUD DOCKS & DRAWERS
+   4. SMOOTH DARK <-> WHITE REALM TRANSITION VEIL & CHROMATIC ADAPTATION
+   5. 2GB RAM LOW-DEFINITION HARDWARE ACCELERATION OVERRIDES
+   ============================================================================ */
+
+/* 1. Zero-Lag Scroll Containers */
+.smooth-scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  touch-action: pan-y;
+  contain: content;
+  will-change: scroll-position;
+  transform: translateZ(0);
+}
+
+.smooth-scroll-x {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  will-change: scroll-position;
+  transform: translateZ(0);
+}
+
+#move-list > div {
+  contain: layout style;
+}
+
+/* 2. Screen-Size Proportional UI Scaling Rules */
+@media (max-width: 359px) {
+  :root {
+    --ui-scale: 0.78;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 479px) {
+  :root {
+    --ui-scale: 0.85;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 639px) {
+  :root {
+    --ui-scale: 0.92;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    --ui-scale: 0.96;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  :root {
+    --ui-scale: 1.0;
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  :root {
+    --ui-scale: 1.08;
+  }
+}
+
+@media (min-width: 1920px) and (max-width: 2559px) {
+  :root {
+    --ui-scale: 1.18;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --ui-scale: 1.32;
+  }
+}
+
+/* Apply proportional scaling anchored to each UI dock's screen corner so elements never collide */
+.ui-scalable-top {
+  transform: scale(var(--ui-scale));
+  transform-origin: top center;
+  width: calc(100% / var(--ui-scale));
+  left: calc((100% - (100% / var(--ui-scale))) / 2);
+  right: auto;
+}
+
+.ui-scalable-bottom-left {
+  transform: scale(var(--ui-scale));
+  transform-origin: bottom left;
+}
+
+.ui-scalable-bottom-right {
+  transform: scale(var(--ui-scale));
+  transform-origin: bottom right;
+}
+
+#history-panel.translate-y-\[130\%\] {
+  transform: translateY(130%) scale(var(--ui-scale)) !important;
+}
+
+#history-panel:not(.translate-y-\[130\%\]) {
+  transform: translateY(0) scale(var(--ui-scale));
+}
+
+.ui-scalable-modal {
+  transform: scale(min(1.12, var(--ui-scale)));
+  transform-origin: center center;
+}
+
+/* 3. Strict Non-Overlap Safe Zones on Small & Short Screens */
+@media (max-width: 639px) {
+  #history-panel {
+    max-width: calc(100vw - 158px);
+    width: 235px;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+  }
+
+  #mobile-touch-dock {
+    bottom: 10px;
+    left: 10px;
+    max-width: 142px;
+  }
+}
+
+@media (max-width: 400px) {
+  #history-panel {
+    max-width: calc(100vw - 140px);
+    width: 210px;
+  }
+}
+
+@media (max-height: 650px) {
+  :root {
+    --ui-scale: 0.80;
+  }
+  #move-list {
+    max-height: 68px;
+  }
+  #start-screen-modal .spatial-modal {
+    max-height: 96dvh;
+    padding: 12px;
+  }
+}
+
+/* Prevent PC keyboard hint from ever overlapping the Chronicle drawer on medium screens */
+@media (min-width: 768px) and (max-width: 1180px) {
+  #pc-control-hint {
+    max-width: calc(100vw - 340px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* 4. Smooth Dark-to-White & White-to-Dark Transition Veil + Light Mode Surface Tuning */
+.theme-transition-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--veil-color, rgba(255, 250, 245, 0.26)) 0%,
+    rgba(233, 213, 255, 0.14) 60%,
+    transparent 100%
+  );
+  transition: opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.theme-transition-veil.veil-active {
+  opacity: 1;
+}
+
+/* Smooth White / Bright Realm Mode (e.g., Morning Sky Citadel & Peach Blush Dunes) */
+body[data-theme-mode="light"] {
+  background-color: #dbeafe;
+}
+
+body[data-theme-mode="light"] .sanctuary-vignette {
+  background: radial-gradient(circle at 50% 50%, transparent 68%, rgba(28, 38, 58, 0.24) 100%);
+}
+
+body[data-theme-mode="light"] .spatial-surface {
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.56) 0%,
+    rgba(51, 65, 85, 0.46) 50%,
+    rgba(15, 23, 42, 0.68) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.44);
+  box-shadow:
+    0 16px 38px -10px rgba(15, 23, 42, 0.32),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+/* 5. Low Definition (2GB RAM Mode) Compositor & GPU Relief Overrides
+      Keeps exact same visual aesthetic & pastel gradients while eliminating expensive 48px multi-pass backdrop blurs */
+body[data-perf-mode="low"] .spatial-surface {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: linear-gradient(
+    145deg,
+    rgba(46, 40, 70, 0.92) 0%,
+    rgba(36, 31, 56, 0.94) 55%,
+    rgba(24, 21, 38, 0.96) 100%
+  );
+}
+
+body[data-perf-mode="low"][data-theme-mode="light"] .spatial-surface {
+  background: linear-gradient(
+    145deg,
+    rgba(38, 50, 72, 0.92) 0%,
+    rgba(30, 41, 59, 0.94) 55%,
+    rgba(18, 26, 42, 0.96) 100%
+  );
+}
+
+body[data-perf-mode="low"] .spatial-modal {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(76, 58, 98, 0.95) 0%,
+    rgba(40, 35, 66, 0.97) 55%,
+    rgba(22, 20, 35, 0.99) 100%
+  );
+}
+
+body[data-perf-mode="low"] #start-screen-modal,
+body[data-perf-mode="low"] #promotion-modal,
+body[data-perf-mode="low"] #gameover-modal {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-color: rgba(12, 10, 22, 0.82) !important;
+}
+
+body[data-perf-mode="low"] .ambient-orb {
+  display: none;
+}
+
+body[data-perf-mode="low"] .animate-float-icon,
+body[data-perf-mode="low"] .check-alert-pulse {
+  animation-duration: 3s;
 }
