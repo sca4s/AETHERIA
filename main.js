@@ -1046,19 +1046,19 @@ class WizardsChessApp {
     const shortSide = Math.min(w, h);
 
     let scale = 1.0;
-    if (w < 360) scale = 0.76;
-    else if (w < 480) scale = 0.84;
-    else if (w < 640) scale = 0.90;
-    else if (w < 1024) scale = 0.95;
+    if (w < 360) scale = 0.80;
+    else if (w < 480) scale = 0.88;
+    else if (w < 640) scale = 0.92;
+    else if (w < 1024) scale = 0.96;
     else if (w < 1440) scale = 1.0;
     else if (w < 1920) scale = 1.08;
     else if (w < 2560) scale = 1.18;
-    else scale = 1.30;
+    else scale = 1.28;
 
     if (shortSide < 620) {
-      scale = Math.min(scale, 0.78);
+      scale = Math.min(scale, 0.82);
     } else if (shortSide < 720) {
-      scale = Math.min(scale, 0.88);
+      scale = Math.min(scale, 0.90);
     }
 
     document.documentElement.style.setProperty('--ui-scale', scale.toFixed(3));
@@ -1066,7 +1066,7 @@ class WizardsChessApp {
 
   /**
    * Automatically adapts Camera FOV, Vertical Target Offset, and Orbit Distance
-   * so the 8x8 chessboard never overlaps the Top HUD or Bottom Touch Dock / Chronicle.
+   * so the 8x8 chessboard never overlaps the Top HUD or Bottom Chronicle.
    */
   getAspectAdjustedRadius(baseR = this.baseRadius) {
     const container = document.getElementById('canvas-container');
@@ -1075,12 +1075,12 @@ class WizardsChessApp {
     const aspect = Math.max(0.35, w / Math.max(1, h));
 
     const headerEl = document.getElementById('top-hud-header');
-    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 84;
+    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 96;
     const topRatio = Math.min(0.35, headerH / Math.max(1, h));
-    const safeClearanceMultiplier = 1 + topRatio * 0.52;
+    const safeClearanceMultiplier = 1 + topRatio * 0.45;
 
     if (aspect < 1.0) {
-      return Math.min(32, (baseR / Math.pow(aspect, 0.78)) * safeClearanceMultiplier);
+      return Math.min(31, (baseR / Math.pow(aspect, 0.78)) * safeClearanceMultiplier);
     }
     return baseR * Math.max(1.0, safeClearanceMultiplier * 0.96);
   }
@@ -1105,7 +1105,7 @@ class WizardsChessApp {
     this.cameraState.desiredRadius = targetRadius;
 
     if (!this.cameraState.savedBeforeAction) {
-      const yOffset = aspect < 0.85 ? 0.65 : 0.42;
+      const yOffset = aspect < 0.85 ? 0.52 : 0.38;
       this.cameraState.desiredTarget.y = yOffset;
       if (instant) this.cameraState.target.y = yOffset;
     }
@@ -1203,7 +1203,6 @@ class WizardsChessApp {
       }
     }
 
-    // Orient camera & cursor to the chosen side of the board
     this.cameraState.savedBeforeAction = null;
     this.cameraState.desiredTheta = this.playerColor === 'b' ? Math.PI : 0;
     this.cameraState.desiredPhi = 0.90;
@@ -1321,23 +1320,24 @@ class WizardsChessApp {
 
     this.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 180);
 
+    // Enforces 'highp' shader precision so mobile GPUs never overflow into black NaN pixels on specular highlights
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: 'high-performance',
-      precision: 'mediump'
+      precision: 'highp'
     });
     this.renderer.setSize(w, h, false);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.08;
+    this.renderer.toneMappingExposure = 1.05;
     container.appendChild(this.renderer.domElement);
 
     this.ambientLight = new THREE.AmbientLight(0x5e548e, 1.55);
     this.scene.add(this.ambientLight);
 
-    this.mainSpotLight = new THREE.SpotLight(0xfff1f2, 2.1);
+    this.mainSpotLight = new THREE.SpotLight(0xfff1f2, 1.95);
     this.mainSpotLight.position.set(4, 21, 6);
     this.mainSpotLight.angle = Math.PI / 2.8;
     this.mainSpotLight.penumbra = 0.75;
@@ -1346,14 +1346,15 @@ class WizardsChessApp {
     this.mainSpotLight.castShadow = true;
     this.mainSpotLight.shadow.mapSize.width = 1024;
     this.mainSpotLight.shadow.mapSize.height = 1024;
-    this.mainSpotLight.shadow.bias = -0.0005;
+    this.mainSpotLight.shadow.bias = -0.0012;
+    this.mainSpotLight.shadow.normalBias = 0.02;
     this.scene.add(this.mainSpotLight);
 
-    this.rimLightWest = new THREE.DirectionalLight(0xe9d5ff, 1.0);
+    this.rimLightWest = new THREE.DirectionalLight(0xe9d5ff, 0.95);
     this.rimLightWest.position.set(-18, 12, -8);
     this.scene.add(this.rimLightWest);
 
-    this.rimLightEast = new THREE.DirectionalLight(0xfed7aa, 0.9);
+    this.rimLightEast = new THREE.DirectionalLight(0xfed7aa, 0.85);
     this.rimLightEast.position.set(18, 9, 10);
     this.scene.add(this.rimLightEast);
 
@@ -1364,35 +1365,36 @@ class WizardsChessApp {
 
   initSharedMaterials() {
     // Soft Pastel Pearl (Light Pieces) & Pastel Dusk Lavender (Dark Pieces)
+    // Safe roughness >= 0.30 prevents mobile GPU GGX specular division overflow (black dots)
     const pearlTex = createStoneTexture('#fff5f7', 'rgba(244, 162, 184, 0.20)', 9);
     const lilacSlateTex = createStoneTexture('#483d5e', 'rgba(216, 180, 254, 0.24)', 12);
 
     this.matMarble = new THREE.MeshStandardMaterial({
       map: pearlTex,
       color: 0xfff7f9,
-      roughness: 0.25,
-      metalness: 0.05
+      roughness: 0.34,
+      metalness: 0.04
     });
     this.matWhiteRune = new THREE.MeshStandardMaterial({
       color: 0xfed7aa,
       emissive: 0xfbbf24,
-      emissiveIntensity: 0.95,
-      roughness: 0.25,
-      metalness: 0.5
+      emissiveIntensity: 0.85,
+      roughness: 0.35,
+      metalness: 0.35
     });
 
     this.matObsidian = new THREE.MeshStandardMaterial({
       map: lilacSlateTex,
       color: 0x4f4366,
-      roughness: 0.22,
-      metalness: 0.32
+      roughness: 0.32,
+      metalness: 0.24
     });
     this.matBlackRune = new THREE.MeshStandardMaterial({
       color: 0xe9d5ff,
       emissive: 0xc084fc,
-      emissiveIntensity: 1.1,
-      roughness: 0.25,
-      metalness: 0.5
+      emissiveIntensity: 0.95,
+      roughness: 0.35,
+      metalness: 0.35
     });
 
     this.matCathedralStone = new THREE.MeshStandardMaterial({
@@ -1413,33 +1415,35 @@ class WizardsChessApp {
 
     const boardSpan = 8 * SQUARE_SIZE;
 
-    const frameGeo = new THREE.BoxGeometry(boardSpan + 1.3, 0.52, boardSpan + 1.3);
+    // Positioned cleanly below the 64 tiles so there is zero Z-fighting or shadow intersection
+    const frameGeo = new THREE.BoxGeometry(boardSpan + 1.3, 0.48, boardSpan + 1.3);
     this.boardFrameMesh = new THREE.Mesh(frameGeo, this.matPedestalStone.clone());
-    this.boardFrameMesh.position.y = -0.32;
+    this.boardFrameMesh.position.y = -0.47;
     this.boardFrameMesh.receiveShadow = true;
-    this.boardFrameMesh.castShadow = true;
+    this.boardFrameMesh.castShadow = false;
     this.boardGroup.add(this.boardFrameMesh);
 
-    const trimGeo = new THREE.BoxGeometry(boardSpan + 0.18, 0.54, boardSpan + 0.18);
+    const trimGeo = new THREE.BoxGeometry(boardSpan + 0.18, 0.48, boardSpan + 0.18);
     this.boardTrimMat = new THREE.MeshStandardMaterial({
       color: 0xf9dcc4,
-      roughness: 0.32,
-      metalness: 0.65
+      roughness: 0.40,
+      metalness: 0.45
     });
     this.boardTrimMesh = new THREE.Mesh(trimGeo, this.boardTrimMat);
-    this.boardTrimMesh.position.y = -0.31;
+    this.boardTrimMesh.position.y = -0.46;
+    this.boardTrimMesh.castShadow = false;
     this.boardGroup.add(this.boardTrimMesh);
 
     const upperPedestalGeo = new THREE.CylinderGeometry(5.2, 6.2, 1.4, 8);
     this.upperPedestal = new THREE.Mesh(upperPedestalGeo, this.matPedestalStone);
-    this.upperPedestal.position.y = -1.25;
+    this.upperPedestal.position.y = -1.42;
     this.upperPedestal.rotation.y = Math.PI / 8;
     this.upperPedestal.receiveShadow = true;
     this.boardGroup.add(this.upperPedestal);
 
     const lowerPedestalGeo = new THREE.CylinderGeometry(6.2, 7.6, 1.6, 8);
     this.lowerPedestal = new THREE.Mesh(lowerPedestalGeo, this.matCathedralStone);
-    this.lowerPedestal.position.y = -2.65;
+    this.lowerPedestal.position.y = -2.82;
     this.lowerPedestal.rotation.y = Math.PI / 8;
     this.lowerPedestal.receiveShadow = true;
     this.boardGroup.add(this.lowerPedestal);
@@ -1453,15 +1457,15 @@ class WizardsChessApp {
     this.lightSquareMat = new THREE.MeshStandardMaterial({
       map: neutralLightTex,
       color: new THREE.Color('#fdf2f8'),
-      roughness: 0.26,
-      metalness: 0.06
+      roughness: 0.38,
+      metalness: 0.04
     });
 
     this.darkSquareMat = new THREE.MeshStandardMaterial({
       map: neutralDarkTex,
       color: new THREE.Color('#5e548e'),
-      roughness: 0.30,
-      metalness: 0.16
+      roughness: 0.40,
+      metalness: 0.10
     });
 
     for (let r = 0; r < 8; r++) {
@@ -1471,6 +1475,7 @@ class WizardsChessApp {
         const worldPos = boardToWorld(r, c);
         sqMesh.position.set(worldPos.x, -0.11, worldPos.z);
         sqMesh.receiveShadow = true;
+        sqMesh.castShadow = false;
         sqMesh.userData = { type: 'square', r, c, isLight };
         this.boardGroup.add(sqMesh);
         this.squareMeshes[r][c] = sqMesh;
@@ -1490,13 +1495,13 @@ class WizardsChessApp {
       });
       const fFront = new THREE.Mesh(labelGeo, fileMat);
       fFront.rotation.x = -Math.PI / 2;
-      fFront.position.set(pos, -0.04, boardSpan / 2 + 0.36);
+      fFront.position.set(pos, -0.21, boardSpan / 2 + 0.36);
       this.boardGroup.add(fFront);
 
       const fBack = new THREE.Mesh(labelGeo, fileMat);
       fBack.rotation.x = -Math.PI / 2;
       fBack.rotation.z = Math.PI;
-      fBack.position.set(pos, -0.04, -boardSpan / 2 - 0.36);
+      fBack.position.set(pos, -0.21, -boardSpan / 2 - 0.36);
       this.boardGroup.add(fBack);
 
       const rankMat = new THREE.MeshBasicMaterial({
@@ -1506,12 +1511,12 @@ class WizardsChessApp {
       });
       const rLeft = new THREE.Mesh(labelGeo, rankMat);
       rLeft.rotation.x = -Math.PI / 2;
-      rLeft.position.set(-boardSpan / 2 - 0.36, -0.04, pos);
+      rLeft.position.set(-boardSpan / 2 - 0.36, -0.21, pos);
       this.boardGroup.add(rLeft);
 
       const rRight = new THREE.Mesh(labelGeo, rankMat);
       rRight.rotation.x = -Math.PI / 2;
-      rRight.position.set(boardSpan / 2 + 0.36, -0.04, pos);
+      rRight.position.set(boardSpan / 2 + 0.36, -0.21, pos);
       this.boardGroup.add(rRight);
     }
 
@@ -1526,7 +1531,8 @@ class WizardsChessApp {
       color: 0xbae6fd,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.85,
+      depthWrite: false
     });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     ring.rotation.x = -Math.PI / 2;
@@ -1539,7 +1545,8 @@ class WizardsChessApp {
         color: 0xfed7aa,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.75
+        opacity: 0.75,
+        depthWrite: false
       })
     );
     innerRing.rotation.x = -Math.PI / 2;
@@ -1642,10 +1649,11 @@ class WizardsChessApp {
       tt.toDarkTint.set(cfg.darkSqBase);
     }
 
-    this.lightSquareMat.roughness = realmKey === 'space' ? 0.18 : 0.26;
-    this.lightSquareMat.metalness = realmKey === 'space' ? 0.32 : 0.06;
-    this.darkSquareMat.roughness = realmKey === 'space' ? 0.18 : 0.30;
-    this.darkSquareMat.metalness = realmKey === 'space' ? 0.32 : 0.16;
+    // Clamp roughness >= 0.30 across all realms to prevent mobile WebGL specular black spots
+    this.lightSquareMat.roughness = realmKey === 'space' ? 0.30 : 0.38;
+    this.lightSquareMat.metalness = realmKey === 'space' ? 0.22 : 0.04;
+    this.darkSquareMat.roughness = realmKey === 'space' ? 0.32 : 0.40;
+    this.darkSquareMat.metalness = realmKey === 'space' ? 0.24 : 0.10;
 
     if (this.envGroup) {
       this.scene.remove(this.envGroup);
@@ -1813,13 +1821,13 @@ class WizardsChessApp {
 
   buildRealmSunlitDay() {
     const isLow = this.graphicsDef === 'low';
-    const poolMat = new THREE.MeshStandardMaterial({ color: 0xbae6fd, roughness: 0.16, metalness: 0.25 });
+    const poolMat = new THREE.MeshStandardMaterial({ color: 0xbae6fd, roughness: 0.30, metalness: 0.20 });
     const pool = new THREE.Mesh(new THREE.CylinderGeometry(52, 52, 0.4, isLow ? 28 : 48), poolMat);
     pool.position.y = -3.55;
     pool.receiveShadow = !isLow;
     this.envGroup.add(pool);
 
-    const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xfff1f2, roughness: 0.3, metalness: 0.05 });
+    const whiteColMat = new THREE.MeshStandardMaterial({ color: 0xfff1f2, roughness: 0.35, metalness: 0.05 });
     const plazaRing = new THREE.Mesh(new THREE.RingGeometry(7.2, 16.5, isLow ? 28 : 48), whiteColMat);
     plazaRing.rotation.x = -Math.PI / 2;
     plazaRing.position.y = -3.32;
@@ -1963,8 +1971,8 @@ class WizardsChessApp {
       color: 0x7dd3fc,
       emissive: 0x2b4c65,
       emissiveIntensity: 0.35,
-      roughness: 0.18,
-      metalness: 0.48,
+      roughness: 0.30,
+      metalness: 0.35,
       flatShading: true
     });
 
@@ -1973,7 +1981,7 @@ class WizardsChessApp {
     this.oceanMesh.receiveShadow = !isLow;
     this.envGroup.add(this.oceanMesh);
 
-    const spireMat = new THREE.MeshStandardMaterial({ color: 0x3d5a80, roughness: 0.35, metalness: 0.35 });
+    const spireMat = new THREE.MeshStandardMaterial({ color: 0x3d5a80, roughness: 0.40, metalness: 0.30 });
     const crystalMat = new THREE.MeshBasicMaterial({ color: 0xa5f3fc });
     for (let i = 0; i < 10; i++) {
       const ang = (i / 10) * Math.PI * 2;
@@ -2067,7 +2075,7 @@ class WizardsChessApp {
     this.envGroup.add(dunesMesh);
 
     const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x9d756d, roughness: 0.7 });
-    const goldCapMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.3, metalness: 0.6 });
+    const goldCapMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.35, metalness: 0.5 });
 
     for (let i = 0; i < 8; i++) {
       const ang = (i / 8) * Math.PI * 2 + 0.2;
@@ -2409,7 +2417,7 @@ class WizardsChessApp {
     const selPos = boardToWorld(r, c);
     const selRing = new THREE.Mesh(
       new THREE.RingGeometry(0.45, 0.56, 32),
-      new THREE.MeshBasicMaterial({ color: 0xfed7aa, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+      new THREE.MeshBasicMaterial({ color: 0xfed7aa, side: THREE.DoubleSide, transparent: true, opacity: 0.9, depthWrite: false })
     );
     selRing.rotation.x = -Math.PI / 2;
     selRing.position.set(selPos.x, 0.02, selPos.z);
@@ -2427,7 +2435,7 @@ class WizardsChessApp {
       if (isCapture) {
         const outerRing = new THREE.Mesh(
           new THREE.RingGeometry(0.48, 0.6, 6),
-          new THREE.MeshBasicMaterial({ color: 0xf9a8d4, side: THREE.DoubleSide, transparent: true, opacity: 0.92 })
+          new THREE.MeshBasicMaterial({ color: 0xf9a8d4, side: THREE.DoubleSide, transparent: true, opacity: 0.92, depthWrite: false })
         );
         outerRing.rotation.x = -Math.PI / 2;
         outerRing.position.set(pos.x, 0.03, pos.z);
@@ -2436,7 +2444,7 @@ class WizardsChessApp {
       } else {
         const dot = new THREE.Mesh(
           new THREE.RingGeometry(0.12, 0.25, 24),
-          new THREE.MeshBasicMaterial({ color: 0xbbf7d0, side: THREE.DoubleSide, transparent: true, opacity: 0.88 })
+          new THREE.MeshBasicMaterial({ color: 0xbbf7d0, side: THREE.DoubleSide, transparent: true, opacity: 0.88, depthWrite: false })
         );
         dot.rotation.x = -Math.PI / 2;
         dot.position.set(pos.x, 0.025, pos.z);
@@ -2460,7 +2468,7 @@ class WizardsChessApp {
         const worldPos = boardToWorld(kingPos.r, kingPos.c);
         const aura = new THREE.Mesh(
           new THREE.RingGeometry(0.32, 0.64, 32),
-          new THREE.MeshBasicMaterial({ color: 0xf472b6, side: THREE.DoubleSide, transparent: true, opacity: 0.88 })
+          new THREE.MeshBasicMaterial({ color: 0xf472b6, side: THREE.DoubleSide, transparent: true, opacity: 0.88, depthWrite: false })
         );
         aura.name = 'check-aura';
         aura.rotation.x = -Math.PI / 2;
@@ -2532,7 +2540,8 @@ class WizardsChessApp {
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.9,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       })
     );
     ringMesh.rotation.x = -Math.PI / 2;
@@ -2554,7 +2563,8 @@ class WizardsChessApp {
         color: color === 'w' ? 0xfed7aa : 0xe9d5ff,
         transparent: true,
         opacity: 0.8,
-        blending: THREE.AdditiveBlending
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       })
     );
     spark.position.set(
@@ -2667,7 +2677,7 @@ class WizardsChessApp {
           body.position.y = Math.sin(t * Math.PI * 0.5) * 0.32;
           body.rotation.x = -normDir.z * t * 0.38;
           body.rotation.z = normDir.x * t * 0.38;
-          attackerMesh.userData.matRune.emissiveIntensity = 1.2 + t * 3.0;
+          attackerMesh.userData.matRune.emissiveIntensity = 1.1 + t * 1.8;
         }
         if (victimMesh) {
           victimMesh.position.x = victimPos.x + (Math.random() - 0.5) * 0.05 * t;
@@ -2704,7 +2714,7 @@ class WizardsChessApp {
           body.position.y = (1 - ease) * 0.32;
           body.rotation.x *= (1 - ease);
           body.rotation.z *= (1 - ease);
-          attackerMesh.userData.matRune.emissiveIntensity = 1.1 + (1 - ease) * 2.0;
+          attackerMesh.userData.matRune.emissiveIntensity = 0.95 + (1 - ease) * 1.2;
         }
       });
 
@@ -2949,20 +2959,31 @@ class WizardsChessApp {
       cardMobile.querySelector('.device-check').classList.remove('hidden');
       cardPC.querySelector('.device-check').classList.add('hidden');
 
-      touchDock.classList.remove('hidden');
-      touchDock.classList.add('flex');
+      // Keep floating D-Pad dock and 3D cursor hidden in Touch Mode because direct touch tap & orbit work natively
+      if (touchDock) {
+        touchDock.classList.add('hidden', 'touch-dock-retired');
+        touchDock.classList.remove('flex');
+      }
+      if (this.cursorGroup) {
+        this.cursorGroup.visible = false;
+      }
       pcHint.classList.add('hidden');
       pcHint.classList.remove('md:flex');
       if (hudBadge) hudBadge.textContent = 'TOUCH';
-      this.baseRadius = 16.0;
+      this.baseRadius = 15.8;
     } else {
       cardPC.classList.add('selected-device');
       cardMobile.classList.remove('selected-device');
       cardPC.querySelector('.device-check').classList.remove('hidden');
       cardMobile.querySelector('.device-check').classList.add('hidden');
 
-      touchDock.classList.add('hidden');
-      touchDock.classList.remove('flex');
+      if (touchDock) {
+        touchDock.classList.add('hidden', 'touch-dock-retired');
+        touchDock.classList.remove('flex');
+      }
+      if (this.cursorGroup) {
+        this.cursorGroup.visible = true;
+      }
       pcHint.classList.remove('hidden');
       pcHint.classList.add('md:flex');
       if (hudBadge) hudBadge.textContent = 'PC';
@@ -3134,7 +3155,7 @@ class WizardsChessApp {
       }
     });
 
-    // Touch D-Pad Controls
+    // Touch D-Pad Controls (preserved for compatibility)
     document.querySelectorAll('[data-dpad]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -3149,16 +3170,17 @@ class WizardsChessApp {
       });
     });
 
-    document.getElementById('btn-touch-rot-left').addEventListener('click', () => {
-      this.cameraState.desiredTheta -= 0.45;
-    });
-    document.getElementById('btn-touch-rot-right').addEventListener('click', () => {
-      this.cameraState.desiredTheta += 0.45;
-    });
-    document.getElementById('btn-touch-zoom').addEventListener('click', () => {
-      const base = this.getAspectAdjustedRadius(this.baseRadius);
-      this.cameraState.desiredRadius = this.cameraState.desiredRadius > base * 0.9 ? base * 0.75 : base;
-    });
+    const rotL = document.getElementById('btn-touch-rot-left');
+    const rotR = document.getElementById('btn-touch-rot-right');
+    const zoomB = document.getElementById('btn-touch-zoom');
+    if (rotL) rotL.addEventListener('click', () => { this.cameraState.desiredTheta -= 0.45; });
+    if (rotR) rotR.addEventListener('click', () => { this.cameraState.desiredTheta += 0.45; });
+    if (zoomB) {
+      zoomB.addEventListener('click', () => {
+        const base = this.getAspectAdjustedRadius(this.baseRadius);
+        this.cameraState.desiredRadius = this.cameraState.desiredRadius > base * 0.9 ? base * 0.75 : base;
+      });
+    }
 
     // HUD Buttons
     document.getElementById('btn-mode').addEventListener('click', () => {
@@ -3300,6 +3322,9 @@ class WizardsChessApp {
 
   moveCursorBy(dr, dc) {
     if (this.isAnimating) return;
+    if (this.cursorGroup && this.controlPlatform === 'pc') {
+      this.cursorGroup.visible = true;
+    }
     this.cursorSquare.r = (this.cursorSquare.r + dr + 8) % 8;
     this.cursorSquare.c = (this.cursorSquare.c + dc + 8) % 8;
     this.updateCursorMeshPosition();
@@ -3386,19 +3411,19 @@ class WizardsChessApp {
     const blackName = this.playerNameBlack || 'Lilac';
 
     if (isWhiteTurn) {
-      turnDot.className = 'w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa]';
+      turnDot.className = 'w-2 h-2 rounded-full bg-orange-200 shadow-[0_0_8px_#fed7aa] shrink-0';
       turnText.textContent =
         this.gameMode === 'ai' && this.playerColor !== 'w'
-          ? `Automaton (${whiteName})`
+          ? `AI (${whiteName})`
           : `${whiteName}'s Turn`;
-      turnText.className = 'text-[11px] font-semibold tracking-wide text-orange-100 whitespace-nowrap';
+      turnText.className = 'hud-turn-label font-semibold tracking-wide text-orange-100 truncate';
     } else {
-      turnDot.className = 'w-2 h-2 rounded-full bg-purple-300 shadow-[0_0_8px_#e9d5ff]';
+      turnDot.className = 'w-2 h-2 rounded-full bg-purple-300 shadow-[0_0_8px_#e9d5ff] shrink-0';
       turnText.textContent =
         this.gameMode === 'ai' && this.playerColor !== 'b'
-          ? `Automaton (${blackName})`
+          ? `AI (${blackName})`
           : `${blackName}'s Turn`;
-      turnText.className = 'text-[11px] font-semibold tracking-wide text-purple-200 whitespace-nowrap';
+      turnText.className = 'hud-turn-label font-semibold tracking-wide text-purple-200 truncate';
     }
 
     const badge = document.getElementById('status-badge');
@@ -3435,15 +3460,15 @@ class WizardsChessApp {
 
     document.getElementById('graveyard-white').innerHTML = this.engine.capturedByWhite.length
       ? this.engine.capturedByWhite.map(t => `<span>${iconsW[t]}</span>`).join('')
-      : '<span class="text-[10px] text-slate-300/75 italic">None</span>';
+      : '<span class="text-[9px] text-slate-300/75 italic">None</span>';
 
     document.getElementById('graveyard-black').innerHTML = this.engine.capturedByBlack.length
       ? this.engine.capturedByBlack.map(t => `<span>${iconsB[t]}</span>`).join('')
-      : '<span class="text-[10px] text-slate-300/75 italic">None</span>';
+      : '<span class="text-[9px] text-slate-300/75 italic">None</span>';
 
     const moveListEl = document.getElementById('move-list');
     if (this.engine.history.length === 0) {
-      moveListEl.innerHTML = '<div class="text-slate-200/80 italic text-center py-2 font-sans text-[11px]">Tap a piece or use WASD/D-Pad to begin.</div>';
+      moveListEl.innerHTML = '<div class="text-slate-200/80 italic text-center py-1.5 font-sans text-[10px]">Tap a piece or use WASD to begin.</div>';
     } else {
       let html = '';
       for (let i = 0; i < this.engine.history.length; i += 2) {
@@ -3525,11 +3550,11 @@ class WizardsChessApp {
         runeRing.scale.setScalar(1 + Math.sin(phase * 1.4) * 0.035);
       }
       if (matRune && !this.isAnimating) {
-        matRune.emissiveIntensity = (isSelected ? 2.0 : 0.95) + Math.sin(phase * 1.6) * 0.25;
+        matRune.emissiveIntensity = (isSelected ? 1.55 : 0.85) + Math.sin(phase * 1.6) * 0.18;
       }
     }
 
-    if (this.cursorGroup) {
+    if (this.cursorGroup && this.cursorGroup.visible) {
       const cs = 1 + Math.sin(elapsed * 4.0) * 0.05;
       this.cursorGroup.scale.set(cs, 1, cs);
       this.cursorGroup.children[0].rotation.z = elapsed * 0.5;
